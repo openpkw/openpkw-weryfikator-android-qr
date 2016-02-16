@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/scan.qr.label.top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/margin.login.left"
+        android:layout_marginStart="@dimen/margin.login.left"
+        android:layout_marginTop="@dimen/margin.login.top"
+        android:text="@string/scan.qr.label.scan"
+        android:textSize="@dimen/fontsize.login.label" />
+
+    <View
+        android:id="@+id/scan.qr.separator.top"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height.login.separator.top"
+        android:layout_below="@id/scan.qr.label.top"
+        android:layout_marginBottom="@dimen/margin.login.separator.bottom"
+        android:layout_marginTop="@dimen/margin.login.separator.top"
+        android:background="@color/green" />
+
+
+    <Button
+        android:id="@+id/scan.qr.button.scan"
+        android:layout_width="@dimen/width.login.button.login"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/scan.qr.separator.top"
+        android:layout_marginLeft="@dimen/margin.login.button.login.left"
+        android:layout_marginStart="@dimen/margin.login.button.login.left"
+        android:layout_marginTop="@dimen/margin.login.button.login.top"
+        android:text="@string/scan.qr.buttonlabel.scan"
+        style="@style/green_button"/>
+
+    <Button
+        android:id="@+id/scan.qr.textlink.scan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/scan.qr.button.scan"
+        android:layout_marginBottom="@dimen/margin.login.textlink.fpassword.top"
+        android:paddingLeft="2dp"
+        android:layout_marginLeft="@dimen/margin.login.textlink.fpassword.left"
+        android:layout_marginTop="@dimen/margin.login.textlink.fpassword.top"
+        android:textAllCaps="false"
+        android:textStyle="normal"
+        android:background="@android:color/transparent"
+        android:text="@string/scan.qr.buttonlabel.help"
+        android:textColor="@color/green"
+        style="?android:attr/borderlessButtonStyle"
+        android:textSize="@dimen/fontsize.login.textlink.fpassword" />
+
+    <View
+        android:id="@+id/scan.separator.bottom"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height.login.separator.bottom"
+        android:layout_below="@id/scan.qr.textlink.scan"
+        android:background="@color/green" />
+
+    <TextView
+        android:id="@+id/scan.qr.label.send.top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/scan.separator.bottom"
+        android:layout_marginLeft="@dimen/margin.login.left"
+        android:layout_marginStart="@dimen/margin.login.left"
+        android:layout_marginTop="@dimen/margin.login.separator.top"
+        android:layout_marginBottom="@dimen/margin.login.separator.top"
+        android:text="@string/scan.qr.label.send"
+        android:textSize="@dimen/fontsize.login.label" />
+
+    <View
+        android:id="@+id/scan.separator.send.top"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height.login.separator.bottom"
+        android:layout_below="@id/scan.qr.label.send.top"
+        android:layout_marginBottom="@dimen/margin.login.separator.bottom"
+        android:layout_marginTop="@dimen/margin.login.separator.top"
+        android:background="@color/green" />
+
+    <Button
+        android:id="@+id/scan.qr.button.send"
+        android:layout_width="@dimen/width.login.button.login"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/scan.separator.send.top"
+        android:layout_marginLeft="@dimen/margin.login.button.login.left"
+        android:layout_marginStart="@dimen/margin.login.button.login.left"
+        android:layout_marginTop="@dimen/margin.login.button.login.top"
+        android:layout_marginBottom="@dimen/margin.login.button.login.top"
+        android:text="@string/scan.qr.buttonlabel.send"
+        style="@style/green_button"/>
+
+    <View
+        android:id="@+id/scan.separator.send.bottom"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height.login.separator.bottom"
+        android:layout_below="@+id/scan.qr.button.send"
+        android:layout_marginTop="@dimen/margin.login.separator.top"
+        android:background="@color/green" />
+
+    <TextView
+        android:id="@+id/scan.qr.label.send.forward"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/scan.separator.send.bottom"
+        android:layout_marginLeft="@dimen/margin.login.left"
+        android:layout_marginStart="@dimen/margin.login.left"
+        android:layout_marginTop="@dimen/margin.login.button.login.top"
+        android:text="@string/scan.qr.label.forward"
+        android:textSize="@dimen/fontsize.login.label" />
+
+
+    <View
+        android:id="@+id/scan.qr.separator.send.top"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height.login.separator.top"
+        android:layout_below="@+id/scan.qr.label.send.forward"
+        android:layout_marginBottom="@dimen/margin.login.separator.bottom"
+        android:layout_marginTop="@dimen/margin.login.separator.top"
+        android:background="@color/green" />
+
+    <Button
+        android:id="@+id/scan.qr.button.forward"
+        android:layout_width="@dimen/width.login.button.login"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/scan.qr.separator.send.top"
+        android:layout_marginLeft="@dimen/margin.login.button.login.left"
+        android:layout_marginStart="@dimen/margin.login.button.login.left"
+        android:layout_marginTop="@dimen/margin.login.button.login.top"
+        android:text="@string/scan.qr.buttonlabel.forward"
+        style="@style/green_button"/>
+
+</RelativeLayout>

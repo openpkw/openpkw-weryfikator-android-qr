@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/about.label.top"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/abc_action_bar_default_height_material"
+            android:gravity ="center_vertical"
+            android:text="@string/about.label.about"
+            android:paddingStart="@dimen/margin.login.left"
+            android:paddingEnd="@dimen/margin.login.left"
+            android:paddingLeft="@dimen/margin.login.left"
+            android:paddingRight="@dimen/margin.login.left"
+            android:textStyle="bold"
+            android:background="@color/green"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/fontsize.login.label" />
+
+        <TextView
+            android:id="@+id/about.description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity ="center_vertical"
+            android:text="@string/about.label.about.description"
+            android:textSize="@dimen/abc_text_size_medium_material"
+            android:paddingStart="@dimen/margin.login.left"
+            android:paddingEnd="@dimen/margin.login.left"
+            android:paddingLeft="@dimen/margin.login.left"
+            android:paddingRight="@dimen/margin.login.left"
+            android:textColor="@color/dark_gray"
+            android:layout_below="@+id/about.label.top"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:id="@+id/about.label.what"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/abc_action_bar_default_height_material"
+            android:gravity ="center_vertical"
+            android:text="@string/about.label.what"
+            android:paddingStart="@dimen/margin.login.left"
+            android:paddingEnd="@dimen/margin.login.left"
+            android:paddingLeft="@dimen/margin.login.left"
+            android:paddingRight="@dimen/margin.login.left"
+            android:textStyle="bold"
+            android:background="@color/green"
+            android:textColor="@android:color/white"
+            android:layout_below="@+id/about.description"
+            android:textSize="@dimen/fontsize.login.label" />
+
+        <TextView
+            android:id="@+id/about.label.what.description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity ="center_vertical"
+            android:text="@string/about.label.what.description"
+            android:textSize="@dimen/abc_text_size_medium_material"
+            android:paddingStart="@dimen/margin.login.left"
+            android:paddingEnd="@dimen/margin.login.left"
+            android:paddingLeft="@dimen/margin.login.left"
+            android:paddingRight="@dimen/margin.login.left"
+            android:textColor="@color/dark_gray"
+            android:layout_below="@+id/about.label.what"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:id="@+id/about.label.help"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/abc_action_bar_default_height_material"
+            android:gravity ="center_vertical"
+            android:text="@string/about.label.help"
+            android:paddingStart="@dimen/margin.login.left"
+            android:paddingEnd="@dimen/margin.login.left"
+            android:paddingLeft="@dimen/margin.login.left"
+            android:paddingRight="@dimen/margin.login.left"
+            android:textStyle="bold"
+            android:background="@color/green"
+            android:textColor="@android:color/white"
+            android:layout_below="@+id/about.label.what.description"
+            android:textSize="@dimen/fontsize.login.label" />
+
+        <TextView
+            android:id="@+id/about.label.form"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity ="center_vertical"
+            android:text="@string/about.label.form"
+            android:textSize="@dimen/abc_text_size_medium_material"
+            android:paddingStart="@dimen/margin.login.left"
+            android:paddingEnd="@dimen/margin.login.left"
+            android:paddingLeft="@dimen/margin.login.left"
+            android:paddingRight="@dimen/margin.login.left"
+            android:textColor="@color/dark_gray"
+            android:layout_below="@+id/about.label.help"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:id="@+id/about.label.link.form"
+            android:autoLink="web"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity ="center_vertical"
+            android:text="@string/about.label.link.form"
+            android:textSize="@dimen/abc_text_size_medium_material"
+            android:paddingStart="@dimen/margin.login.left"
+            android:paddingEnd="@dimen/margin.login.left"
+            android:paddingLeft="@dimen/margin.login.left"
+            android:paddingRight="@dimen/margin.login.left"
+            android:textColor="@color/dark_gray"
+            android:layout_below="@+id/about.label.form"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:id="@+id/about.label.forum"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity ="center_vertical"
+            android:text="@string/about.label.forum"
+            android:textSize="@dimen/abc_text_size_medium_material"
+            android:paddingStart="@dimen/margin.login.left"
+            android:paddingEnd="@dimen/margin.login.left"
+            android:paddingLeft="@dimen/margin.login.left"
+            android:paddingRight="@dimen/margin.login.left"
+            android:textColor="@color/dark_gray"
+            android:layout_below="@+id/about.label.link.form"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:id="@+id/about.label.link.forum"
+            android:autoLink="web"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity ="center_vertical"
+            android:text="@string/about.label.link.forum"
+            android:textSize="@dimen/abc_text_size_medium_material"
+            android:paddingStart="@dimen/margin.login.left"
+            android:paddingEnd="@dimen/margin.login.left"
+            android:paddingLeft="@dimen/margin.login.left"
+            android:paddingRight="@dimen/margin.login.left"
+            android:textColor="@color/dark_gray"
+            android:layout_below="@+id/about.label.forum"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:id="@+id/about.label.news"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity ="center_vertical"
+            android:text="@string/about.label.news"
+            android:textSize="@dimen/abc_text_size_medium_material"
+            android:paddingStart="@dimen/margin.login.left"
+            android:paddingEnd="@dimen/margin.login.left"
+            android:paddingLeft="@dimen/margin.login.left"
+            android:paddingRight="@dimen/margin.login.left"
+            android:textColor="@color/dark_gray"
+            android:layout_below="@+id/about.label.link.forum"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:id="@+id/about.label.link.news"
+            android:autoLink="web"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity ="center_vertical"
+            android:text="@string/about.label.link.news"
+            android:textSize="@dimen/abc_text_size_medium_material"
+            android:paddingStart="@dimen/margin.login.left"
+            android:paddingEnd="@dimen/margin.login.left"
+            android:paddingLeft="@dimen/margin.login.left"
+            android:paddingRight="@dimen/margin.login.left"
+            android:textColor="@color/dark_gray"
+            android:layout_below="@+id/about.label.news"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="@dimen/margin.login.separator.bottom"/>
+
+       </RelativeLayout>
+</ScrollView>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+        <PreferenceCategory
+            android:title="Ustawienia"
+            android:key="pref_key_storage_settings">
+
+            <EditTextPreference
+                android:key="url_login_preference"
+                android:title="Adres URL logowania"
+                android:defaultValue="http://rumcajs.open-pkw.pl:9080/openpkw/api/login"
+                android:paddingLeft="10dp"
+                android:paddingStart="10dp"
+                android:summary="http://rumcajs.open-pkw.pl:9080/openpkw/api/login"
+                android:dialogTitle="Ustaw URL logowania" />
+
+            <EditTextPreference
+                android:key="url_register_preference"
+                android:title="Adres URL rej. użytkownika"
+                android:defaultValue="http://rumcajs.open-pkw.pl:9080/openpkw/users/"
+                android:paddingLeft="10dp"
+                android:paddingStart="10dp"
+                android:summary="http://rumcajs.open-pkw.pl:9080/openpkw/users/"
+                android:dialogTitle="Ustaw URL rej. użytkownika" />
+
+            <EditTextPreference
+                android:key="url_verify_preference"
+                android:title="Adres URL weryfikatora QR"
+                android:defaultValue="http://rumcajs.open-pkw.pl:9080/openpkw/api/qr"
+                android:paddingLeft="10dp"
+                android:paddingStart="10dp"
+                android:summary="http://rumcajs.open-pkw.pl:9080/openpkw/api/qr"
+                android:dialogTitle="Ustaw URL weryfikatora" />
+
+        </PreferenceCategory>
+
+        <PreferenceCategory
+            android:title="Bezpieczeństwo"
+            android:key="pref_key_security_settings">
+
+            <Preference
+                android:key="oauth2_preference"
+                android:title="Skonfiguruj ID użytkownika i hasło"
+                android:defaultValue="Hasła"
+                android:paddingLeft="10dp"
+                android:paddingStart="10dp"
+                android:summary="Dostęp do serwera po wprowadzeniu identyfikatora użytkownika i hasła"
+                android:dialogTitle="Ustaw ID użytkownika i hasło" />
+
+            <Preference
+                android:key="update_security_preference"
+                android:title="Aktualizacja zabezpieczeń"
+                android:defaultValue="up-to-date"
+                android:paddingLeft="10dp"
+                android:paddingStart="10dp"
+                android:summary="Zwiększa bezpieczenśtwo aplikacji, aktualizując zasady zabezpieczeń" />
+
+        </PreferenceCategory>
+
+</PreferenceScreen>
