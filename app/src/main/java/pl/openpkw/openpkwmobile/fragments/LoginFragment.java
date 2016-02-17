@@ -228,7 +228,7 @@ public class LoginFragment extends Fragment {
         String secret = sharedPref.getString(StringUtils.OAUTH2_SECRET_PREFERENCE, null);
         PrivateKey privateKey = SecurityECDSA.loadPrivateKey(StringUtils.KEY_ALIAS);
         oAuthParam.setLoginURL(sharedPref.getString(StringUtils.URL_LOGIN_PREFERENCE, StringUtils.URL_DEFAULT_LOGIN).trim());
-        
+
         if(sharedPref.getBoolean(StringUtils.DEFAULT_PARAM_CHANGE,false)){
             String decryptID = SecurityECDSA.decrypt(Base64.decode(id, Base64.DEFAULT), privateKey);
             String decryptSecret =SecurityECDSA.decrypt(Base64.decode(secret,Base64.DEFAULT),privateKey);
