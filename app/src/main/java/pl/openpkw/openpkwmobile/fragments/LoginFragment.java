@@ -225,13 +225,20 @@ public class LoginFragment extends Fragment {
         OAuthParam oAuthParam = new OAuthParam();
         SharedPreferences sharedPref = getActivity().getSharedPreferences(StringUtils.DATA, Context.MODE_PRIVATE);
         String id = sharedPref.getString(StringUtils.OAUTH2_ID_PREFERENCE, null);
-        String secret = sharedPref.getString(StringUtils.OAUTH2_SECRET_PREFERENCE,null);
+        String secret = sharedPref.getString(StringUtils.OAUTH2_SECRET_PREFERENCE, null);
         PrivateKey privateKey = SecurityECDSA.loadPrivateKey(StringUtils.KEY_ALIAS);
-        String decryptID = SecurityECDSA.decrypt(Base64.decode(id, Base64.DEFAULT), privateKey);
-        String decryptSecret =SecurityECDSA.decrypt(Base64.decode(secret,Base64.DEFAULT),privateKey);
         oAuthParam.setLoginURL(sharedPref.getString(StringUtils.URL_LOGIN_PREFERENCE, StringUtils.URL_DEFAULT_LOGIN).trim());
-        oAuthParam.setId(decryptID);
-        oAuthParam.setSecret(decryptSecret);
+        
+        if(sharedPref.getBoolean(StringUtils.DEFAULT_PARAM_CHANGE,false)){
+            String decryptID = SecurityECDSA.decrypt(Base64.decode(id, Base64.DEFAULT), privateKey);
+            String decryptSecret =SecurityECDSA.decrypt(Base64.decode(secret,Base64.DEFAULT),privateKey);
+            oAuthParam.setId(decryptID);
+            oAuthParam.setSecret(decryptSecret);
+        } else {
+            oAuthParam.setId(sharedPref.getString(StringUtils.OAUTH2_ID_PREFERENCE, StringUtils.ID_DEFAULT).trim());
+            oAuthParam.setSecret(sharedPref.getString(StringUtils.OAUTH2_SECRET_PREFERENCE, StringUtils.SECRET_DEFAULT).trim());
+        }
+
         return oAuthParam;
     }
 
