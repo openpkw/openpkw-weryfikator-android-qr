@@ -36,7 +36,7 @@ import pl.openpkw.openpkwmobile.network.GetAccessToken;
 import pl.openpkw.openpkwmobile.network.NetworkUtils;
 import pl.openpkw.openpkwmobile.network.QrSendResponse;
 import pl.openpkw.openpkwmobile.network.SendQrData;
-import pl.openpkw.openpkwmobile.security.SecretKeyWrapper;
+import pl.openpkw.openpkwmobile.security.KeyWrapper;
 import pl.openpkw.openpkwmobile.security.SecurityECDSA;
 import pl.openpkw.openpkwmobile.utils.StringUtils;
 
@@ -97,11 +97,11 @@ public class ScanQrCodeFragment extends Fragment {
             {
                 if(NetworkUtils.isNetworkAvailable(getActivity())) {
                     SharedPreferences sharedPref = getActivity().getSharedPreferences(StringUtils.DATA, Context.MODE_PRIVATE);
-                    SecretKeyWrapper secretKeyWrapper = new SecretKeyWrapper(getActivity().getApplicationContext(),StringUtils.KEY_ALIAS);
+                    KeyWrapper keyWrapper = new KeyWrapper(getActivity().getApplicationContext(),StringUtils.KEY_ALIAS);
                     String privateKeyStr = sharedPref.getString(StringUtils.PRIVATE_KEY,null);
                     PrivateKey privateKey = null;
                     try {
-                        privateKey = secretKeyWrapper.unwrapPrivateKey(Base64.decode(privateKeyStr,Base64.DEFAULT));
+                        privateKey = keyWrapper.unwrapPrivateKey(Base64.decode(privateKeyStr,Base64.DEFAULT));
                     } catch (GeneralSecurityException e) {
                         e.printStackTrace();
                     }
@@ -162,7 +162,7 @@ public class ScanQrCodeFragment extends Fragment {
                     if(!json.getString(StringUtils.ERROR).isEmpty())
                     {
                         Toast.makeText(getActivity().getApplicationContext(),
-                                "INTERNAL SERVER ERROR", Toast.LENGTH_LONG).show();
+                                "Błąd dostępu do serwera", Toast.LENGTH_LONG).show();
                     }
 
                 } catch (JSONException e) {
@@ -236,9 +236,12 @@ public class ScanQrCodeFragment extends Fragment {
         SharedPreferences sharedPref = getActivity().getSharedPreferences(StringUtils.DATA, Context.MODE_PRIVATE);
         oAuthParam.setLoginURL(sharedPref.getString(StringUtils.URL_LOGIN_PREFERENCE, StringUtils.URL_DEFAULT_LOGIN).trim());
         oAuthParam.setSendQrURL(sharedPref.getString(StringUtils.URL_VERIFY_PREFERENCE, StringUtils.URL_DEFAULT__VERIFY_QR).trim());
-        oAuthParam.setRefreshToken(sharedPref.getString(StringUtils.REFRESH_TOKEN, null));
+        String decryptToken = SecurityECDSA.decrypt(Base64.decode(sharedPref.getString(StringUtils.REFRESH_TOKEN, null)
+                ,Base64.DEFAULT),SecurityECDSA.loadPrivateKey(StringUtils.KEY_ALIAS));
+        oAuthParam.setRefreshToken(decryptToken);
         qrString = sharedPref.getString(StringUtils.QR, null);
         clearQRSharedPreferences(StringUtils.QR, sharedPref);
+
         if(sharedPref.getBoolean(StringUtils.DEFAULT_PARAM_CHANGE,false)){
             PrivateKey privateKey = SecurityECDSA.loadPrivateKey(StringUtils.KEY_ALIAS);
             String id = sharedPref.getString(StringUtils.OAUTH2_ID_PREFERENCE, StringUtils.ID_DEFAULT).trim();
@@ -246,9 +249,7 @@ public class ScanQrCodeFragment extends Fragment {
             oAuthParam.setId(decryptID);
             String secret = sharedPref.getString(StringUtils.OAUTH2_SECRET_PREFERENCE, StringUtils.SECRET_DEFAULT).trim();
             String decryptSecret = SecurityECDSA.decrypt(Base64.decode(secret, Base64.DEFAULT), privateKey);
-            oAuthParam.setId(decryptSecret);
-            Log.e(StringUtils.TAG, "ID: " + decryptID);
-            Log.e(StringUtils.TAG, "SECRET: " + decryptSecret);
+            oAuthParam.setSecret(decryptSecret);
         }
         else {
             oAuthParam.setId(sharedPref.getString(StringUtils.OAUTH2_ID_PREFERENCE, StringUtils.ID_DEFAULT).trim());

@@ -36,7 +36,7 @@ import pl.openpkw.openpkwmobile.network.NetworkUtils;
 import pl.openpkw.openpkwmobile.network.RestClientError;
 import pl.openpkw.openpkwmobile.network.SendUserRegisterData;
 import pl.openpkw.openpkwmobile.network.UserRegisterResponse;
-import pl.openpkw.openpkwmobile.security.SecretKeyWrapper;
+import pl.openpkw.openpkwmobile.security.KeyWrapper;
 import pl.openpkw.openpkwmobile.utils.StringUtils;
 
 
@@ -155,7 +155,7 @@ public class RegisterUserFragment extends Fragment {
                 if(NetworkUtils.isNetworkAvailable(getActivity())) {
                     URL_REGISTER = getUrlRegister();
                     SharedPreferences sharedPref = getActivity().getSharedPreferences(StringUtils.DATA, Context.MODE_PRIVATE);
-                    SecretKeyWrapper secretKeyWrapper = new SecretKeyWrapper(getActivity().getApplicationContext(),StringUtils.KEY_ALIAS);
+                    KeyWrapper keyWrapper = new KeyWrapper(getActivity().getApplicationContext(),StringUtils.KEY_ALIAS);
                     UserRegisterDTO userRegisterDTO = new UserRegisterDTO();
                     userRegisterDTO.setPassword(passwordEditText.getText().toString().trim());
                     userRegisterDTO.setEmail(emailEditText.getText().toString().trim());
@@ -164,7 +164,7 @@ public class RegisterUserFragment extends Fragment {
                     String publicKeyStr = sharedPref.getString(StringUtils.PUBLIC_KEY, null);
                     PublicKey publicKey = null;
                     try {
-                        publicKey = secretKeyWrapper.unwrapPublicKey(Base64.decode(publicKeyStr,Base64.DEFAULT));
+                        publicKey = keyWrapper.unwrapPublicKey(Base64.decode(publicKeyStr,Base64.DEFAULT));
                     } catch (GeneralSecurityException e) {
                         e.printStackTrace();
                     }

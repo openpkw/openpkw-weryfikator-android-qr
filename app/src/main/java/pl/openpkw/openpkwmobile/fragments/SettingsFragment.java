@@ -24,7 +24,6 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import pl.openpkw.openpkwmobile.R;
-import pl.openpkw.openpkwmobile.security.SecretKeyWrapper;
 import pl.openpkw.openpkwmobile.security.SecurityECDSA;
 import pl.openpkw.openpkwmobile.utils.StringUtils;
 

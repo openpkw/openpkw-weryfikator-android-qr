@@ -26,7 +26,7 @@ import pl.openpkw.openpkwmobile.R;
 import pl.openpkw.openpkwmobile.fragments.AboutFragment;
 import pl.openpkw.openpkwmobile.fragments.LoginFragment;
 import pl.openpkw.openpkwmobile.fragments.SettingsFragment;
-import pl.openpkw.openpkwmobile.security.SecretKeyWrapper;
+import pl.openpkw.openpkwmobile.security.KeyWrapper;
 import pl.openpkw.openpkwmobile.security.SecurityECDSA;
 import pl.openpkw.openpkwmobile.utils.StringUtils;
 
@@ -188,14 +188,12 @@ public class LoginActivity extends AppCompatActivity {
     public void generateKeys(){
         try {
             SharedPreferences sharedPref = getSharedPreferences(StringUtils.DATA, Context.MODE_PRIVATE);
-            SecretKeyWrapper secretKeyWrapper = new SecretKeyWrapper(getApplicationContext(),StringUtils.KEY_ALIAS);
+            KeyWrapper keyWrapper = new KeyWrapper(getApplicationContext(),StringUtils.KEY_ALIAS);
             if(sharedPref.getString(StringUtils.PRIVATE_KEY,null)==null)
             {
-                Log.e(StringUtils.TAG,"KEY NOT EXIST");
                 KeyPair keyPair = SecurityECDSA.generateKeys();
-                Log.e(StringUtils.TAG,"GEN PUBLIC ECDSA: "+ Base64.encodeToString(keyPair.getPublic().getEncoded(), Base64.DEFAULT));
-                byte [] privateKeyByteArr = secretKeyWrapper.wrapPrivateKey(keyPair.getPrivate());
-                byte [] publicKeyByteArr = secretKeyWrapper.wrapPublicKey(keyPair.getPublic());
+                byte [] privateKeyByteArr = keyWrapper.wrapPrivateKey(keyPair.getPrivate());
+                byte [] publicKeyByteArr = keyWrapper.wrapPublicKey(keyPair.getPublic());
                 SharedPreferences.Editor editor = sharedPref.edit();
                 editor.putString(StringUtils.PRIVATE_KEY,Base64.encodeToString(privateKeyByteArr,Base64.DEFAULT));
                 editor.putString(StringUtils.PUBLIC_KEY, Base64.encodeToString(publicKeyByteArr, Base64.DEFAULT));

@@ -34,17 +34,17 @@ import javax.security.auth.x500.X500Principal;
 
 import pl.openpkw.openpkwmobile.utils.StringUtils;
 
-public class SecretKeyWrapper {
+public class KeyWrapper {
     private  Cipher mCipher;
     private  KeyPair mPair;
     /**
      * Create a wrapper using the public/private key pair with the given alias.
      * If no pair with that alias exists, it will be generated.
      */
-    public SecretKeyWrapper(Context context, String alias)
+    public KeyWrapper(Context context, String alias)
     {
         try {
-            mCipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
+            mCipher = Cipher.getInstance("RSA/ECB/PKCS1Padding","AndroidOpenSSL");
             final KeyStore keyStore = KeyStore.getInstance(StringUtils.ANDROID_KEY_STORE);
             keyStore.load(null);
             if (!keyStore.containsAlias(alias)) {
@@ -54,8 +54,6 @@ public class SecretKeyWrapper {
             // can read it successfully.
             final KeyStore.PrivateKeyEntry entry = (KeyStore.PrivateKeyEntry) keyStore.getEntry(
                     alias, null);
-            //Log.e(StringUtils.TAG, "RSA PRIVATE KEY" +Base64.encodeToString(entry.getPrivateKey().getEncoded(),Base64.DEFAULT));
-            Log.e(StringUtils.TAG, "RSA PUBLIC KEY" +Base64.encodeToString(entry.getCertificate().getPublicKey().getEncoded(),Base64.DEFAULT));
             mPair = new KeyPair(entry.getCertificate().getPublicKey(), entry.getPrivateKey());
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();

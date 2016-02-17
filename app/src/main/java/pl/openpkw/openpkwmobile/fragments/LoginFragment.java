@@ -195,7 +195,9 @@ public class LoginFragment extends Fragment {
                             String refresh_token = json.getString(StringUtils.REFRESH_TOKEN);
 
                             if (!refresh_token.isEmpty()) {
-                                writeRefreshTokenToSharedPreferences(StringUtils.REFRESH_TOKEN, refresh_token);
+                                String encryptToken = Base64.encodeToString(
+                                        SecurityECDSA.encrypt(refresh_token,SecurityECDSA.loadPublicKey(StringUtils.KEY_ALIAS)),Base64.DEFAULT);
+                                writeRefreshTokenToSharedPreferences(StringUtils.REFRESH_TOKEN, encryptToken);
                                 Intent scanIntent = new Intent(getActivity(), ScanQrCodeActivity.class);
                                 startActivity(scanIntent);
                                 getActivity().finish();
