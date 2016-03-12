@@ -1,3 +1,14 @@
+buildscript {
+  repositories {
+    mavenCentral()
+  }
+  dependencies {
+    classpath 'com.android.tools.build:gradle:0.12.+'
+    classpath 'com.jakewharton.sdkmanager:gradle-plugin:0.12.+'
+  }
+}
+
+apply plugin: 'android-sdk-manager'
 apply plugin: 'com.android.application'
 
 android {
@@ -27,7 +38,9 @@ android {
         exclude 'META-INF/NOTICE'
     }
 
-
+    lintOptions {
+        abortOnError false
+    }
 }
 
 dependencies {
