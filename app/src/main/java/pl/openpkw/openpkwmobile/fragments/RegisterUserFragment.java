@@ -282,7 +282,7 @@ public class RegisterUserFragment extends Fragment {
                                 break;
 
                             default:
-                                builder.setMessage(R.string.register_toast_user_already_exist_message)
+                                builder.setMessage(R.string.register_toast_user_register_error_message)
                                         .setTitle(R.string.register_toast_user_register_title)
                                         .setPositiveButton(R.string.zxing_button_ok, null);
                                 break;
