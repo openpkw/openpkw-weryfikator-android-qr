@@ -69,6 +69,8 @@ public class GetRefreshToken {
             } catch (JSONException e1) {
                 e1.printStackTrace();
             }
+        }finally {
+            oAuthClient.shutdown();
         }
 
         //build JSON

@@ -147,7 +147,6 @@ public class LoginActivity extends AppCompatActivity {
                 ft.commit();
                 fm.executePendingTransactions();
             }
-
         }
         else if(fragmentAbout !=null && fragmentAbout .isVisible()) {
             //show action bar
@@ -201,7 +200,6 @@ public class LoginActivity extends AppCompatActivity {
                     editor.apply();
                 }
             }
-
         } catch (GeneralSecurityException e) {
             Log.e(StringUtils.TAG, "GeneralSecurityException: " + e.getMessage());
         }

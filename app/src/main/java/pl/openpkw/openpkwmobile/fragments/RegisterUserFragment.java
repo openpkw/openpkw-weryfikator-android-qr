@@ -1,5 +1,6 @@
 package pl.openpkw.openpkwmobile.fragments;
 
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -169,14 +170,20 @@ public class RegisterUserFragment extends Fragment {
                         e.printStackTrace();
                     }
                     if (publicKey != null) {
-                        userRegisterDTO.setKey(Base64.encodeToString(publicKey.getEncoded(),Base64.DEFAULT));
+                        Log.e(StringUtils.TAG, "PUBLIC KEY:" + Base64.encodeToString(publicKey.getEncoded(), Base64.NO_WRAP));
+                        userRegisterDTO.setPublicKey(Base64.encodeToString(publicKey.getEncoded(), Base64.NO_WRAP));
                     }
 
                     RegisterUserAsyncTask registerUserAsyncTask = new RegisterUserAsyncTask();
                     registerUserAsyncTask.execute(userRegisterDTO);
-                }else
-                    Toast.makeText(getActivity().getApplicationContext(),getString(R.string.login_toast_no_network_connection),
-                            Toast.LENGTH_LONG).show();
+                }else {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setMessage(R.string.login_toast_no_network_connection_message)
+                            .setTitle(R.string.login_toast_no_network_connection_title)
+                            .setPositiveButton(R.string.zxing_button_ok,null);
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                }
             }
             else
                 Toast.makeText(getActivity().getApplicationContext(),getString(R.string.register_error_data_user),
@@ -258,22 +265,30 @@ public class RegisterUserFragment extends Fragment {
 
                         Gson gson = new GsonBuilder().create();
                         UserRegisterResponse userRegisterResponse = gson.fromJson(json.toString(), UserRegisterResponse.class);
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
                         switch (userRegisterResponse.getErrorCode()) {
                             case RestClientError.OK:
-                                Toast.makeText(getActivity().getApplicationContext(),getString(R.string.register_toast_user_register_ok),
-                                        Toast.LENGTH_LONG).show();
+                                builder.setMessage(R.string.register_toast_user_register_ok_message)
+                                        .setTitle(R.string.register_toast_user_register_title)
+                                        .setPositiveButton(R.string.zxing_button_ok, null);
                                 break;
 
                             case RestClientError.USER_ALREADY_EXISTS:
-                                Toast.makeText(getActivity().getApplicationContext(),getString(R.string.register_toast_user_already_exist),
-                                        Toast.LENGTH_LONG).show();
+
+                                builder.setMessage(R.string.register_toast_user_already_exist_message)
+                                        .setTitle(R.string.register_toast_user_register_title)
+                                        .setPositiveButton(R.string.zxing_button_ok, null);
                                 break;
 
                             default:
-                                Log.e(StringUtils.TAG, "REGISTRATION USER ERROR");
+                                builder.setMessage(R.string.register_toast_user_already_exist_message)
+                                        .setTitle(R.string.register_toast_user_register_title)
+                                        .setPositiveButton(R.string.zxing_button_ok, null);
                                 break;
                         }
+                        AlertDialog dialog = builder.create();
+                        dialog.show();
 
                     }
                 } catch (JSONException e) {

@@ -35,7 +35,8 @@ public class SendQrData {
             e.printStackTrace();
         }
 
-        //set request body JSON {"qr":"scanned_qr","token":"access_token"}
+        //set request body JSON {"qr":"scanned_qr","token":"qr_signature_ECDSA"}
+        Log.e(StringUtils.TAG,"JSON BODY: "+body);
         if (bearerClientRequest != null) {
             bearerClientRequest.setHeader(OAuth.HeaderType.CONTENT_TYPE, OAuth.ContentType.JSON);
             bearerClientRequest.setBody(body);
@@ -49,6 +50,7 @@ public class SendQrData {
         try {
             oAuthResourceResponse = oAuthClient.resource(bearerClientRequest, OAuth.HttpMethod.POST, OAuthResourceResponse.class);
             Log.e(StringUtils.TAG,"SEND QR RESPONSE BODY: "+oAuthResourceResponse.getBody());
+            Log.e(StringUtils.TAG,"RESPONSE CODE: "+oAuthResourceResponse.getResponseCode());
         } catch (OAuthSystemException e) {
             e.printStackTrace();
             Log.e(StringUtils.TAG, "SEND QR SYSTEM EXCEPTION: " + e.getMessage());

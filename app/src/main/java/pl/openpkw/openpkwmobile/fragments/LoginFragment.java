@@ -1,5 +1,6 @@
 package pl.openpkw.openpkwmobile.fragments;
 
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -118,9 +119,14 @@ public class LoginFragment extends Fragment {
                     LoginAsyncTask loginAsyncTask = new LoginAsyncTask(getOAuthLoginParam());
                     loginAsyncTask.execute(credentials);
                }
-               else
-                    Toast.makeText(getActivity().getApplicationContext(),getString(R.string.login_toast_no_network_connection),
-                            Toast.LENGTH_LONG).show();
+               else {
+                   AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                   builder.setMessage(R.string.login_toast_no_network_connection_message)
+                           .setTitle(R.string.login_toast_no_network_connection_title)
+                           .setPositiveButton(R.string.zxing_button_ok,null);
+                   AlertDialog dialog = builder.create();
+                   dialog.show();
+               }
             }
             else
             {

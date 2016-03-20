@@ -6,7 +6,6 @@ package pl.openpkw.openpkwmobile.models;
 public class QrDTO {
     private String qr;
     private String token;
-    private String sign;
 
     public String getQr() {
         return qr;
@@ -22,13 +21,5 @@ public class QrDTO {
 
     public void setToken(String token) {
         this.token = token;
-    }
-
-    public String getSign() {
-        return sign;
-    }
-
-    public void setSign(String sign) {
-        this.sign = sign;
     }
 }

@@ -118,6 +118,7 @@ public class SecurityECC {
             return keyFactory.generatePublic(X509publicKey);
         }
         catch(Exception e){
+            Log.e(StringUtils.TAG,"ERROR CREATE PUBLIC KEY: "+e.getMessage());
             e.printStackTrace();
         }
         return null;
@@ -131,6 +132,7 @@ public class SecurityECC {
             return keyFactory.generatePrivate(encodedKeySpec);
         }
         catch(Exception e){
+            Log.e(StringUtils.TAG,"ERROR CREATE PRIVATE KEY: "+e.getMessage());
             e.printStackTrace();
         }
         return null;

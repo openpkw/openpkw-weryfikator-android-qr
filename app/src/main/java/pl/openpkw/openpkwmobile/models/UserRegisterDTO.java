@@ -8,7 +8,7 @@ public class UserRegisterDTO {
     private String first_name;
     private String last_name;
     private String password;
-    private String key;
+    private String public_key;
 
     public String getEmail() {
         return email;
@@ -42,11 +42,11 @@ public class UserRegisterDTO {
         this.last_name = last_name;
     }
 
-    public String getKey() {
-        return key;
+    public String getPublicKey() {
+        return public_key;
     }
 
-    public void setKey(String key) {
-        this.key = key;
+    public void setPublicKey(String public_key) {
+        this.public_key = public_key;
     }
 }

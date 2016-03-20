@@ -1,5 +1,6 @@
 package pl.openpkw.openpkwmobile.fragments;
 
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
@@ -31,7 +32,6 @@ import java.security.Security;
 
 import pl.openpkw.openpkwmobile.R;
 import pl.openpkw.openpkwmobile.activities.ElectionResultActivity;
-import pl.openpkw.openpkwmobile.activities.VotingFormActivity;
 import pl.openpkw.openpkwmobile.models.OAuthParam;
 import pl.openpkw.openpkwmobile.models.QrDTO;
 import pl.openpkw.openpkwmobile.network.GetAccessToken;
@@ -110,8 +110,7 @@ public class ScanQrCodeFragment extends Fragment {
                     }
                     scanQrDTO = new QrDTO();
                     scanQrDTO.setQr(qrString);
-                    scanQrDTO.setToken(oAuthParam.getRefreshToken());
-                    scanQrDTO.setSign(Base64.encodeToString(SecurityECC.generateSignature(qrString, privateKey),Base64.DEFAULT));
+                    scanQrDTO.setToken(Base64.encodeToString(SecurityECC.generateSignature(qrString, privateKey), Base64.NO_WRAP));
 
                     GetAccessTokenAsyncTask getAccessTokenAsyncTask = new GetAccessTokenAsyncTask();
                     getAccessTokenAsyncTask.execute(oAuthParam);
@@ -120,8 +119,14 @@ public class ScanQrCodeFragment extends Fragment {
                                     " " + qrString,
                             Toast.LENGTH_LONG).show();
                 }else
-                    Toast.makeText(getActivity().getApplicationContext(),getString(R.string.login_toast_no_network_connection),
-                            Toast.LENGTH_LONG).show();
+                {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setMessage(R.string.login_toast_no_network_connection_message)
+                            .setTitle(R.string.login_toast_no_network_connection_title)
+                            .setPositiveButton(R.string.zxing_button_ok,null);
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                }
             }
             else
                 Toast.makeText(getActivity().getApplicationContext(),getString(R.string.scan_qr_toast_please_scan_qr),

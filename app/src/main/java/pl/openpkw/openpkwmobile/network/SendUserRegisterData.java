@@ -32,7 +32,8 @@ public class SendUserRegisterData {
             e.printStackTrace();
         }
 
-        //set request body JSON {"qr":"scanned_qr","token":"access_token"}
+        //set request body JSON {"first_name":"user_first_name","last_name":"user_last_name","password":"user_password","email":"user_email"."public_key":"user_public_key_ECDSA"}
+        Log.e(StringUtils.TAG,"USER REGISTER JSON: "+body);
         if (oAuthRequest != null) {
             oAuthRequest.setHeader(OAuth.HeaderType.CONTENT_TYPE, OAuth.ContentType.JSON);
             oAuthRequest.setBody(body);
@@ -45,7 +46,7 @@ public class SendUserRegisterData {
         OAuthResourceResponse oAuthResourceResponse = null;
         try {
             oAuthResourceResponse = oAuthClient.resource(oAuthRequest, OAuth.HttpMethod.POST, OAuthResourceResponse.class);
-            Log.e(StringUtils.TAG,"SEND QR RESPONSE BODY: "+oAuthResourceResponse.getBody());
+            Log.e(StringUtils.TAG,"SEND USER DATA RESPONSE BODY: "+oAuthResourceResponse.getBody());
         } catch (OAuthSystemException e) {
             e.printStackTrace();
             Log.e(StringUtils.TAG, "SEND QR SYSTEM EXCEPTION: " + e.getMessage());
@@ -54,7 +55,7 @@ public class SendUserRegisterData {
             Log.e(StringUtils.TAG, "SEND QR PROBLEM EXCEPTION: " + e.getMessage());
         }
 
-        //build JSON
+        //build response JSON
         if(oAuthResourceResponse!=null) {
             try {
                 jsonObject = new JSONObject(oAuthResourceResponse.getBody());
