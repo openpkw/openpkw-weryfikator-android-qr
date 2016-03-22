@@ -11,7 +11,8 @@
                 android:paddingLeft="10dp"
                 android:paddingStart="10dp"
                 android:summary="http://rumcajs.open-pkw.pl:9080/openpkw/api/login"
-                android:dialogTitle="Ustaw URL logowania" />
+                android:dialogTitle="Ustaw URL logowania"
+                />
 
             <EditTextPreference
                 android:key="url_register_preference"

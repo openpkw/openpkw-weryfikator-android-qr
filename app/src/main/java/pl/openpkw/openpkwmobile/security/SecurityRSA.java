@@ -23,7 +23,7 @@ import javax.crypto.Cipher;
 import javax.crypto.CipherInputStream;
 import javax.security.auth.x500.X500Principal;
 
-import pl.openpkw.openpkwmobile.utils.StringUtils;
+import pl.openpkw.openpkwmobile.utils.Utils;
 
 /**
  * Created by Admin on 17.02.16.
@@ -42,7 +42,7 @@ public class SecurityRSA {
                 .setStartDate(start.getTime())
                 .setEndDate(end.getTime())
                 .build();
-        final KeyPairGenerator keyGen = KeyPairGenerator.getInstance(StringUtils.RSA, StringUtils.ANDROID_KEY_STORE);
+        final KeyPairGenerator keyGen = KeyPairGenerator.getInstance(Utils.RSA, Utils.ANDROID_KEY_STORE);
         keyGen.initialize(spec, new SecureRandom());
         keyGen.generateKeyPair();
     }
@@ -50,7 +50,7 @@ public class SecurityRSA {
     public static PublicKey loadPublicKey(String keyAlias) {
         java.security.KeyStore keyStore;
         try {
-            keyStore = java.security.KeyStore.getInstance(StringUtils.ANDROID_KEY_STORE);
+            keyStore = java.security.KeyStore.getInstance(Utils.ANDROID_KEY_STORE);
             keyStore.load(null);
             java.security.KeyStore.Entry keyEntry = keyStore.getEntry(keyAlias, null);
             return ((java.security.KeyStore.PrivateKeyEntry) keyEntry)
@@ -65,7 +65,7 @@ public class SecurityRSA {
     public static PrivateKey loadPrivateKey(String keyAlias) {
         java.security.KeyStore keyStore;
         try {
-            keyStore = java.security.KeyStore.getInstance(StringUtils.ANDROID_KEY_STORE);
+            keyStore = java.security.KeyStore.getInstance(Utils.ANDROID_KEY_STORE);
             keyStore.load(null);
             java.security.KeyStore.Entry keyEntry = keyStore.getEntry(keyAlias, null);
             return ((java.security.KeyStore.PrivateKeyEntry) keyEntry)
@@ -81,7 +81,7 @@ public class SecurityRSA {
         byte[] cipherText = null;
         try {
             // get an RSA cipher object
-            final Cipher cipher = Cipher.getInstance(StringUtils.ENCRYPTION_MODE_RSA, StringUtils.PROVIDER_OPEN_SSL);
+            final Cipher cipher = Cipher.getInstance(Utils.ENCRYPTION_MODE_RSA, Utils.PROVIDER_OPEN_SSL);
             // encrypt the plain text using the public key
             cipher.init(Cipher.ENCRYPT_MODE, key);
             cipherText = cipher.doFinal(text.getBytes());
@@ -93,7 +93,7 @@ public class SecurityRSA {
 
     public static String decrypt(byte [] encryptedText, PrivateKey key) {
         try {
-            Cipher output = Cipher.getInstance(StringUtils.ENCRYPTION_MODE_RSA, StringUtils.PROVIDER_OPEN_SSL);
+            Cipher output = Cipher.getInstance(Utils.ENCRYPTION_MODE_RSA, Utils.PROVIDER_OPEN_SSL);
             output.init(Cipher.DECRYPT_MODE, key);
 
             CipherInputStream cipherInputStream = new CipherInputStream(
@@ -108,7 +108,7 @@ public class SecurityRSA {
             for(int i = 0; i < bytes.length; i++) {
                 bytes[i] = values.get(i);
             }
-            return  new String(bytes, 0, bytes.length, StringUtils.CHARACTER_ENCODING);
+            return  new String(bytes, 0, bytes.length, Utils.CHARACTER_ENCODING);
 
         } catch (Exception e) {
             return null;

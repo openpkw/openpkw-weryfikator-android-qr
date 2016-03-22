@@ -2,6 +2,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="pl.openpkw.openpkwmobile.activities.RegisterUserActivity">
+
+    <item android:id="@+id/session.timer"
+        android:title="@string/session_timer_start"
+        app:showAsAction="ifRoom"
+        app:actionViewClass="android.widget.TextView" />
+
     <group android:id="@+id/grp1">
         <item android:id="@+id/action_settings"
             android:title="@string/action_settings"

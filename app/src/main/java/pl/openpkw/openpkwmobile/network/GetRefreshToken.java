@@ -13,7 +13,7 @@ import org.apache.oltu.oauth2.common.message.types.GrantType;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import pl.openpkw.openpkwmobile.utils.StringUtils;
+import pl.openpkw.openpkwmobile.utils.Utils;
 
 public class GetRefreshToken {
 
@@ -34,7 +34,7 @@ public class GetRefreshToken {
                     .setGrantType(GrantType.PASSWORD)
                     .setClientId(client_id)
                     .setClientSecret(client_secret)
-                    .setScope(StringUtils.SCOPE)
+                    .setScope(Utils.SCOPE)
                     .setPassword(password)
                     .setUsername(username)
                     .buildBodyMessage();
@@ -58,13 +58,13 @@ public class GetRefreshToken {
 
         } catch (OAuthSystemException e) {
             e.printStackTrace();
-            Log.e(StringUtils.TAG, "SYSTEM EXCEPTION LOGIN: " + e.getMessage());
+            Log.e(Utils.TAG, "SYSTEM EXCEPTION LOGIN: " + e.getMessage());
         } catch (OAuthProblemException e) {
             e.printStackTrace();
-            Log.e(StringUtils.TAG,"PROBLEM EXCEPTION LOGIN: "+e.getMessage());
+            Log.e(Utils.TAG,"PROBLEM EXCEPTION LOGIN: "+e.getMessage());
             try {
                 jsonObject = new JSONObject();
-                jsonObject.put(StringUtils.ERROR, e.getMessage());
+                jsonObject.put(Utils.ERROR, e.getMessage());
                 return jsonObject;
             } catch (JSONException e1) {
                 e1.printStackTrace();

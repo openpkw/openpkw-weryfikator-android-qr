@@ -13,7 +13,7 @@ import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import pl.openpkw.openpkwmobile.utils.StringUtils;
+import pl.openpkw.openpkwmobile.utils.Utils;
 
 public class SendQrData {
 
@@ -36,7 +36,7 @@ public class SendQrData {
         }
 
         //set request body JSON {"qr":"scanned_qr","token":"qr_signature_ECDSA"}
-        Log.e(StringUtils.TAG,"JSON BODY: "+body);
+        Log.e(Utils.TAG,"JSON BODY: "+body);
         if (bearerClientRequest != null) {
             bearerClientRequest.setHeader(OAuth.HeaderType.CONTENT_TYPE, OAuth.ContentType.JSON);
             bearerClientRequest.setBody(body);
@@ -49,14 +49,14 @@ public class SendQrData {
         OAuthResourceResponse oAuthResourceResponse = null;
         try {
             oAuthResourceResponse = oAuthClient.resource(bearerClientRequest, OAuth.HttpMethod.POST, OAuthResourceResponse.class);
-            Log.e(StringUtils.TAG,"SEND QR RESPONSE BODY: "+oAuthResourceResponse.getBody());
-            Log.e(StringUtils.TAG,"RESPONSE CODE: "+oAuthResourceResponse.getResponseCode());
+            Log.e(Utils.TAG,"SEND QR RESPONSE BODY: "+oAuthResourceResponse.getBody());
+            Log.e(Utils.TAG,"RESPONSE CODE: "+oAuthResourceResponse.getResponseCode());
         } catch (OAuthSystemException e) {
             e.printStackTrace();
-            Log.e(StringUtils.TAG, "SEND QR SYSTEM EXCEPTION: " + e.getMessage());
+            Log.e(Utils.TAG, "SEND QR SYSTEM EXCEPTION: " + e.getMessage());
         } catch (OAuthProblemException e) {
             e.printStackTrace();
-            Log.e(StringUtils.TAG, "SEND QR PROBLEM EXCEPTION: " + e.getMessage());
+            Log.e(Utils.TAG, "SEND QR PROBLEM EXCEPTION: " + e.getMessage());
         }
 
         //build JSON

@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
@@ -16,6 +17,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.security.GeneralSecurityException;
@@ -28,7 +30,7 @@ import pl.openpkw.openpkwmobile.fragments.LoginFragment;
 import pl.openpkw.openpkwmobile.fragments.SettingsFragment;
 import pl.openpkw.openpkwmobile.security.KeyWrapper;
 import pl.openpkw.openpkwmobile.security.SecurityECC;
-import pl.openpkw.openpkwmobile.utils.StringUtils;
+import pl.openpkw.openpkwmobile.utils.Utils;
 
 
 public class LoginActivity extends AppCompatActivity {
@@ -41,10 +43,10 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         FragmentManager fm = getFragmentManager();
-        LoginFragment loginFragment = (LoginFragment) fm.findFragmentByTag(StringUtils.LOGIN_FRAGMENT_TAG);
+        LoginFragment loginFragment = (LoginFragment) fm.findFragmentByTag(Utils.LOGIN_FRAGMENT_TAG);
         if (loginFragment == null) {
             FragmentTransaction ft = fm.beginTransaction();
-            ft.replace(R.id.login_fragment_container, new LoginFragment(), StringUtils.LOGIN_FRAGMENT_TAG);
+            ft.replace(R.id.login_fragment_container, new LoginFragment(), Utils.LOGIN_FRAGMENT_TAG);
             ft.commit();
             fm.executePendingTransactions();
         }
@@ -60,6 +62,11 @@ public class LoginActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_app, menu);
+        //set session timer to 15 min
+        MenuItem timerMenuItem = menu.findItem(R.id.session_timer);
+        TextView sessionTimerTextView = (TextView) MenuItemCompat.getActionView(timerMenuItem);
+        sessionTimerTextView.setPadding(10, 0, 10, 0);
+        sessionTimerTextView.setText(R.string.session_timer_start);
         return true;
     }
 
@@ -67,7 +74,7 @@ public class LoginActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         FragmentManager fm = getFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
-        Fragment loginFragment = getFragmentManager().findFragmentByTag(StringUtils.LOGIN_FRAGMENT_TAG);
+        Fragment loginFragment = getFragmentManager().findFragmentByTag(Utils.LOGIN_FRAGMENT_TAG);
         //hide action bar
         ActionBar actionBar = getSupportActionBar();
         if(actionBar!=null)
@@ -82,10 +89,10 @@ public class LoginActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_settings:
                 // Display the settings fragment as the main content.
-                SettingsFragment settingsFragment = (SettingsFragment) fm.findFragmentByTag(StringUtils.SETTINGS_FRAGMENT_TAG);
+                SettingsFragment settingsFragment = (SettingsFragment) fm.findFragmentByTag(Utils.SETTINGS_FRAGMENT_TAG);
                 if (settingsFragment == null) {
                     settingsFragment = new SettingsFragment();
-                    ft.add(R.id.login_fragment_container, settingsFragment, StringUtils.SETTINGS_FRAGMENT_TAG);
+                    ft.add(R.id.login_fragment_container, settingsFragment, Utils.SETTINGS_FRAGMENT_TAG);
                     ft.hide(loginFragment);
                     ft.addToBackStack(null);
                     ft.commit();
@@ -103,10 +110,10 @@ public class LoginActivity extends AppCompatActivity {
 
             case R.id.about_project:
                 // Display the about fragment as the main content.
-                AboutFragment aboutFragment = (AboutFragment) fm.findFragmentByTag(StringUtils.ABOUT_FRAGMENT_TAG);
+                AboutFragment aboutFragment = (AboutFragment) fm.findFragmentByTag(Utils.ABOUT_FRAGMENT_TAG);
                 if (aboutFragment  == null) {
                     aboutFragment  = new AboutFragment();
-                    ft.add(R.id.login_fragment_container, aboutFragment , StringUtils.ABOUT_FRAGMENT_TAG);
+                    ft.add(R.id.login_fragment_container, aboutFragment , Utils.ABOUT_FRAGMENT_TAG);
                     ft.hide(loginFragment);
                     ft.addToBackStack(null);
                     ft.commit();
@@ -128,8 +135,8 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Fragment fragmentSettings = getFragmentManager().findFragmentByTag(StringUtils.SETTINGS_FRAGMENT_TAG);
-        Fragment fragmentAbout = getFragmentManager().findFragmentByTag(StringUtils.ABOUT_FRAGMENT_TAG);
+        Fragment fragmentSettings = getFragmentManager().findFragmentByTag(Utils.SETTINGS_FRAGMENT_TAG);
+        Fragment fragmentAbout = getFragmentManager().findFragmentByTag(Utils.ABOUT_FRAGMENT_TAG);
         if(fragmentSettings!=null && fragmentSettings.isVisible())
         {
             //show action bar
@@ -138,7 +145,7 @@ public class LoginActivity extends AppCompatActivity {
                 actionBar.show();
 
             FragmentManager fm = getFragmentManager();
-            LoginFragment loginFragment = (LoginFragment) fm.findFragmentByTag(StringUtils.LOGIN_FRAGMENT_TAG);
+            LoginFragment loginFragment = (LoginFragment) fm.findFragmentByTag(Utils.LOGIN_FRAGMENT_TAG);
             if (loginFragment != null) {
                 FragmentTransaction ft = fm.beginTransaction();
                 ft.hide(fragmentSettings);
@@ -155,7 +162,7 @@ public class LoginActivity extends AppCompatActivity {
                 actionBar.show();
 
             FragmentManager fm = getFragmentManager();
-            LoginFragment loginFragment = (LoginFragment) fm.findFragmentByTag(StringUtils.LOGIN_FRAGMENT_TAG);
+            LoginFragment loginFragment = (LoginFragment) fm.findFragmentByTag(Utils.LOGIN_FRAGMENT_TAG);
             if (loginFragment != null) {
                 FragmentTransaction ft = fm.beginTransaction();
                 ft.hide(fragmentAbout);
@@ -186,23 +193,22 @@ public class LoginActivity extends AppCompatActivity {
 
     public void generateKeys(){
         try {
-            SharedPreferences sharedPref = getSharedPreferences(StringUtils.DATA, Context.MODE_PRIVATE);
-            KeyWrapper keyWrapper = new KeyWrapper(getApplicationContext(),StringUtils.KEY_ALIAS);
-            if(sharedPref.getString(StringUtils.PRIVATE_KEY,null)==null)
+            SharedPreferences sharedPref = getSharedPreferences(Utils.DATA, Context.MODE_PRIVATE);
+            KeyWrapper keyWrapper = new KeyWrapper(getApplicationContext(), Utils.KEY_ALIAS);
+            if(sharedPref.getString(Utils.PRIVATE_KEY,null)==null)
             {
                 KeyPair keyPair = SecurityECC.generateKeys();
                 if (keyPair != null) {
                     byte [] privateKeyByteArr = keyWrapper.wrapPrivateKey(keyPair.getPrivate());
                     byte [] publicKeyByteArr = keyWrapper.wrapPublicKey(keyPair.getPublic());
                     SharedPreferences.Editor editor = sharedPref.edit();
-                    editor.putString(StringUtils.PRIVATE_KEY,Base64.encodeToString(privateKeyByteArr,Base64.DEFAULT));
-                    editor.putString(StringUtils.PUBLIC_KEY, Base64.encodeToString(publicKeyByteArr, Base64.DEFAULT));
+                    editor.putString(Utils.PRIVATE_KEY,Base64.encodeToString(privateKeyByteArr,Base64.DEFAULT));
+                    editor.putString(Utils.PUBLIC_KEY, Base64.encodeToString(publicKeyByteArr, Base64.DEFAULT));
                     editor.apply();
                 }
             }
         } catch (GeneralSecurityException e) {
-            Log.e(StringUtils.TAG, "GeneralSecurityException: " + e.getMessage());
+            Log.e(Utils.TAG, "GeneralSecurityException: " + e.getMessage());
         }
     }
-
 }

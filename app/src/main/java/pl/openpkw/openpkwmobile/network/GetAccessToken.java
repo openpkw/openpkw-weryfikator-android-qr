@@ -13,7 +13,7 @@ import org.apache.oltu.oauth2.common.message.types.GrantType;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import pl.openpkw.openpkwmobile.utils.StringUtils;
+import pl.openpkw.openpkwmobile.utils.Utils;
 
 /**
  * Created by Admin on 14.01.16.
@@ -58,10 +58,10 @@ public class GetAccessToken {
 
         } catch (OAuthSystemException e) {
             e.printStackTrace();
-            Log.e(StringUtils.TAG, "SYSTEM EXCEPTION ACCESS TOKEN: " + e.getMessage());
+            Log.e(Utils.TAG, "SYSTEM EXCEPTION ACCESS TOKEN: " + e.getMessage());
         } catch (OAuthProblemException e) {
             e.printStackTrace();
-            Log.e(StringUtils.TAG,"PROBLEM EXCEPTION ACCESS TOKEN: "+e.getMessage());
+            Log.e(Utils.TAG,"PROBLEM EXCEPTION ACCESS TOKEN: "+e.getMessage());
             try {
                 jsonObject = new JSONObject();
                 jsonObject.put("error", e.getMessage());

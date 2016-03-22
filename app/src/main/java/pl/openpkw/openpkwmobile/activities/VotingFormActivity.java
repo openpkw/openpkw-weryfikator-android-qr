@@ -8,7 +8,7 @@ import android.support.v4.app.FragmentTransaction;
 
 import pl.openpkw.openpkwmobile.R;
 import pl.openpkw.openpkwmobile.fragments.VotingFormFragment;
-import pl.openpkw.openpkwmobile.utils.StringUtils;
+import pl.openpkw.openpkwmobile.utils.Utils;
 
 
 public class VotingFormActivity extends FragmentActivity {
@@ -20,11 +20,11 @@ public class VotingFormActivity extends FragmentActivity {
 
         FragmentManager fm = getSupportFragmentManager();
         VotingFormFragment fvFragment = (VotingFormFragment)
-                fm.findFragmentByTag(StringUtils.VOTING_FORM_FRAGMENT_TAG);
+                fm.findFragmentByTag(Utils.VOTING_FORM_FRAGMENT_TAG);
         if (fvFragment == null) {
             FragmentTransaction ft = fm.beginTransaction();
             ft.replace(R.id.fvoting_fragment_container, new VotingFormFragment(),
-                    StringUtils.VOTING_FORM_FRAGMENT_TAG);
+                    Utils.VOTING_FORM_FRAGMENT_TAG);
             ft.commit();
             fm.executePendingTransactions();
         }

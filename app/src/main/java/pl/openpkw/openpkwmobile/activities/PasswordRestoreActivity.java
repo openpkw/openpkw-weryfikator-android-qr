@@ -17,7 +17,7 @@ import pl.openpkw.openpkwmobile.R;
 import pl.openpkw.openpkwmobile.fragments.AboutFragment;
 import pl.openpkw.openpkwmobile.fragments.PasswordRestoreFragment;
 import pl.openpkw.openpkwmobile.fragments.SettingsFragment;
-import pl.openpkw.openpkwmobile.utils.StringUtils;
+import pl.openpkw.openpkwmobile.utils.Utils;
 
 public class PasswordRestoreActivity extends AppCompatActivity {
 
@@ -28,12 +28,12 @@ public class PasswordRestoreActivity extends AppCompatActivity {
 
         FragmentManager fm = getFragmentManager();
         PasswordRestoreFragment passwordRestoreFragment = (PasswordRestoreFragment)
-                fm.findFragmentByTag(StringUtils.PRESTORE_FRAGMENT_TAG);
+                fm.findFragmentByTag(Utils.PRESTORE_FRAGMENT_TAG);
 
         if (passwordRestoreFragment == null) {
             FragmentTransaction ft = fm.beginTransaction();
             ft.replace(R.id.prestore_fragment_container, new PasswordRestoreFragment(),
-                    StringUtils.PRESTORE_FRAGMENT_TAG);
+                    Utils.PRESTORE_FRAGMENT_TAG);
             ft.commit();
             fm.executePendingTransactions();
         }
@@ -50,7 +50,7 @@ public class PasswordRestoreActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         FragmentManager fm = getFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
-        Fragment passwordRestoreFragment = getFragmentManager().findFragmentByTag(StringUtils.PRESTORE_FRAGMENT_TAG);
+        Fragment passwordRestoreFragment = getFragmentManager().findFragmentByTag(Utils.PRESTORE_FRAGMENT_TAG);
         //hide keyboard
         View view = this.getCurrentFocus();
         if (view != null) {
@@ -66,11 +66,11 @@ public class PasswordRestoreActivity extends AppCompatActivity {
             case R.id.action_settings:
                 // Display the settings fragment as the main content.
                 SettingsFragment settingsFragment = (SettingsFragment)
-                        fm.findFragmentByTag(StringUtils.SETTINGS_FRAGMENT_TAG);
+                        fm.findFragmentByTag(Utils.SETTINGS_FRAGMENT_TAG);
                 if (settingsFragment == null) {
                     settingsFragment = new SettingsFragment();
                     ft.add(R.id.prestore_fragment_container, settingsFragment,
-                            StringUtils.SETTINGS_FRAGMENT_TAG);
+                            Utils.SETTINGS_FRAGMENT_TAG);
                     ft.hide(passwordRestoreFragment);
                     ft.addToBackStack(null);
                     ft.commit();
@@ -89,11 +89,11 @@ public class PasswordRestoreActivity extends AppCompatActivity {
             case R.id.about_project:
                 // Display the about fragment as the main content.
                 AboutFragment aboutFragment = (AboutFragment)
-                        fm.findFragmentByTag(StringUtils.ABOUT_FRAGMENT_TAG);
+                        fm.findFragmentByTag(Utils.ABOUT_FRAGMENT_TAG);
                 if (aboutFragment  == null) {
                     aboutFragment  = new AboutFragment();
                     ft.add(R.id.prestore_fragment_container, aboutFragment ,
-                            StringUtils.ABOUT_FRAGMENT_TAG);
+                            Utils.ABOUT_FRAGMENT_TAG);
                     ft.hide(passwordRestoreFragment);
                     ft.addToBackStack(null);
                     ft.commit();
@@ -115,8 +115,8 @@ public class PasswordRestoreActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Fragment fragmentSettings = getFragmentManager().findFragmentByTag(StringUtils.SETTINGS_FRAGMENT_TAG);
-        Fragment fragmentAbout = getFragmentManager().findFragmentByTag(StringUtils.ABOUT_FRAGMENT_TAG);
+        Fragment fragmentSettings = getFragmentManager().findFragmentByTag(Utils.SETTINGS_FRAGMENT_TAG);
+        Fragment fragmentAbout = getFragmentManager().findFragmentByTag(Utils.ABOUT_FRAGMENT_TAG);
         if(fragmentSettings!=null && fragmentSettings.isVisible())
         {
             //show action bar
@@ -126,7 +126,7 @@ public class PasswordRestoreActivity extends AppCompatActivity {
 
             FragmentManager fm = getFragmentManager();
             PasswordRestoreFragment passwordRestoreFragment = (PasswordRestoreFragment)
-                    fm.findFragmentByTag(StringUtils.PRESTORE_FRAGMENT_TAG);
+                    fm.findFragmentByTag(Utils.PRESTORE_FRAGMENT_TAG);
             if (passwordRestoreFragment != null) {
                 FragmentTransaction ft = fm.beginTransaction();
                 ft.hide(fragmentSettings);
@@ -145,7 +145,7 @@ public class PasswordRestoreActivity extends AppCompatActivity {
 
             FragmentManager fm = getFragmentManager();
             PasswordRestoreFragment passwordRestoreFragment = (PasswordRestoreFragment)
-                    fm.findFragmentByTag(StringUtils.PRESTORE_FRAGMENT_TAG);
+                    fm.findFragmentByTag(Utils.PRESTORE_FRAGMENT_TAG);
             if (passwordRestoreFragment != null) {
                 FragmentTransaction ft = fm.beginTransaction();
                 ft.hide(fragmentAbout);

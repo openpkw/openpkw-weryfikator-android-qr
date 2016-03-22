@@ -5,7 +5,7 @@ import android.text.TextUtils;
 /**
  * Created by Admin on 08.12.15.
  */
-public class StringUtils {
+public class Utils {
 
     public static final String TAG = "OPEN_PKW";
     public static final String URL_DEFAULT__VERIFY_QR = "http://rumcajs.open-pkw.pl:9080/openpkw/api/qr";
@@ -53,8 +53,12 @@ public class StringUtils {
     public static final String CURVE = "secp256k1";
     public static final String ECIES = "ECIES";
     public static final String AES = "AES";
+    public static final String TIMEOUT = "timeout";
 
     public static final int RSA_KEY_SIZE = 4096;
+    public static final int SESSION_TIMER = 60*1000*15-1000;//14 min 59 sec
+
+    public static final int DIALOG_STYLE = android.R.style.Theme_DeviceDefault_Dialog;
 
     public static boolean isEmailValid(CharSequence target) {
         return !TextUtils.isEmpty(target) && android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();

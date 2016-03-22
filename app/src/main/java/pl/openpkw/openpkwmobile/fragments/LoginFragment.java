@@ -14,6 +14,7 @@ import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
 import android.util.Base64;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,13 +36,14 @@ import pl.openpkw.openpkwmobile.models.UserCredentialsDTO;
 import pl.openpkw.openpkwmobile.network.GetRefreshToken;
 import pl.openpkw.openpkwmobile.network.NetworkUtils;
 import pl.openpkw.openpkwmobile.security.SecurityRSA;
-import pl.openpkw.openpkwmobile.utils.StringUtils;
+import pl.openpkw.openpkwmobile.utils.Utils;
 
 
 public class LoginFragment extends Fragment {
 
     private EditText emailEditText;
     private EditText passwordEditText;
+    private ContextThemeWrapper contextThemeWrapper;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -69,6 +71,9 @@ public class LoginFragment extends Fragment {
                 startActivity(prestoreIntent);
             }
         });
+
+        contextThemeWrapper = new ContextThemeWrapper(getActivity(), Utils.DIALOG_STYLE);
+
         return v;
     }
 
@@ -91,7 +96,7 @@ public class LoginFragment extends Fragment {
                 isEmailCorrect = false;
             }
             else {
-                if (!StringUtils.isEmailValid(emailEditText.getText().toString().trim())) {
+                if (!Utils.isEmailValid(emailEditText.getText().toString().trim())) {
                     emailEditText.setError(getString(R.string.register_error_email_invalid));
                     isEmailCorrect = false;
                 }
@@ -120,11 +125,12 @@ public class LoginFragment extends Fragment {
                     loginAsyncTask.execute(credentials);
                }
                else {
-                   AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                   final AlertDialog.Builder builder = new AlertDialog.Builder(contextThemeWrapper);
                    builder.setMessage(R.string.login_toast_no_network_connection_message)
                            .setTitle(R.string.login_toast_no_network_connection_title)
-                           .setPositiveButton(R.string.zxing_button_ok,null);
-                   AlertDialog dialog = builder.create();
+                           .setCancelable(false)
+                           .setPositiveButton(R.string.zxing_button_ok, null);
+                   final AlertDialog dialog = builder.create();
                    dialog.show();
                }
             }
@@ -154,7 +160,7 @@ public class LoginFragment extends Fragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            progressBar = new ProgressDialog(getActivity());
+            progressBar = new ProgressDialog(contextThemeWrapper);
             progressBar.setCancelable(true);
             progressBar.setMessage(getString(R.string.login_label_progress_authorization));
             progressBar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -165,9 +171,9 @@ public class LoginFragment extends Fragment {
 
         @Override
         protected JSONObject doInBackground(UserCredentialsDTO... credentials) {
-            Log.e(StringUtils.TAG, "OAUTH URL: "+oAuthParam.getLoginURL());
-            Log.e(StringUtils.TAG, "OAUTH ID: "+oAuthParam.getId());
-            Log.e(StringUtils.TAG, "OAUTH SECRET: "+oAuthParam.getSecret());
+            Log.e(Utils.TAG, "OAUTH URL: "+oAuthParam.getLoginURL());
+            Log.e(Utils.TAG, "OAUTH ID: "+oAuthParam.getId());
+            Log.e(Utils.TAG, "OAUTH SECRET: "+oAuthParam.getSecret());
             GetRefreshToken jParser = new GetRefreshToken();
             return jParser.getToken(oAuthParam.getLoginURL(), oAuthParam.getId(), oAuthParam.getSecret(),
                     credentials[0].getEmail(), credentials[0].getPassword());
@@ -180,10 +186,10 @@ public class LoginFragment extends Fragment {
             progressBar.dismiss();
 
             if (json != null){
-                Log.e(StringUtils.TAG, "SERVER RESPONSE LOGIN: "+json.toString());
+                Log.e(Utils.TAG, "SERVER RESPONSE LOGIN: "+json.toString());
                 try {
 
-                    if(!json.getString(StringUtils.ERROR).isEmpty())
+                    if(!json.getString(Utils.ERROR).isEmpty())
                     {
                         Toast.makeText(getActivity().getApplicationContext(),
                                 getString(R.string.login_toast_authorization_failed), Toast.LENGTH_LONG).show();
@@ -198,13 +204,13 @@ public class LoginFragment extends Fragment {
                 } catch (JSONException e) {
                     e.printStackTrace();
                     try {
-                        if(!json.getString(StringUtils.REFRESH_TOKEN).isEmpty()) {
-                            String refresh_token = json.getString(StringUtils.REFRESH_TOKEN);
+                        if(!json.getString(Utils.REFRESH_TOKEN).isEmpty()) {
+                            String refresh_token = json.getString(Utils.REFRESH_TOKEN);
 
                             if (!refresh_token.isEmpty()) {
                                 String encryptToken = Base64.encodeToString(
-                                        SecurityRSA.encrypt(refresh_token, SecurityRSA.loadPublicKey(StringUtils.KEY_ALIAS)),Base64.DEFAULT);
-                                writeRefreshTokenToSharedPreferences(StringUtils.REFRESH_TOKEN, encryptToken);
+                                        SecurityRSA.encrypt(refresh_token, SecurityRSA.loadPublicKey(Utils.KEY_ALIAS)),Base64.DEFAULT);
+                                writeRefreshTokenToSharedPreferences(Utils.REFRESH_TOKEN, encryptToken);
                                 Intent scanIntent = new Intent(getActivity(), ScanQrCodeActivity.class);
                                 startActivity(scanIntent);
                                 getActivity().finish();
@@ -223,7 +229,7 @@ public class LoginFragment extends Fragment {
     }
 
     private void writeRefreshTokenToSharedPreferences(String key, String token) {
-        SharedPreferences sharedPref = getActivity().getSharedPreferences(StringUtils.DATA, Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = getActivity().getSharedPreferences(Utils.DATA, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString(key,token);
         editor.apply();
@@ -232,20 +238,20 @@ public class LoginFragment extends Fragment {
     private OAuthParam getOAuthLoginParam()
     {
         OAuthParam oAuthParam = new OAuthParam();
-        SharedPreferences sharedPref = getActivity().getSharedPreferences(StringUtils.DATA, Context.MODE_PRIVATE);
-        String id = sharedPref.getString(StringUtils.OAUTH2_ID_PREFERENCE, null);
-        String secret = sharedPref.getString(StringUtils.OAUTH2_SECRET_PREFERENCE, null);
-        PrivateKey privateKey = SecurityRSA.loadPrivateKey(StringUtils.KEY_ALIAS);
+        SharedPreferences sharedPref = getActivity().getSharedPreferences(Utils.DATA, Context.MODE_PRIVATE);
+        String id = sharedPref.getString(Utils.OAUTH2_ID_PREFERENCE, null);
+        String secret = sharedPref.getString(Utils.OAUTH2_SECRET_PREFERENCE, null);
+        PrivateKey privateKey = SecurityRSA.loadPrivateKey(Utils.KEY_ALIAS);
         oAuthParam.setLoginURL(getLoginUrl());
 
-        if(sharedPref.getBoolean(StringUtils.DEFAULT_PARAM_CHANGE,false)){
+        if(sharedPref.getBoolean(Utils.DEFAULT_PARAM_CHANGE,false)){
             String decryptID = SecurityRSA.decrypt(Base64.decode(id, Base64.DEFAULT), privateKey);
             String decryptSecret =SecurityRSA.decrypt(Base64.decode(secret,Base64.DEFAULT),privateKey);
             oAuthParam.setId(decryptID);
             oAuthParam.setSecret(decryptSecret);
         } else {
-            oAuthParam.setId(sharedPref.getString(StringUtils.OAUTH2_ID_PREFERENCE, StringUtils.ID_DEFAULT).trim());
-            oAuthParam.setSecret(sharedPref.getString(StringUtils.OAUTH2_SECRET_PREFERENCE, StringUtils.SECRET_DEFAULT).trim());
+            oAuthParam.setId(sharedPref.getString(Utils.OAUTH2_ID_PREFERENCE, Utils.ID_DEFAULT).trim());
+            oAuthParam.setSecret(sharedPref.getString(Utils.OAUTH2_SECRET_PREFERENCE, Utils.SECRET_DEFAULT).trim());
         }
 
         return oAuthParam;
@@ -253,6 +259,6 @@ public class LoginFragment extends Fragment {
 
     private String getLoginUrl(){
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity().getBaseContext());
-        return sharedPref.getString(StringUtils.URL_LOGIN_PREFERENCE, StringUtils.URL_DEFAULT_LOGIN).trim();
+        return sharedPref.getString(Utils.URL_LOGIN_PREFERENCE, Utils.URL_DEFAULT_LOGIN).trim();
     }
 }

@@ -11,7 +11,8 @@
         android:layout_width="wrap_content"
         android:id="@+id/dialog.label.id"
         android:text="Identyfikator:"
-        android:background="@color/dark_green"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
         android:textColor="@android:color/white"
         android:textSize="@dimen/fontsize.login.label"
          />
@@ -21,7 +22,6 @@
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:inputType="textPassword"
-        android:textColor="@android:color/black"
         android:maxLength="20"
         android:textSize="@dimen/fontsize.login.label"
         />
@@ -31,7 +31,8 @@
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:text="Hasło:"
-        android:background="@color/dark_green"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
         android:textColor="@android:color/white"
         android:textSize="@dimen/fontsize.login.label"/>
 
@@ -41,7 +42,6 @@
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:inputType="textPassword"
-        android:textColor="@android:color/black"
         android:maxLength="20"
         android:textSize="@dimen/fontsize.login.label"
         />

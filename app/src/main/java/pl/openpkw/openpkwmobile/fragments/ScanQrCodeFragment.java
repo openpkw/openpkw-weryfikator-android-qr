@@ -3,6 +3,7 @@ package pl.openpkw.openpkwmobile.fragments;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -12,11 +13,11 @@ import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
 import android.util.Base64;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -32,6 +33,8 @@ import java.security.Security;
 
 import pl.openpkw.openpkwmobile.R;
 import pl.openpkw.openpkwmobile.activities.ElectionResultActivity;
+import pl.openpkw.openpkwmobile.activities.LoginActivity;
+import pl.openpkw.openpkwmobile.activities.ScanQrCodeActivity;
 import pl.openpkw.openpkwmobile.models.OAuthParam;
 import pl.openpkw.openpkwmobile.models.QrDTO;
 import pl.openpkw.openpkwmobile.network.GetAccessToken;
@@ -41,18 +44,14 @@ import pl.openpkw.openpkwmobile.network.SendQrData;
 import pl.openpkw.openpkwmobile.security.KeyWrapper;
 import pl.openpkw.openpkwmobile.security.SecurityECC;
 import pl.openpkw.openpkwmobile.security.SecurityRSA;
-import pl.openpkw.openpkwmobile.utils.StringUtils;
+import pl.openpkw.openpkwmobile.utils.Utils;
 
 public class ScanQrCodeFragment extends Fragment {
 
     private String qrString;
     private OAuthParam oAuthParam;
-
     private IntentIntegrator integratorScan;
-
-    public static TextView textViewQR;
-    private TextView textViewSendQR;
-
+    private ContextThemeWrapper contextThemeWrapper;
     private QrDTO scanQrDTO = null;
 
     @Override
@@ -79,13 +78,12 @@ public class ScanQrCodeFragment extends Fragment {
         buttonText.setSpan(new UnderlineSpan(), 0, buttonText.length(), 0);
         helpScanQrButton.setText(buttonText);
 
-        textViewQR = (TextView) viewScanQR.findViewById(R.id.scan_qr_label_top);
-        textViewSendQR = (TextView) viewScanQR.findViewById(R.id.scan_qr_label_send_top);
-
         integratorScan = new IntentIntegrator(getActivity());
 
         // add spongy castle security provider
         Security.addProvider(new org.spongycastle.jce.provider.BouncyCastleProvider());
+
+        contextThemeWrapper = new ContextThemeWrapper(getActivity(), Utils.DIALOG_STYLE);
 
         return viewScanQR;
     }
@@ -99,9 +97,9 @@ public class ScanQrCodeFragment extends Fragment {
             if(qrString!=null)
             {
                 if(NetworkUtils.isNetworkAvailable(getActivity())) {
-                    SharedPreferences sharedPref = getActivity().getSharedPreferences(StringUtils.DATA, Context.MODE_PRIVATE);
-                    KeyWrapper keyWrapper = new KeyWrapper(getActivity().getApplicationContext(),StringUtils.KEY_ALIAS);
-                    String privateKeyStr = sharedPref.getString(StringUtils.PRIVATE_KEY,null);
+                    SharedPreferences sharedPref = getActivity().getSharedPreferences(Utils.DATA, Context.MODE_PRIVATE);
+                    KeyWrapper keyWrapper = new KeyWrapper(getActivity().getApplicationContext(), Utils.KEY_ALIAS);
+                    String privateKeyStr = sharedPref.getString(Utils.PRIVATE_KEY,null);
                     PrivateKey privateKey = null;
                     try {
                         privateKey = keyWrapper.unwrapPrivateKey(Base64.decode(privateKeyStr,Base64.DEFAULT));
@@ -120,10 +118,11 @@ public class ScanQrCodeFragment extends Fragment {
                             Toast.LENGTH_LONG).show();
                 }else
                 {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    AlertDialog.Builder builder = new AlertDialog.Builder(contextThemeWrapper);
                     builder.setMessage(R.string.login_toast_no_network_connection_message)
                             .setTitle(R.string.login_toast_no_network_connection_title)
-                            .setPositiveButton(R.string.zxing_button_ok,null);
+                            .setCancelable(false)
+                            .setPositiveButton(R.string.zxing_button_ok, null);
                     AlertDialog dialog = builder.create();
                     dialog.show();
                 }
@@ -137,7 +136,7 @@ public class ScanQrCodeFragment extends Fragment {
     public View.OnClickListener scanQrButtonClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            textViewSendQR.setText(getString(R.string.scan_qr_label_send));
+            //textViewSendQR.setText(getString(R.string.scan_qr_label_send));
             integratorScan.initiateScan(IntentIntegrator.QR_CODE_TYPES);
         }
     };
@@ -146,6 +145,7 @@ public class ScanQrCodeFragment extends Fragment {
         @Override
         public void onClick(View view) {
             Intent erIntent = new Intent(getActivity(), ElectionResultActivity.class);
+            erIntent.putExtra(Utils.TIMEOUT,ScanQrCodeActivity.getSessionTimeout());
             startActivity(erIntent);
             getActivity().finish();
         }
@@ -164,10 +164,10 @@ public class ScanQrCodeFragment extends Fragment {
         protected void onPostExecute(JSONObject json) {
 
             if (json != null){
-                Log.e(StringUtils.TAG, "SERVER RESPONSE ACCESS TOKEN: "+json.toString());
+                Log.e(Utils.TAG, "SERVER RESPONSE ACCESS TOKEN: "+json.toString());
                 try {
 
-                    if(!json.getString(StringUtils.ERROR).isEmpty())
+                    if(!json.getString(Utils.ERROR).isEmpty())
                     {
                         Toast.makeText(getActivity().getApplicationContext(),
                                 "Błąd dostępu do serwera", Toast.LENGTH_LONG).show();
@@ -176,8 +176,8 @@ public class ScanQrCodeFragment extends Fragment {
                 } catch (JSONException e) {
                     e.printStackTrace();
                     try {
-                        if(!json.getString(StringUtils.ACCESS_TOKEN).isEmpty()) {
-                            String access_token = json.getString(StringUtils.ACCESS_TOKEN);
+                        if(!json.getString(Utils.ACCESS_TOKEN).isEmpty()) {
+                            String access_token = json.getString(Utils.ACCESS_TOKEN);
 
                             if (!access_token.isEmpty()) {
                                 if(scanQrDTO!=null) {
@@ -199,7 +199,6 @@ public class ScanQrCodeFragment extends Fragment {
         }
     }
 
-
     private class SendQrAsyncTask extends AsyncTask<String, String, JSONObject>{
 
         @Override
@@ -211,15 +210,15 @@ public class ScanQrCodeFragment extends Fragment {
         @Override
         protected void onPostExecute(JSONObject json) {
             if (json != null) {
-                Log.e(StringUtils.TAG,"JSON SERVER RESPONSE QR: "+json.toString());
+                Log.e(Utils.TAG,"JSON SERVER RESPONSE QR: "+json.toString());
                 try {
-                    if(!json.getString(StringUtils.ERROR_MESSAGE).isEmpty()) {
+                    if(!json.getString(Utils.ERROR_MESSAGE).isEmpty()) {
                         Gson gson = new GsonBuilder().create();
                         QrSendResponse qrSendResponse = gson.fromJson(json.toString(),QrSendResponse.class);
-                        Log.e(StringUtils.TAG,"ERROR MESSAGE: "+ qrSendResponse.getErrorMessage());
-                        Log.e(StringUtils.TAG,"PROTOCOL: "+ qrSendResponse.getProtocol());
+                        Log.e(Utils.TAG,"ERROR MESSAGE: "+ qrSendResponse.getErrorMessage());
+                        Log.e(Utils.TAG,"PROTOCOL: "+ qrSendResponse.getProtocol());
                         Toast.makeText(getActivity().getApplicationContext(),
-                                StringUtils.SERVER_RESPONSE + json.toString(), Toast.LENGTH_LONG).show();
+                                Utils.SERVER_RESPONSE + json.toString(), Toast.LENGTH_LONG).show();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -242,27 +241,27 @@ public class ScanQrCodeFragment extends Fragment {
     {
         String [] urls = getUrls();
         OAuthParam oAuthParam = new OAuthParam();
-        SharedPreferences sharedPref = getActivity().getSharedPreferences(StringUtils.DATA, Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = getActivity().getSharedPreferences(Utils.DATA, Context.MODE_PRIVATE);
         oAuthParam.setLoginURL(urls[0]);
         oAuthParam.setSendQrURL(urls[1]);
-        String decryptToken = SecurityRSA.decrypt(Base64.decode(sharedPref.getString(StringUtils.REFRESH_TOKEN, null)
-                , Base64.DEFAULT), SecurityRSA.loadPrivateKey(StringUtils.KEY_ALIAS));
+        String decryptToken = SecurityRSA.decrypt(Base64.decode(sharedPref.getString(Utils.REFRESH_TOKEN, null)
+                , Base64.DEFAULT), SecurityRSA.loadPrivateKey(Utils.KEY_ALIAS));
         oAuthParam.setRefreshToken(decryptToken);
-        qrString = sharedPref.getString(StringUtils.QR, null);
-        clearQRSharedPreferences(StringUtils.QR, sharedPref);
+        qrString = sharedPref.getString(Utils.QR, null);
+        clearQRSharedPreferences(Utils.QR, sharedPref);
 
-        if(sharedPref.getBoolean(StringUtils.DEFAULT_PARAM_CHANGE,false)){
-            PrivateKey privateKey = SecurityRSA.loadPrivateKey(StringUtils.KEY_ALIAS);
-            String id = sharedPref.getString(StringUtils.OAUTH2_ID_PREFERENCE, StringUtils.ID_DEFAULT).trim();
+        if(sharedPref.getBoolean(Utils.DEFAULT_PARAM_CHANGE,false)){
+            PrivateKey privateKey = SecurityRSA.loadPrivateKey(Utils.KEY_ALIAS);
+            String id = sharedPref.getString(Utils.OAUTH2_ID_PREFERENCE, Utils.ID_DEFAULT).trim();
             String decryptID = SecurityRSA.decrypt(Base64.decode(id, Base64.DEFAULT), privateKey);
             oAuthParam.setId(decryptID);
-            String secret = sharedPref.getString(StringUtils.OAUTH2_SECRET_PREFERENCE, StringUtils.SECRET_DEFAULT).trim();
+            String secret = sharedPref.getString(Utils.OAUTH2_SECRET_PREFERENCE, Utils.SECRET_DEFAULT).trim();
             String decryptSecret = SecurityRSA.decrypt(Base64.decode(secret, Base64.DEFAULT), privateKey);
             oAuthParam.setSecret(decryptSecret);
         }
         else {
-            oAuthParam.setId(sharedPref.getString(StringUtils.OAUTH2_ID_PREFERENCE, StringUtils.ID_DEFAULT).trim());
-            oAuthParam.setSecret(sharedPref.getString(StringUtils.OAUTH2_SECRET_PREFERENCE, StringUtils.SECRET_DEFAULT).trim());
+            oAuthParam.setId(sharedPref.getString(Utils.OAUTH2_ID_PREFERENCE, Utils.ID_DEFAULT).trim());
+            oAuthParam.setSecret(sharedPref.getString(Utils.OAUTH2_SECRET_PREFERENCE, Utils.SECRET_DEFAULT).trim());
         }
         return oAuthParam;
     }
@@ -270,8 +269,34 @@ public class ScanQrCodeFragment extends Fragment {
     private String [] getUrls(){
         String [] urls = new String[2];
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity().getBaseContext());
-        urls[0]= sharedPref.getString(StringUtils.URL_LOGIN_PREFERENCE, StringUtils.URL_DEFAULT_LOGIN).trim();
-        urls[1]= sharedPref.getString(StringUtils.URL_VERIFY_PREFERENCE, StringUtils.URL_DEFAULT__VERIFY_QR).trim();
+        urls[0]= sharedPref.getString(Utils.URL_LOGIN_PREFERENCE, Utils.URL_DEFAULT_LOGIN).trim();
+        urls[1]= sharedPref.getString(Utils.URL_VERIFY_PREFERENCE, Utils.URL_DEFAULT__VERIFY_QR).trim();
         return urls;
     }
+
+    public void showSessionTimeoutAlertDialog(){
+        final AlertDialog.Builder builder = new AlertDialog.Builder(contextThemeWrapper);
+        builder.setMessage(R.string.session_timeout_message)
+                .setTitle(R.string.seasion_timeout_title)
+                .setCancelable(false)
+                .setPositiveButton(R.string.session_timeout_login, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Intent loginIntent = new Intent(getActivity(), LoginActivity.class);
+                        startActivity(loginIntent);
+                        dialogInterface.dismiss();
+                        getActivity().finish();
+                    }
+                })
+                .setNegativeButton(R.string.session_timeout_quit, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                        getActivity().finish();
+                    }
+                });
+        final AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
 }

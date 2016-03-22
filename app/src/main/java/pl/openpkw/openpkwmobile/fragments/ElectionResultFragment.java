@@ -1,12 +1,16 @@
 package pl.openpkw.openpkwmobile.fragments;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.preference.PreferenceManager;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,9 +21,12 @@ import android.webkit.WebViewClient;
 import android.widget.Toast;
 
 import pl.openpkw.openpkwmobile.R;
-import pl.openpkw.openpkwmobile.utils.StringUtils;
+import pl.openpkw.openpkwmobile.activities.LoginActivity;
+import pl.openpkw.openpkwmobile.utils.Utils;
 
 public class ElectionResultFragment extends Fragment {
+
+    private ContextThemeWrapper contextThemeWrapper;
 
     public ElectionResultFragment() {
         // Required empty public constructor
@@ -55,12 +62,38 @@ public class ElectionResultFragment extends Fragment {
             });
         }
         electionResultWebView.loadUrl(getElectionResultUrl());
+        contextThemeWrapper = new ContextThemeWrapper(getActivity(), Utils.DIALOG_STYLE);
         return view;
     }
 
     private String getElectionResultUrl(){
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity().getBaseContext());
-        return sharedPref.getString(StringUtils.URL_ELECTION_RESULT_PREFERENCE, StringUtils.URL_DEFAULT_ELECTION_RESULT).trim();
+        return sharedPref.getString(Utils.URL_ELECTION_RESULT_PREFERENCE, Utils.URL_DEFAULT_ELECTION_RESULT).trim();
+    }
+
+    public void showSessionTimeoutAlertDialog(){
+        final AlertDialog.Builder builder = new AlertDialog.Builder(contextThemeWrapper);
+        builder.setMessage(R.string.session_timeout_message)
+                .setTitle(R.string.seasion_timeout_title)
+                .setCancelable(false)
+                .setPositiveButton(R.string.session_timeout_login, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Intent loginIntent = new Intent(getActivity(), LoginActivity.class);
+                        startActivity(loginIntent);
+                        dialogInterface.dismiss();
+                        getActivity().finish();
+                    }
+                })
+                .setNegativeButton(R.string.session_timeout_quit, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                        getActivity().finish();
+                    }
+                });
+        final AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     @Override

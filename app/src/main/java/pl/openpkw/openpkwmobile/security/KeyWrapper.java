@@ -19,7 +19,7 @@ import java.security.PublicKey;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 
-import pl.openpkw.openpkwmobile.utils.StringUtils;
+import pl.openpkw.openpkwmobile.utils.Utils;
 
 public class KeyWrapper {
     private  Cipher cipher;
@@ -31,8 +31,8 @@ public class KeyWrapper {
     public KeyWrapper(Context context, String alias)
     {
         try {
-            cipher = Cipher.getInstance(StringUtils.ENCRYPTION_MODE_RSA, StringUtils.PROVIDER_OPEN_SSL);
-            final KeyStore keyStore = KeyStore.getInstance(StringUtils.ANDROID_KEY_STORE);
+            cipher = Cipher.getInstance(Utils.ENCRYPTION_MODE_RSA, Utils.PROVIDER_OPEN_SSL);
+            final KeyStore keyStore = KeyStore.getInstance(Utils.ANDROID_KEY_STORE);
             keyStore.load(null);
             if (!keyStore.containsAlias(alias)) {
                 SecurityRSA.generateKeyPair(context, alias);
@@ -59,7 +59,7 @@ public class KeyWrapper {
 
     public ECPrivateKey unwrapPrivateKey(byte[] blob) throws GeneralSecurityException {
         cipher.init(Cipher.UNWRAP_MODE, keyPair.getPrivate());
-        return (ECPrivateKey) cipher.unwrap(blob, StringUtils.ECDSA, Cipher.PRIVATE_KEY);
+        return (ECPrivateKey) cipher.unwrap(blob, Utils.ECDSA, Cipher.PRIVATE_KEY);
     }
 
     public byte[] wrapPublicKey(PublicKey key) throws GeneralSecurityException {
@@ -69,7 +69,7 @@ public class KeyWrapper {
 
     public ECPublicKey unwrapPublicKey(byte[] blob) throws GeneralSecurityException {
         cipher.init(Cipher.UNWRAP_MODE, keyPair.getPrivate());
-        return (ECPublicKey) cipher.unwrap(blob, StringUtils.ECDSA, Cipher.PUBLIC_KEY);
+        return (ECPublicKey) cipher.unwrap(blob, Utils.ECDSA, Cipher.PUBLIC_KEY);
     }
 
 }

@@ -39,15 +39,8 @@
         <item name="android:alertDialogTheme">@style/PreferenceDialogStyle</item>
     </style>
 
-    <style name="PreferenceDialogStyle">
-        <item name="android:layout_margin">0dp</item>
-        <item name="android:gravity">center_horizontal</item>
-        <item name="android:paddingBottom">3dp</item>
-        <item name="android:background">@color/dark_green</item>
-        <item name="android:windowFrame">@null</item>
-        <item name="android:windowAnimationStyle">@null</item>
-        <item name="android:backgroundDimEnabled">false</item>
-        <item name="android:windowIsTranslucent">true</item>
+    <style name="PreferenceDialogStyle" parent="@style/Base.V7.Theme.AppCompat.Dialog">
+        <item name="android:textColor">@android:color/white</item>
     </style>
 
     <style name="ListSeparator">

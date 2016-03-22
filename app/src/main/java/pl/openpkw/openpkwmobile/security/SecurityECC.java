@@ -8,11 +8,7 @@ import android.util.Log;
 import org.spongycastle.crypto.DataLengthException;
 import org.spongycastle.jce.ECNamedCurveTable;
 
-import org.spongycastle.jce.interfaces.ECPrivateKey;
-import org.spongycastle.jce.interfaces.ECPublicKey;
 import org.spongycastle.jce.spec.ECParameterSpec;
-import org.spongycastle.jce.spec.IESParameterSpec;
-import org.spongycastle.util.encoders.Hex;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -39,7 +35,7 @@ import java.util.GregorianCalendar;
 import javax.crypto.Cipher;
 import javax.security.auth.x500.X500Principal;
 
-import pl.openpkw.openpkwmobile.utils.StringUtils;
+import pl.openpkw.openpkwmobile.utils.Utils;
 
 
 public class SecurityECC {
@@ -48,8 +44,8 @@ public class SecurityECC {
     public static KeyPair generateKeys()
     {
         try {
-            ECParameterSpec ecSpec = ECNamedCurveTable.getParameterSpec(StringUtils.CURVE);
-            KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(StringUtils.ECDSA, StringUtils.SECURITY_PROVIDER);
+            ECParameterSpec ecSpec = ECNamedCurveTable.getParameterSpec(Utils.CURVE);
+            KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(Utils.ECDSA, Utils.SECURITY_PROVIDER);
             keyPairGenerator.initialize(ecSpec, new SecureRandom());
             return keyPairGenerator.generateKeyPair();
         } catch (InvalidAlgorithmParameterException | NoSuchAlgorithmException | NoSuchProviderException e) {
@@ -75,7 +71,7 @@ public class SecurityECC {
                 .setStartDate(start.getTime())
                 .setEndDate(end.getTime())
                 .build();
-        final KeyPairGenerator keyGen = KeyPairGenerator.getInstance(StringUtils.RSA, StringUtils.ANDROID_KEY_STORE);
+        final KeyPairGenerator keyGen = KeyPairGenerator.getInstance(Utils.RSA, Utils.ANDROID_KEY_STORE);
         keyGen.initialize(spec, new SecureRandom());
         keyGen.generateKeyPair();
     }
@@ -84,13 +80,13 @@ public class SecurityECC {
     public static byte [] generateSignature(String data,PrivateKey privateKey)
     {
         try {
-            Signature signature = Signature.getInstance(StringUtils.SIGNATURE_INSTANCE, StringUtils.SECURITY_PROVIDER);
+            Signature signature = Signature.getInstance(Utils.SIGNATURE_INSTANCE, Utils.SECURITY_PROVIDER);
             signature.initSign(privateKey);
-            signature.update(data.getBytes(StringUtils.CHARACTER_ENCODING));
+            signature.update(data.getBytes(Utils.CHARACTER_ENCODING));
             return signature.sign();
 
         } catch (NoSuchAlgorithmException | SignatureException | InvalidKeyException | UnsupportedEncodingException | NoSuchProviderException e) {
-            Log.e(StringUtils.TAG,"ECDSA SIGNATURE ERROR: "+e.getMessage());
+            Log.e(Utils.TAG,"ECDSA SIGNATURE ERROR: "+e.getMessage());
         }
         return null;
     }
@@ -99,13 +95,13 @@ public class SecurityECC {
     public static boolean signatureVerification (PublicKey publicKey, String data, byte [] signature)
     {
         try {
-            Signature signVerify = Signature.getInstance(StringUtils.SIGNATURE_INSTANCE, StringUtils.SECURITY_PROVIDER);
+            Signature signVerify = Signature.getInstance(Utils.SIGNATURE_INSTANCE, Utils.SECURITY_PROVIDER);
             signVerify.initVerify(publicKey);
-            signVerify.update(data.getBytes(StringUtils.CHARACTER_ENCODING));
+            signVerify.update(data.getBytes(Utils.CHARACTER_ENCODING));
             return signVerify.verify(signature);
         } catch (NoSuchAlgorithmException | SignatureException |
                 InvalidKeyException | UnsupportedEncodingException | NoSuchProviderException e) {
-            Log.e(StringUtils.TAG,"ECDSA VERIFICATION SIGNATURE ERROR: "+e.getMessage());
+            Log.e(Utils.TAG,"ECDSA VERIFICATION SIGNATURE ERROR: "+e.getMessage());
         }
         return false;
     }
@@ -114,11 +110,11 @@ public class SecurityECC {
         try{
             byte[] bytePublicKey = Base64.decode(publicKey.getBytes(), Base64.DEFAULT);
             X509EncodedKeySpec X509publicKey = new X509EncodedKeySpec(bytePublicKey);
-            KeyFactory keyFactory = KeyFactory.getInstance(StringUtils.ECDSA, StringUtils.SECURITY_PROVIDER);
+            KeyFactory keyFactory = KeyFactory.getInstance(Utils.ECDSA, Utils.SECURITY_PROVIDER);
             return keyFactory.generatePublic(X509publicKey);
         }
         catch(Exception e){
-            Log.e(StringUtils.TAG,"ERROR CREATE PUBLIC KEY: "+e.getMessage());
+            Log.e(Utils.TAG,"ERROR CREATE PUBLIC KEY: "+e.getMessage());
             e.printStackTrace();
         }
         return null;
@@ -128,11 +124,11 @@ public class SecurityECC {
         try{
             byte[] bytePrivateKey = Base64.decode(privateKey.getBytes(), Base64.DEFAULT);
             PKCS8EncodedKeySpec encodedKeySpec = new PKCS8EncodedKeySpec(bytePrivateKey);
-            KeyFactory keyFactory = KeyFactory.getInstance(StringUtils.ECDSA, StringUtils.SECURITY_PROVIDER);
+            KeyFactory keyFactory = KeyFactory.getInstance(Utils.ECDSA, Utils.SECURITY_PROVIDER);
             return keyFactory.generatePrivate(encodedKeySpec);
         }
         catch(Exception e){
-            Log.e(StringUtils.TAG,"ERROR CREATE PRIVATE KEY: "+e.getMessage());
+            Log.e(Utils.TAG,"ERROR CREATE PRIVATE KEY: "+e.getMessage());
             e.printStackTrace();
         }
         return null;
@@ -143,12 +139,12 @@ public class SecurityECC {
         byte[] cipherText = null;
         try {
             // get an ECIES cipher object
-            final Cipher cipher = Cipher.getInstance(StringUtils.ECIES, StringUtils.SECURITY_PROVIDER);
+            final Cipher cipher = Cipher.getInstance(Utils.ECIES, Utils.SECURITY_PROVIDER);
             // encrypt the plain text using the ECDSA public key
             cipher.init(Cipher.ENCRYPT_MODE, key, new SecureRandom());
             cipherText = cipher.doFinal(text.getBytes());
         } catch (Exception e) {
-            Log.e(StringUtils.TAG, "Encryption error: "+e.getMessage());
+            Log.e(Utils.TAG, "Encryption error: "+e.getMessage());
         }
         return cipherText;
     }
@@ -158,12 +154,12 @@ public class SecurityECC {
         byte[] cipherText = null;
         try {
             // get an ECIES cipher object
-            final Cipher cipher = Cipher.getInstance(StringUtils.ECIES, StringUtils.SECURITY_PROVIDER);
+            final Cipher cipher = Cipher.getInstance(Utils.ECIES, Utils.SECURITY_PROVIDER);
             // decrypt the text using the ECDSA private key
             cipher.init(Cipher.DECRYPT_MODE, key, new SecureRandom());
             cipherText = cipher.doFinal(encryptText);
         } catch (Exception e) {
-            Log.e(StringUtils.TAG, "Decryption error: "+e.getMessage());
+            Log.e(Utils.TAG, "Decryption error: "+e.getMessage());
         }
         return cipherText;
     }

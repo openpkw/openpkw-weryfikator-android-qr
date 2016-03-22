@@ -25,7 +25,7 @@ import android.widget.ListView;
 
 import pl.openpkw.openpkwmobile.R;
 import pl.openpkw.openpkwmobile.security.SecurityRSA;
-import pl.openpkw.openpkwmobile.utils.StringUtils;
+import pl.openpkw.openpkwmobile.utils.Utils;
 
 public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -33,7 +33,6 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     private EditTextPreference urlRegisterPreference;
     private EditTextPreference urlVerifyPreference;
     private EditTextPreference urlElectionResultPreference;
-    private Preference setIdAndSecretPreference;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,16 +46,16 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         //read preference
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
         //set summary preference
-        urlLoginPreference = (EditTextPreference) findPreference(StringUtils.URL_LOGIN_PREFERENCE);
-        urlLoginPreference.setSummary(sharedPref.getString(StringUtils.URL_LOGIN_PREFERENCE,""));
-        urlRegisterPreference = (EditTextPreference) findPreference(StringUtils.URL_REGISTER_PREFERENCE);
-        urlRegisterPreference.setSummary(sharedPref.getString(StringUtils.URL_REGISTER_PREFERENCE,""));
-        urlVerifyPreference  = (EditTextPreference) findPreference(StringUtils.URL_VERIFY_PREFERENCE );
-        urlVerifyPreference.setSummary(sharedPref.getString(StringUtils.URL_VERIFY_PREFERENCE,""));
-        urlElectionResultPreference  = (EditTextPreference) findPreference(StringUtils.URL_ELECTION_RESULT_PREFERENCE);
-        urlElectionResultPreference.setSummary(sharedPref.getString(StringUtils.URL_ELECTION_RESULT_PREFERENCE,""));
+        urlLoginPreference = (EditTextPreference) findPreference(Utils.URL_LOGIN_PREFERENCE);
+        urlLoginPreference.setSummary(sharedPref.getString(Utils.URL_LOGIN_PREFERENCE,""));
+        urlRegisterPreference = (EditTextPreference) findPreference(Utils.URL_REGISTER_PREFERENCE);
+        urlRegisterPreference.setSummary(sharedPref.getString(Utils.URL_REGISTER_PREFERENCE,""));
+        urlVerifyPreference  = (EditTextPreference) findPreference(Utils.URL_VERIFY_PREFERENCE );
+        urlVerifyPreference.setSummary(sharedPref.getString(Utils.URL_VERIFY_PREFERENCE,""));
+        urlElectionResultPreference  = (EditTextPreference) findPreference(Utils.URL_ELECTION_RESULT_PREFERENCE);
+        urlElectionResultPreference.setSummary(sharedPref.getString(Utils.URL_ELECTION_RESULT_PREFERENCE,""));
         //
-        setIdAndSecretPreference = findPreference(StringUtils.OAUTH2_PREFERENCE);
+        Preference setIdAndSecretPreference = findPreference(Utils.OAUTH2_PREFERENCE);
         setIdAndSecretPreference.setOnPreferenceClickListener(setIdAndSecretPreferenceClickListener);
 
     }
@@ -71,7 +70,8 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
             InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.showSoftInputFromInputMethod(idEditText.getApplicationWindowToken(), 0);
             final EditText secretEditText = (EditText) dialogView.findViewById(R.id.dialog_edittext_password);
-            final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.PreferenceDialogStyle));
+
+            final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), Utils.DIALOG_STYLE));
             dialogBuilder.setView(dialogView);
             dialogBuilder.setPositiveButton("OK", null);
             dialogBuilder.setNegativeButton("Anuluj", null);
@@ -105,15 +105,15 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                             {
                                 String id = (idEditText.getText().toString());
                                 String secret = (secretEditText.getText().toString());
-                                Log.e(StringUtils.TAG,"NEW ID: "+id);
-                                Log.e(StringUtils.TAG,"NEW secret: "+secret);
-                                SharedPreferences sharedPref = getActivity().getSharedPreferences(StringUtils.DATA, Context.MODE_PRIVATE);
+                                Log.e(Utils.TAG,"NEW ID: "+id);
+                                Log.e(Utils.TAG,"NEW secret: "+secret);
+                                SharedPreferences sharedPref = getActivity().getSharedPreferences(Utils.DATA, Context.MODE_PRIVATE);
                                 SharedPreferences.Editor editor = sharedPref.edit();
-                                editor.putString(StringUtils.OAUTH2_ID_PREFERENCE,
-                                        Base64.encodeToString(SecurityRSA.encrypt(id,SecurityRSA.loadPublicKey(StringUtils.KEY_ALIAS)),Base64.DEFAULT));
-                                editor.putString(StringUtils.OAUTH2_SECRET_PREFERENCE,
-                                        Base64.encodeToString(SecurityRSA.encrypt(secret, SecurityRSA.loadPublicKey(StringUtils.KEY_ALIAS)),Base64.DEFAULT));
-                                editor.putBoolean(StringUtils.DEFAULT_PARAM_CHANGE, true);
+                                editor.putString(Utils.OAUTH2_ID_PREFERENCE,
+                                        Base64.encodeToString(SecurityRSA.encrypt(id,SecurityRSA.loadPublicKey(Utils.KEY_ALIAS)),Base64.DEFAULT));
+                                editor.putString(Utils.OAUTH2_SECRET_PREFERENCE,
+                                        Base64.encodeToString(SecurityRSA.encrypt(secret, SecurityRSA.loadPublicKey(Utils.KEY_ALIAS)),Base64.DEFAULT));
+                                editor.putBoolean(Utils.DEFAULT_PARAM_CHANGE, true);
                                 editor.apply();
                                 setIdSecretDialog.dismiss();
                             }
@@ -142,20 +142,20 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (key.equals(StringUtils.URL_LOGIN_PREFERENCE)) {
-            Log.e(StringUtils.TAG,"LOGIN URL "+sharedPreferences.getString(key,""));
+        if (key.equals(Utils.URL_LOGIN_PREFERENCE)) {
+            Log.e(Utils.TAG,"LOGIN URL "+sharedPreferences.getString(key,""));
             urlLoginPreference.setSummary(sharedPreferences.getString(key,""));
         }
-        if (key.equals(StringUtils.URL_REGISTER_PREFERENCE)) {
-            Log.e(StringUtils.TAG,"REGISTER URL: "+sharedPreferences.getString(key,""));
+        if (key.equals(Utils.URL_REGISTER_PREFERENCE)) {
+            Log.e(Utils.TAG,"REGISTER URL: "+sharedPreferences.getString(key,""));
             urlRegisterPreference.setSummary(sharedPreferences.getString(key,""));
         }
-        if (key.equals(StringUtils.URL_VERIFY_PREFERENCE)) {
-            Log.e(StringUtils.TAG,"Vetify URL: "+sharedPreferences.getString(key,""));
+        if (key.equals(Utils.URL_VERIFY_PREFERENCE)) {
+            Log.e(Utils.TAG,"Vetify URL: "+sharedPreferences.getString(key,""));
             urlVerifyPreference.setSummary(sharedPreferences.getString(key,""));
         }
-        if (key.equals(StringUtils.URL_ELECTION_RESULT_PREFERENCE)) {
-            Log.e(StringUtils.TAG,"Election result URL: "+sharedPreferences.getString(key,""));
+        if (key.equals(Utils.URL_ELECTION_RESULT_PREFERENCE)) {
+            Log.e(Utils.TAG,"Election result URL: "+sharedPreferences.getString(key,""));
             urlElectionResultPreference.setSummary(sharedPreferences.getString(key,""));
         }
     }
