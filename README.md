@@ -15,10 +15,12 @@ Pierwsze uruchomienie generacja kluczy dla algorytmu ECDSA, krzywa - secp256k1
   "access_token": "app_access_token",
   "token_type": "bearer",
   "refresh_token": "app_refresh_token",
-  "expires_in": 1800,
+  "expires_in": 10,
   "scope": "read write"
   }
 
+  Poprawne logowanie -> Czas życia sesji 15 minut
+  
   Rekonfiguracja URL: Ustawienia -> Adres URL logowania
 
 2. Rejestracja użytkownika:
@@ -27,7 +29,7 @@ Pierwsze uruchomienie generacja kluczy dla algorytmu ECDSA, krzywa - secp256k1
 
   URL: POST [host]/openpkw/users/
 
-  JSON:{"first_name":"user_first_name","last_name":"user_last_name","email":"user_email","password":"user_password","key":"ecdsa_public_key}
+  JSON:{"first_name":"user_first_name","last_name":"user_last_name","email":"user_email","password":"user_password","public_key":"ecdsa_public_key}
   
   Odpowiedź serwera:
   {
@@ -35,7 +37,7 @@ Pierwsze uruchomienie generacja kluczy dla algorytmu ECDSA, krzywa - secp256k1
   "errorMessage": "app_error_message",
   "errorCode": "app_error_code"
   }
-
+  
   Rekonfiguracja URL: Ustawienia -> Adres URL rej. użytkownika
 
 3. Przesyłanie kodu QR na serwer:
@@ -46,7 +48,7 @@ Pierwsze uruchomienie generacja kluczy dla algorytmu ECDSA, krzywa - secp256k1
   
   Authorization: Bearer app_access_token
 
-  JSON: {"token":"app_access_token,"qr":"scanned_qr","sign":"qr_signature"}
+  JSON: {"qr":"scanned_qr","token":"ecdsa_qr_signature}
   
   Odpowiedź serwera:
   {
