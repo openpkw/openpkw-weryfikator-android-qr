@@ -288,7 +288,7 @@ public class RegisterUserFragment extends Fragment {
 
     private String getUrlRegister()
     {
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity().getBaseContext());
         return sharedPref.getString(StringUtils.URL_REGISTER_PREFERENCE, StringUtils.URL_DEFAULT_REGISTER ).trim();
     }
 }

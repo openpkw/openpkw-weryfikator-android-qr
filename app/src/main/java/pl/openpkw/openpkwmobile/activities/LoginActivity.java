@@ -27,7 +27,7 @@ import pl.openpkw.openpkwmobile.fragments.AboutFragment;
 import pl.openpkw.openpkwmobile.fragments.LoginFragment;
 import pl.openpkw.openpkwmobile.fragments.SettingsFragment;
 import pl.openpkw.openpkwmobile.security.KeyWrapper;
-import pl.openpkw.openpkwmobile.security.SecurityECDSA;
+import pl.openpkw.openpkwmobile.security.SecurityECC;
 import pl.openpkw.openpkwmobile.utils.StringUtils;
 
 
@@ -191,17 +191,20 @@ public class LoginActivity extends AppCompatActivity {
             KeyWrapper keyWrapper = new KeyWrapper(getApplicationContext(),StringUtils.KEY_ALIAS);
             if(sharedPref.getString(StringUtils.PRIVATE_KEY,null)==null)
             {
-                KeyPair keyPair = SecurityECDSA.generateKeys();
-                byte [] privateKeyByteArr = keyWrapper.wrapPrivateKey(keyPair.getPrivate());
-                byte [] publicKeyByteArr = keyWrapper.wrapPublicKey(keyPair.getPublic());
-                SharedPreferences.Editor editor = sharedPref.edit();
-                editor.putString(StringUtils.PRIVATE_KEY,Base64.encodeToString(privateKeyByteArr,Base64.DEFAULT));
-                editor.putString(StringUtils.PUBLIC_KEY, Base64.encodeToString(publicKeyByteArr, Base64.DEFAULT));
-                editor.apply();
+                KeyPair keyPair = SecurityECC.generateKeys();
+                if (keyPair != null) {
+                    byte [] privateKeyByteArr = keyWrapper.wrapPrivateKey(keyPair.getPrivate());
+                    byte [] publicKeyByteArr = keyWrapper.wrapPublicKey(keyPair.getPublic());
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    editor.putString(StringUtils.PRIVATE_KEY,Base64.encodeToString(privateKeyByteArr,Base64.DEFAULT));
+                    editor.putString(StringUtils.PUBLIC_KEY, Base64.encodeToString(publicKeyByteArr, Base64.DEFAULT));
+                    editor.apply();
+                }
             }
 
         } catch (GeneralSecurityException e) {
             Log.e(StringUtils.TAG, "GeneralSecurityException: " + e.getMessage());
         }
     }
+
 }

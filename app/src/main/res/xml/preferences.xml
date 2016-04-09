@@ -31,6 +31,15 @@
                 android:summary="http://rumcajs.open-pkw.pl:9080/openpkw/api/qr"
                 android:dialogTitle="Ustaw URL weryfikatora" />
 
+            <EditTextPreference
+                android:key="url_election_result_preference"
+                android:title="Adres URL wyników wyborczych"
+                android:defaultValue="http://rumcajs.open-pkw.pl:81/"
+                android:paddingLeft="10dp"
+                android:paddingStart="10dp"
+                android:summary="http://rumcajs.open-pkw.pl:81/"
+                android:dialogTitle="Ustaw URL wyników wyborczych" />
+
         </PreferenceCategory>
 
         <PreferenceCategory

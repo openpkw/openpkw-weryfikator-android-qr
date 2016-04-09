@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="pl.openpkw.openpkwmobile" >
+    package="pl.openpkw.openpkwmobile">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -10,11 +10,11 @@
         android:allowBackup="true"
         android:icon="@mipmap/openpkw_icon"
         android:label="@string/app.name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <activity
             android:name=".views.SplashActivity"
             android:label="@string/app.name"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -23,7 +23,6 @@
         </activity>
         <activity android:name=".activities.LoginActivity" />
         <activity android:name=".activities.PasswordRestoreActivity" />
-
         <activity
             android:name=".activities.ScanQrCodeActivity"
             android:screenOrientation="portrait" />
@@ -33,10 +32,8 @@
         <activity
             android:name=".views.TestActivity"
             android:label="@string/app.name" />
-        <activity
-            android:name=".activities.RegisterUserActivity"
-            >
-        </activity>
+        <activity android:name=".activities.RegisterUserActivity"></activity>
+        <activity android:name=".activities.ElectionResultActivity"></activity>
     </application>
 
 </manifest>

@@ -24,7 +24,6 @@
         android:textColor="@android:color/black"
         android:background="@android:color/white"
         android:maxLength="20"
-        android:textSize="@dimen/fontsize.login.label"
         />
 
     <TextView
@@ -45,7 +44,6 @@
         android:textColor="@android:color/black"
         android:background="@android:color/white"
         android:maxLength="20"
-        android:textSize="@dimen/fontsize.login.label"
         />
 
 </LinearLayout>

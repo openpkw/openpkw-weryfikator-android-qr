@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
@@ -32,7 +33,7 @@ import pl.openpkw.openpkwmobile.models.OAuthParam;
 import pl.openpkw.openpkwmobile.models.UserCredentialsDTO;
 import pl.openpkw.openpkwmobile.network.GetRefreshToken;
 import pl.openpkw.openpkwmobile.network.NetworkUtils;
-import pl.openpkw.openpkwmobile.security.SecurityECDSA;
+import pl.openpkw.openpkwmobile.security.SecurityRSA;
 import pl.openpkw.openpkwmobile.utils.StringUtils;
 
 
@@ -196,7 +197,7 @@ public class LoginFragment extends Fragment {
 
                             if (!refresh_token.isEmpty()) {
                                 String encryptToken = Base64.encodeToString(
-                                        SecurityECDSA.encrypt(refresh_token,SecurityECDSA.loadPublicKey(StringUtils.KEY_ALIAS)),Base64.DEFAULT);
+                                        SecurityRSA.encrypt(refresh_token, SecurityRSA.loadPublicKey(StringUtils.KEY_ALIAS)),Base64.DEFAULT);
                                 writeRefreshTokenToSharedPreferences(StringUtils.REFRESH_TOKEN, encryptToken);
                                 Intent scanIntent = new Intent(getActivity(), ScanQrCodeActivity.class);
                                 startActivity(scanIntent);
@@ -228,12 +229,12 @@ public class LoginFragment extends Fragment {
         SharedPreferences sharedPref = getActivity().getSharedPreferences(StringUtils.DATA, Context.MODE_PRIVATE);
         String id = sharedPref.getString(StringUtils.OAUTH2_ID_PREFERENCE, null);
         String secret = sharedPref.getString(StringUtils.OAUTH2_SECRET_PREFERENCE, null);
-        PrivateKey privateKey = SecurityECDSA.loadPrivateKey(StringUtils.KEY_ALIAS);
-        oAuthParam.setLoginURL(sharedPref.getString(StringUtils.URL_LOGIN_PREFERENCE, StringUtils.URL_DEFAULT_LOGIN).trim());
+        PrivateKey privateKey = SecurityRSA.loadPrivateKey(StringUtils.KEY_ALIAS);
+        oAuthParam.setLoginURL(getLoginUrl());
 
         if(sharedPref.getBoolean(StringUtils.DEFAULT_PARAM_CHANGE,false)){
-            String decryptID = SecurityECDSA.decrypt(Base64.decode(id, Base64.DEFAULT), privateKey);
-            String decryptSecret =SecurityECDSA.decrypt(Base64.decode(secret,Base64.DEFAULT),privateKey);
+            String decryptID = SecurityRSA.decrypt(Base64.decode(id, Base64.DEFAULT), privateKey);
+            String decryptSecret =SecurityRSA.decrypt(Base64.decode(secret,Base64.DEFAULT),privateKey);
             oAuthParam.setId(decryptID);
             oAuthParam.setSecret(decryptSecret);
         } else {
@@ -244,4 +245,8 @@ public class LoginFragment extends Fragment {
         return oAuthParam;
     }
 
+    private String getLoginUrl(){
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity().getBaseContext());
+        return sharedPref.getString(StringUtils.URL_LOGIN_PREFERENCE, StringUtils.URL_DEFAULT_LOGIN).trim();
+    }
 }

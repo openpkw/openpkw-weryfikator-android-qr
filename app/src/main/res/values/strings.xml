@@ -4,8 +4,8 @@
     <string name="rules.text">Zasady korzystania z aplikacji</string>
     <string name="action_settings">Ustawienia</string>
     <string name="about.label.about">O projekcie</string>
-    <string name="about.label.what">0 co chodzi?</string>
-    <string name="about.label.help">Jak pomóc?</string>
+    <string name="about.label.what">O co chodzi ?</string>
+    <string name="about.label.help">Jak pomóc ?</string>
     <string name="about.label.form">Wypełnij formularz na:</string>
     <string name="about.label.link.form">https://openpkw.pl/dolacz/</string>
     <string name="about.label.forum">Zapisz się do wybranego działu na forum:</string>
@@ -60,9 +60,9 @@
     <string name="scan.qr.buttonlabel.help">Nie wiesz jak zeskanować?</string>
     <string name="scan.qr.buttonlabel.scan">Skanuj</string>
     <string name="scan.qr.buttonlabel.send">Wyślij</string>
-    <string name="scan.qr.buttonlabel.forward">Dalej</string>
+    <string name="scan.qr.buttonlabel.result">Wyniki</string>
     <string name="scan.qr.label.send">Wyślij zeskanowany kod do Weryfikatora Wyborczego</string>
-    <string name="scan.qr.label.forward">Przejdź do formularza wyborczego</string>
+    <string name="scan.qr.label.result">Przejdź do wyników wyborczych</string>
     <string name="scan.qr.label.was.scanned">Kod QR został zeskanowany</string>
     <string name="scan.qr.label.was.uploaded.to.db">Kod został wysłany do Weryfikatora Wyborczego</string>
     <string name="scan.qr.toast.please.scan.qr">Proszę zeskanować kod QR</string>
@@ -83,5 +83,8 @@
         systemu do przetestowania organom bezpieczeństwa i wreszcie wszelkich ludzi, mających styczność z
         procedurami demokratycznymi, którzy projekt konsultują.\n\nProjekt jest w pełni obywatelski, wspierają go
         specjaliści w każdej dziedzinie życia obywatelskiego. By go wesprzeć wystarczy dobra wola, odrobina czasu i chęci.</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

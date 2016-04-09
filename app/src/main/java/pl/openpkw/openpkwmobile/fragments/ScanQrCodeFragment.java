@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
 import android.util.Base64;
@@ -29,6 +30,7 @@ import java.security.PrivateKey;
 import java.security.Security;
 
 import pl.openpkw.openpkwmobile.R;
+import pl.openpkw.openpkwmobile.activities.ElectionResultActivity;
 import pl.openpkw.openpkwmobile.activities.VotingFormActivity;
 import pl.openpkw.openpkwmobile.models.OAuthParam;
 import pl.openpkw.openpkwmobile.models.QrDTO;
@@ -37,7 +39,8 @@ import pl.openpkw.openpkwmobile.network.NetworkUtils;
 import pl.openpkw.openpkwmobile.network.QrSendResponse;
 import pl.openpkw.openpkwmobile.network.SendQrData;
 import pl.openpkw.openpkwmobile.security.KeyWrapper;
-import pl.openpkw.openpkwmobile.security.SecurityECDSA;
+import pl.openpkw.openpkwmobile.security.SecurityECC;
+import pl.openpkw.openpkwmobile.security.SecurityRSA;
 import pl.openpkw.openpkwmobile.utils.StringUtils;
 
 public class ScanQrCodeFragment extends Fragment {
@@ -108,7 +111,7 @@ public class ScanQrCodeFragment extends Fragment {
                     scanQrDTO = new QrDTO();
                     scanQrDTO.setQr(qrString);
                     scanQrDTO.setToken(oAuthParam.getRefreshToken());
-                    scanQrDTO.setSign(Base64.encodeToString(SecurityECDSA.generateSignature(qrString,privateKey),Base64.DEFAULT));
+                    scanQrDTO.setSign(Base64.encodeToString(SecurityECC.generateSignature(qrString, privateKey),Base64.DEFAULT));
 
                     GetAccessTokenAsyncTask getAccessTokenAsyncTask = new GetAccessTokenAsyncTask();
                     getAccessTokenAsyncTask.execute(oAuthParam);
@@ -137,8 +140,8 @@ public class ScanQrCodeFragment extends Fragment {
     public View.OnClickListener forwardButtonClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Intent vfIntent = new Intent(getActivity(), VotingFormActivity.class);
-            startActivity(vfIntent);
+            Intent erIntent = new Intent(getActivity(), ElectionResultActivity.class);
+            startActivity(erIntent);
             getActivity().finish();
         }
     };
@@ -232,23 +235,24 @@ public class ScanQrCodeFragment extends Fragment {
 
     private OAuthParam getOAuthParam()
     {
+        String [] urls = getUrls();
         OAuthParam oAuthParam = new OAuthParam();
         SharedPreferences sharedPref = getActivity().getSharedPreferences(StringUtils.DATA, Context.MODE_PRIVATE);
-        oAuthParam.setLoginURL(sharedPref.getString(StringUtils.URL_LOGIN_PREFERENCE, StringUtils.URL_DEFAULT_LOGIN).trim());
-        oAuthParam.setSendQrURL(sharedPref.getString(StringUtils.URL_VERIFY_PREFERENCE, StringUtils.URL_DEFAULT__VERIFY_QR).trim());
-        String decryptToken = SecurityECDSA.decrypt(Base64.decode(sharedPref.getString(StringUtils.REFRESH_TOKEN, null)
-                ,Base64.DEFAULT),SecurityECDSA.loadPrivateKey(StringUtils.KEY_ALIAS));
+        oAuthParam.setLoginURL(urls[0]);
+        oAuthParam.setSendQrURL(urls[1]);
+        String decryptToken = SecurityRSA.decrypt(Base64.decode(sharedPref.getString(StringUtils.REFRESH_TOKEN, null)
+                , Base64.DEFAULT), SecurityRSA.loadPrivateKey(StringUtils.KEY_ALIAS));
         oAuthParam.setRefreshToken(decryptToken);
         qrString = sharedPref.getString(StringUtils.QR, null);
         clearQRSharedPreferences(StringUtils.QR, sharedPref);
 
         if(sharedPref.getBoolean(StringUtils.DEFAULT_PARAM_CHANGE,false)){
-            PrivateKey privateKey = SecurityECDSA.loadPrivateKey(StringUtils.KEY_ALIAS);
+            PrivateKey privateKey = SecurityRSA.loadPrivateKey(StringUtils.KEY_ALIAS);
             String id = sharedPref.getString(StringUtils.OAUTH2_ID_PREFERENCE, StringUtils.ID_DEFAULT).trim();
-            String decryptID = SecurityECDSA.decrypt(Base64.decode(id, Base64.DEFAULT), privateKey);
+            String decryptID = SecurityRSA.decrypt(Base64.decode(id, Base64.DEFAULT), privateKey);
             oAuthParam.setId(decryptID);
             String secret = sharedPref.getString(StringUtils.OAUTH2_SECRET_PREFERENCE, StringUtils.SECRET_DEFAULT).trim();
-            String decryptSecret = SecurityECDSA.decrypt(Base64.decode(secret, Base64.DEFAULT), privateKey);
+            String decryptSecret = SecurityRSA.decrypt(Base64.decode(secret, Base64.DEFAULT), privateKey);
             oAuthParam.setSecret(decryptSecret);
         }
         else {
@@ -258,4 +262,11 @@ public class ScanQrCodeFragment extends Fragment {
         return oAuthParam;
     }
 
+    private String [] getUrls(){
+        String [] urls = new String[2];
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity().getBaseContext());
+        urls[0]= sharedPref.getString(StringUtils.URL_LOGIN_PREFERENCE, StringUtils.URL_DEFAULT_LOGIN).trim();
+        urls[1]= sharedPref.getString(StringUtils.URL_VERIFY_PREFERENCE, StringUtils.URL_DEFAULT__VERIFY_QR).trim();
+        return urls;
+    }
 }
