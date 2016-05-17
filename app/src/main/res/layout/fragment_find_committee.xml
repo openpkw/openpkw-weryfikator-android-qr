@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/find.committee.label.top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/padding.committee.label"
+        android:paddingTop="@dimen/padding.committee.label"
+        android:paddingLeft="@dimen/padding.committee.label"
+        android:paddingRight="@dimen/padding.committee.label"
+        android:layout_marginStart="0dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginTop="0dp"
+        android:gravity="center"
+        android:background="@android:color/darker_gray"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/fontsize.find.committe.label"
+        android:text="Wyszukaj komisję, z której przekazujesz dane do Weryfikator Wyborczego"
+        />
+
+    <TextView
+        android:id="@+id/find.committee.instruction"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/find.committee.label.top"
+        android:layout_marginStart="@dimen/margin.login.left"
+        android:layout_marginTop="10dp"
+        android:text="Wpisz kod terytorialny i nr obwodu głosowania z protokołu wyborczego dla Twojej komisji lokalnej"
+        android:textSize="@dimen/fontsize.find.committe.label" />
+
+    <View
+        android:id="@+id/find.committee.separator.top"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height.login.separator.top"
+        android:layout_below="@id/find.committee.instruction"
+        android:layout_marginBottom="@dimen/margin.login.separator.bottom"
+        android:layout_marginTop="@dimen/margin.login.separator.top"
+        android:background="@color/green" />
+
+    <EditText
+        android:id="@+id/find.committee.edittext.territorial.code"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/find.committee.separator.top"
+        android:layout_marginStart="@dimen/margin.login.edittext.user.left"
+        android:layout_marginEnd="@dimen/margin.login.edittext.user.right"
+        android:layout_marginTop="@dimen/margin.login.edittext.user.top"
+        android:hint="Kod terytorialny gminy/dzielnicy"
+        android:inputType="number|numberSigned"
+        android:textSize="@dimen/fontsize.login.edittext" />
+
+    <EditText
+        android:id="@+id/find.committee.edittext.id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/find.committee.edittext.territorial.code"
+        android:layout_marginStart="@dimen/margin.login.edittext.password.left"
+        android:layout_marginEnd="@dimen/margin.login.edittext.password.right"
+        android:layout_marginTop="@dimen/margin.login.edittext.password.top"
+        android:hint="Nr obwodu głosowania"
+        android:inputType="number|numberSigned"
+        android:textSize="@dimen/fontsize.login.edittext" />
+
+    <Button
+        android:id="@+id/find.committee.button.find"
+        android:layout_width="@dimen/width.login.button.login"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/find.committee.edittext.id"
+        android:layout_marginStart="@dimen/margin.login.button.login.left"
+        android:layout_marginTop="@dimen/margin.login.button.login.top"
+        android:text="Szukaj"
+        style="@style/green_button"/>
+
+    <!-- -->
+
+    <TextView
+        android:id="@+id/find.committee.label"
+        android:layout_below="@id/find.committee.button.find"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/padding.committee.label"
+        android:paddingTop="@dimen/padding.committee.label"
+        android:paddingLeft="@dimen/padding.committee.label"
+        android:paddingRight="@dimen/padding.committee.label"
+        android:layout_marginStart="0dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/committee_label"
+        android:gravity="center"
+        android:background="@android:color/darker_gray"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/fontsize.committee.label" />
+
+    <View
+        android:id="@+id/fvoting.committee.separator"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height.login.separator.top"
+        android:layout_below="@+id/find.committee.label"
+        android:layout_marginStart="0dp"
+        android:layout_marginEnd="0dp"
+        android:background="@android:color/black" />
+
+
+    <LinearLayout
+        android:id="@+id/fvoting.committee.id.layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/fvoting.committee.separator"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/find.committee.number"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:paddingBottom="@dimen/padding.committee.label"
+            android:paddingTop="@dimen/padding.committee.label"
+            android:gravity="center"
+            android:background="@android:color/darker_gray"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/fontsize.committee.label"/>
+
+        <TextView
+            android:id="@+id/find.committee.id"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:paddingBottom="@dimen/padding.committee.label"
+            android:paddingTop="@dimen/padding.committee.label"
+            android:gravity="center"
+            android:background="@android:color/darker_gray"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/fontsize.committee.label"/>
+    </LinearLayout>
+
+    <View
+        android:id="@+id/fvoting.committee.id.separator"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height.login.separator.top"
+        android:layout_below="@+id/fvoting.committee.id.layout"
+        android:layout_marginStart="0dp"
+        android:layout_marginEnd="0dp"
+        android:background="@android:color/black" />
+
+    <TextView
+        android:id="@+id/find.committee.name"
+        android:layout_below="@+id/fvoting.committee.id.separator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/padding.committee.label"
+        android:paddingTop="@dimen/padding.committee.label"
+        android:paddingLeft="@dimen/padding.committee.label"
+        android:paddingRight="@dimen/padding.committee.label"
+        android:layout_marginStart="0dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginTop="0dp"
+        android:gravity="center"
+        android:background="@android:color/darker_gray"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/fontsize.committee.name"/>
+
+    <View
+        android:id="@+id/fvoting.committee.name.separator"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height.login.separator.top"
+        android:layout_below="@+id/find.committee.name"
+        android:layout_marginStart="0dp"
+        android:layout_marginEnd="0dp"
+        android:background="@android:color/black" />
+
+    <TextView
+        android:id="@+id/find.committee.address"
+        android:layout_below="@+id/fvoting.committee.name.separator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/padding.committee.label"
+        android:paddingTop="@dimen/padding.committee.label"
+        android:paddingLeft="@dimen/padding.committee.label"
+        android:paddingRight="@dimen/padding.committee.label"
+        android:layout_marginStart="0dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginTop="0dp"
+        android:gravity="center"
+        android:background="@android:color/darker_gray"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/fontsize.committee.address"/>
+
+    <View
+        android:id="@+id/fvoting.committee.address.separator"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height.login.separator.top"
+        android:layout_below="@+id/find.committee.address"
+        android:layout_marginStart="0dp"
+        android:layout_marginEnd="0dp"
+        android:background="@android:color/black" />
+
+    <Button
+        android:id="@+id/find.committee.next.button"
+        android:layout_below="@+id/fvoting.committee.address.separator"
+        style="@style/green_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="20dp"
+        android:text="Dalej" />
+
+    </RelativeLayout>
+</ScrollView>

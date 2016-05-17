@@ -1,22 +1,26 @@
 package pl.openpkw.openpkwmobile.activities;
 
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.os.Handler;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,19 +28,34 @@ import android.widget.Toast;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
-import java.util.concurrent.TimeUnit;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Objects;
 
 import pl.openpkw.openpkwmobile.R;
 import pl.openpkw.openpkwmobile.fragments.AboutFragment;
 import pl.openpkw.openpkwmobile.fragments.ScanQrCodeFragment;
 import pl.openpkw.openpkwmobile.fragments.SettingsFragment;
+import pl.openpkw.openpkwmobile.loaders.CandidatesDataLoader;
+import pl.openpkw.openpkwmobile.loaders.ElectionCommitteesDataLoader;
+import pl.openpkw.openpkwmobile.loaders.PeripheryDataLoader;
+import pl.openpkw.openpkwmobile.models.CandidateVoteDTO;
+import pl.openpkw.openpkwmobile.models.ElectionCommitteeDTO;
+import pl.openpkw.openpkwmobile.models.PeripheryDTO;
+import pl.openpkw.openpkwmobile.qr.QrValidator;
+import pl.openpkw.openpkwmobile.qr.QrWrapper;
 import pl.openpkw.openpkwmobile.utils.Utils;
+
+import static pl.openpkw.openpkwmobile.fragments.LoginFragment.timer;
 
 public class ScanQrCodeActivity extends AppCompatActivity {
 
     private boolean doubleBackToExitPressedOnce = false;
-    public static TextView sessionTimerTextView;
-    private CountDownTimer sessionTimer;
+    public static HashMap<String,CandidateVoteDTO> candidatesHashMap;
+    public static HashSet<String> electionCommitteeDistrictList;
+    public static HashMap<String,ElectionCommitteeDTO> electionCommitteeMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +72,6 @@ public class ScanQrCodeActivity extends AppCompatActivity {
             ft.commit();
             fm.executePendingTransactions();
         }
-
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -61,26 +79,81 @@ public class ScanQrCodeActivity extends AppCompatActivity {
             case IntentIntegrator.REQUEST_CODE:
             {
                 if (resultCode == RESULT_CANCELED){
-                    Log.i(Utils.TAG, "SCAN CANCELED");
+                    Log.e(Utils.TAG, "SCAN CANCELED");
                 }
                 else
                 {
                     IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-                    writeQRtoSharedPreferences(Utils.QR,scanResult.getContents());
-                    Log.i(Utils.TAG, "SCAN OK");
-                    Log.i(Utils.TAG, "QR: "+scanResult.getContents());
-                    Toast.makeText(getApplicationContext(),getString(R.string.scan_qr_label_was_scanned)+". "
-                            +getString(R.string.scan_qr_label_send)+".", Toast.LENGTH_LONG).show();
+                    String scannedQR = scanResult.getContents();
+                    Log.e(Utils.TAG, "SCAN OK");
+                    Log.e(Utils.TAG, "QR: "+scannedQR);
+                    if(QrValidator.isCorrectQR(scannedQR)) {
+                        //decode qr
+                        QrWrapper qrWrapper = new QrWrapper(scannedQR);
+                        String territorial_code = qrWrapper.getTerritorialCode();
+                        String periphery_number = qrWrapper.getPeripheryNumber();
+                        PeripheryDTO periphery = new PeripheryDTO(periphery_number, territorial_code);
+
+                        if (territorial_code != null & periphery_number != null) {
+                            PeripheryDataLoader peripheryDataLoader = new PeripheryDataLoader(periphery, ScanQrCodeActivity.this);
+                            periphery = peripheryDataLoader.getPeripheryData();
+
+                            //read asynchronous candidates data
+                            CandidatesDataLoad candidatesDataLoad = new CandidatesDataLoad();
+                            candidatesDataLoad.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, scannedQR);
+
+                            //read asynchronous election committees data
+                            ElectionCommitteesDataLoad electionCommitteesDataLoad = new ElectionCommitteesDataLoad();
+                            electionCommitteesDataLoad.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                        }
+                        //write data to shared preferences
+                        writeDataToSharedPreferences(scannedQR, periphery.getTerritorialCode(), periphery.getPeripheryNumber(),
+                                periphery.getPeripheryName(), periphery.getPeripheryAddress());
+
+                        FragmentManager fm = getFragmentManager();
+                        ScanQrCodeFragment scanQRFragment = (ScanQrCodeFragment)
+                                fm.findFragmentByTag(Utils.SCAN_QR_FRAGMENT_TAG);
+
+                        if (scanQRFragment != null) {
+                            scanQRFragment.loadData();
+                        }
+                    }else{
+                        showDialogIncorrectQr();
+                    }
+
                 }
                 break;
             }
         }
     }
 
-    private void writeQRtoSharedPreferences(String key, String qr) {
+    private void showDialogIncorrectQr(){
+        ContextThemeWrapper contextThemeWrapper = new ContextThemeWrapper(ScanQrCodeActivity.this, Utils.DIALOG_STYLE);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(contextThemeWrapper);
+        builder.setMessage(R.string.dialog_incorrect_qr_message)
+                .setTitle(R.string.dialog_warning_title)
+                .setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                    }
+                });
+        final AlertDialog dialog = builder.create();
+        dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+        dialog.show();
+
+    }
+
+    private void writeDataToSharedPreferences(String qr, String territorial_code,
+                                              String periphery_number,String periphery_name,
+                                              String periphery_address) {
         SharedPreferences sharedPref = getSharedPreferences(Utils.DATA, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString(key,qr);
+        editor.putString(Utils.QR,qr);
+        editor.putString(Utils.TERRITORIAL_CODE,territorial_code);
+        editor.putString(Utils.PERIPHERY_NUMBER,periphery_number);
+        editor.putString(Utils.PERIPHERY_NAME,periphery_name);
+        editor.putString(Utils.PERIPHERY_ADDRESS,periphery_address);
         editor.apply();
     }
 
@@ -90,13 +163,10 @@ public class ScanQrCodeActivity extends AppCompatActivity {
         inflater.inflate(R.menu.menu_app, menu);
         //set session timer
         MenuItem timerMenuItem = menu.findItem(R.id.session_timer);
-        sessionTimerTextView = (TextView) MenuItemCompat.getActionView(timerMenuItem);
+        TextView sessionTimerTextView = (TextView) MenuItemCompat.getActionView(timerMenuItem);
         sessionTimerTextView.setPadding(10, 0, 10, 0);
-        Bundle extras = getIntent().getExtras();
-        if(extras!=null)
-            startSessionTimer(extras.getLong(Utils.TIMEOUT, Utils.SESSION_TIMER), 1000);
-        else
-            startSessionTimer(Utils.SESSION_TIMER, 1000);
+        sessionTimerTextView.setText(timer.getTimer());
+        timer.setTimeTextView(sessionTimerTextView);
         return true;
     }
 
@@ -213,6 +283,7 @@ public class ScanQrCodeActivity extends AppCompatActivity {
 
             if (doubleBackToExitPressedOnce) {
                 super.onBackPressed();
+                timer.cancel();
                 return;
             }
 
@@ -228,72 +299,98 @@ public class ScanQrCodeActivity extends AppCompatActivity {
         }
     }
 
-    private void startSessionTimer(long duration, long interval) {
-
-        sessionTimer = new CountDownTimer(duration, interval) {
-            String minStr;
-            String secStr;
-            String timer;
-            long min;
-            long sec;
-
-            @Override
-            public void onFinish() {
-                sessionTimerTextView.setText(R.string.session_timer_finish);
-
-                FragmentManager fm = getFragmentManager();
-                ScanQrCodeFragment scanQRFragment = (ScanQrCodeFragment)
-                        fm.findFragmentByTag(Utils.SCAN_QR_FRAGMENT_TAG);
-                if(scanQRFragment!=null)
-                    scanQRFragment.showSessionTimeoutAlertDialog();
-            }
-
-            @Override
-            public void onTick(long millisecondsLeft) {
-
-                min = (TimeUnit.MILLISECONDS.toMinutes(millisecondsLeft) -
-                        TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millisecondsLeft)));
-
-                sec = TimeUnit.MILLISECONDS.toSeconds(millisecondsLeft)
-                        - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millisecondsLeft));
-
-                if(min<10) {
-                    minStr = "0" + min;
-                } else{
-                    minStr = "" + min;
-                }
-
-                if(sec<10) {
-                    secStr = "0" + sec;
-                }else{
-                    secStr = "" + sec;
-                }
-
-                timer = minStr + ":" + secStr;
-                sessionTimerTextView.setText(timer);
-            }
-        };
-
-        sessionTimer.start();
-    }
-
     protected void onDestroy() {
         super.onDestroy();
-        sessionTimer.cancel();
     }
 
-    public static long getSessionTimeout()
-    {
-        int min = 0;
-        int sec = 0;
-        if(sessionTimerTextView!=null) {
-            String timerStr = sessionTimerTextView.getText().toString();
-            String minStr = timerStr.substring(0, 2);
-            String secStr = timerStr.substring(3, 5);
-            min = Integer.valueOf(minStr);
-            sec = Integer.valueOf(secStr);
+    class CandidatesDataLoad extends AsyncTask<String,Integer,HashMap<String, CandidateVoteDTO>>{
+
+        private HashSet<String> electionCommitteesList;
+
+        @Override
+        protected HashMap<String, CandidateVoteDTO> doInBackground(String... strings) {
+            QrWrapper qrWrapper = new QrWrapper(strings[0]); //strings[0] -> scanned QR
+            HashMap<String,CandidateVoteDTO> candidatesMap;
+            String district_number = qrWrapper.getDistrictNumber()+"$";
+            Log.e(Utils.TAG,"DISTRICT NUMBER: "+district_number);
+            CandidatesDataLoader candidatesDataLoader = new CandidatesDataLoader(district_number,ScanQrCodeActivity.this);
+            candidatesMap = candidatesDataLoader.getCandidatesData();
+            candidatesMap = qrWrapper.getCandidatesVotes(candidatesMap);
+            electionCommitteesList = candidatesDataLoader.electionCommitteeList;
+            return candidatesMap ;
         }
-        return (min*60*1000+sec*1000);
+
+        @Override
+        protected void onPostExecute(HashMap<String, CandidateVoteDTO> hashMap) {
+            candidatesHashMap = hashMap;
+            electionCommitteeDistrictList = electionCommitteesList;
+
+        }
+    }
+
+    class ElectionCommitteesDataLoad extends AsyncTask<String,Integer,HashMap<String,ElectionCommitteeDTO>>{
+
+        @Override
+        protected HashMap<String, ElectionCommitteeDTO> doInBackground(String... strings) {
+            ElectionCommitteesDataLoader electionCommitteesDataLoader = new ElectionCommitteesDataLoader(ScanQrCodeActivity.this);
+            return electionCommitteesDataLoader.getElectionCommitteesData();
+        }
+
+        @Override
+        protected void onPostExecute( HashMap<String,ElectionCommitteeDTO> hashMap) {
+            electionCommitteeMap = hashMap;
+            if(candidatesHashMap!=null && !candidatesHashMap.isEmpty()
+                    && electionCommitteeDistrictList!=null && !electionCommitteeDistrictList.isEmpty()
+                    && electionCommitteeMap!=null && !electionCommitteeMap.isEmpty())
+            {
+                for (String iElectionCommitteeDistrictList : electionCommitteeDistrictList) {
+                    ElectionCommitteeDTO electionCommittee = electionCommitteeMap.get(iElectionCommitteeDistrictList.substring(0,iElectionCommitteeDistrictList.indexOf(";")));
+                    if(electionCommittee  !=null) {
+                        electionCommittee.setListNumber(Integer.valueOf(iElectionCommitteeDistrictList.substring(
+                                iElectionCommitteeDistrictList.indexOf(";") + 1, iElectionCommitteeDistrictList.length())));
+                        TotalVotesCounter totalVotesCounter = new TotalVotesCounter(candidatesHashMap,electionCommittee.getName());
+                        totalVotesCounter.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,electionCommittee.getListNumber());
+                    }
+                }
+            }
+        }
+    }
+
+    class TotalVotesCounter extends AsyncTask<Integer,Integer,Integer>{
+
+        public TotalVotesCounter(HashMap<String, CandidateVoteDTO> candidatesMap, String electionCommitteeName) {
+            this.candidatesMap = candidatesMap;
+            this.electionCommitteeName = electionCommitteeName;
+        }
+
+        private HashMap<String,CandidateVoteDTO> candidatesMap;
+        private String electionCommitteeName;
+
+        @Override
+        protected Integer doInBackground(Integer... integers) {
+            Iterator it = candidatesMap.entrySet().iterator();
+            int totalNumberOfVotes = 0;
+            while (it.hasNext()) {
+                Map.Entry pair = (Map.Entry)it.next();
+                CandidateVoteDTO candidate = (CandidateVoteDTO)pair.getValue();
+                if(Objects.equals(candidate.getListNumber(), integers[0]))
+                {
+                    totalNumberOfVotes = totalNumberOfVotes + candidate.getVotesNumber();
+                }
+            }
+            return totalNumberOfVotes;
+        }
+
+        @Override
+        protected void onPostExecute(Integer totalNumberOfVotes) {
+            ElectionCommitteeDTO electionCommittee = electionCommitteeMap.get(electionCommitteeName);
+            if(electionCommittee!=null){
+                electionCommittee.setTotalNumberOfVotes(totalNumberOfVotes);
+                electionCommitteeMap.put(electionCommitteeName,electionCommittee);
+                Log.e(Utils.TAG, "ELECTION COMMITTEE NAME: " + electionCommittee.getName());
+                Log.e(Utils.TAG, "TOTAL NUMBER OF VOTES: " + electionCommittee.getTotalNumberOfVotes());
+            }
+        }
     }
 
 }

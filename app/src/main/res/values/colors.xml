@@ -5,5 +5,5 @@
     <item name="green" type="color">#86B404</item>
     <item name="dark_green" type="color">#4B610B</item>
     <item name="dark_gray" type="color">#666666</item>
-    <item name="light_gray" type="color">#808080</item>
+    <item name="light_gray" type="color">#808080</item><item name="light_gray_protocol" type="color">#dbdbdb</item>
 </resources>

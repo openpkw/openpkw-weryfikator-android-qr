@@ -55,7 +55,6 @@ public class GetRefreshToken {
         OAuthAccessTokenResponse oauthTokenResponse = null;
         try {
             oauthTokenResponse = oAuthClient.accessToken(oAuthRequest);
-
         } catch (OAuthSystemException e) {
             e.printStackTrace();
             Log.e(Utils.TAG, "SYSTEM EXCEPTION LOGIN: " + e.getMessage());

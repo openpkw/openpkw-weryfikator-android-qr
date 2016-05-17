@@ -1,46 +1,82 @@
 package pl.openpkw.openpkwmobile.fragments;
 
+import android.app.Fragment;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.text.InputFilter;
-import android.text.InputType;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.ScrollView;
-import android.widget.TableLayout;
-import android.widget.TableRow;
+import android.widget.Button;
 import android.widget.TextView;
 
 import pl.openpkw.openpkwmobile.R;
+import pl.openpkw.openpkwmobile.activities.CommitteesResultActivity;
+import pl.openpkw.openpkwmobile.activities.ScanQrCodeActivity;
+import pl.openpkw.openpkwmobile.qr.QrWrapper;
+import pl.openpkw.openpkwmobile.utils.Utils;
 
-/**
- * Created by fockeRR on 28.04.15.
- */
 public class VotingFormFragment extends Fragment {
-    private ScrollView mScrollView;
-    private TextView mCommisionNumber;
-    private TextView mCommisionId;
-    private TextView mCommisionName;
-    private TextView mCommisionAddress;
-    private TableLayout mCandidates;
-    private TableLayout mGeneralData;
+
+    private TextView territorialCodeTextView;
+    private TextView peripheryNumberTextView;
+    private TextView peripheryNameTextView;
+    private TextView peripheryAddressTextView;
+
+    private TextView totalEntitledToVoteTextView;
+    private TextView totalVotingCardsTextView;
+    private TextView validCardsTextView;
+    private TextView invalidVotesTextView;
+    private TextView validVotesTextView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_voting_form, container, false);
-        mScrollView = (ScrollView) v.findViewById(R.id.fvoting_scrollview);
-        mCommisionNumber = (TextView) v.findViewById(R.id.fvoting_commision_number);
-        mCommisionId = (TextView) v.findViewById(R.id.fvoting_commision_id);
-        mCommisionName = (TextView) v.findViewById(R.id.fvoting_commision_name);
-        mCommisionAddress = (TextView) v.findViewById(R.id.fvoting_commision_address);
-        mGeneralData = (TableLayout) v.findViewById(R.id.fvoting_generaldata);
-        mCandidates = (TableLayout) v.findViewById(R.id.fvoting_candidates);
-        populateDummmyData();
+
+        peripheryNumberTextView = (TextView) v.findViewById(R.id.fvoting_periphery_number);
+        territorialCodeTextView= (TextView) v.findViewById(R.id.fvoting_territorial_code);
+        peripheryNameTextView = (TextView) v.findViewById(R.id.fvoting_periphery_name);
+        peripheryAddressTextView = (TextView) v.findViewById(R.id.fvoting_periphery_address);
+
+        totalEntitledToVoteTextView = (TextView) v.findViewById(R.id.fvoting_total_entitled_to_vote);
+        totalVotingCardsTextView = (TextView) v.findViewById(R.id.fvoting_total_voting_cards);
+        validCardsTextView = (TextView) v.findViewById(R.id.fvoting_valid_cards);
+        invalidVotesTextView = (TextView) v.findViewById(R.id.fvoting_invalid_votes);
+        validVotesTextView = (TextView) v.findViewById(R.id.fvoting_valid_votes);
+
+        Button forwardButton = (Button) v.findViewById(R.id.fvoting_forward_button);
+        forwardButton.setOnClickListener(forwardButtonClickListener);
+
+        Button nextButton = (Button) v.findViewById(R.id.fvoting_next_button);
+        nextButton.setOnClickListener(nextButtonClickListener);
+
+        loadData();
         return v;
     }
+
+    View.OnClickListener nextButtonClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Intent committeesResultIntent = new Intent(getActivity(), CommitteesResultActivity.class);
+            startActivity(committeesResultIntent);
+            getActivity().finish();
+        }
+    };
+
+    View.OnClickListener forwardButtonClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Intent scanQrIntent = new Intent(getActivity(), ScanQrCodeActivity.class);
+            startActivity(scanQrIntent);
+            getActivity().finish();
+        }
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,37 +84,26 @@ public class VotingFormFragment extends Fragment {
         setRetainInstance(true);
     }
 
-    private void populateDummmyData() {
-        mCommisionNumber.setText("Nr 5 Łódź");
-        mCommisionId.setText("106101-5");
-        mCommisionName.setText("Laboratorium Produkcji Ogrodniczej w Zespole Szkół Rzemiosła im. Jana Kilińskiego");
-        mCommisionAddress.setText("ul. Liściasta 181, 91-220 Łódź");
-
-        TableLayout.LayoutParams rowParams = new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.MATCH_PARENT);
-        TableRow.LayoutParams nameParams = new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 0.7f);
-        TableRow.LayoutParams votesParams = new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 0.2f);
-        TableRow.LayoutParams orderParams = new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 0.1f);
-        InputFilter[] maxVotesLength = new InputFilter[1];
-        maxVotesLength[0] = new InputFilter.LengthFilter(6);
-        for (int i = 0; i < 10; i++) {
-            TableRow candidate = new TableRow(getActivity());
-            candidate.setPadding(5, 5, 5, 5);
-            TextView order = new TextView(getActivity());
-            TextView name = new TextView(getActivity());
-            EditText numberOfVotes = new EditText(getActivity());
-            //order
-            order.setText(String.valueOf(i));
-            //set name
-            name.setText("KOWALEWSKI Jan, Maria");
-            //setMaxLength
-            numberOfVotes.setMaxLines(1);
-            numberOfVotes.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED);
-            numberOfVotes.setFilters(maxVotesLength);
-            candidate.addView(order, orderParams);
-            candidate.addView(name, nameParams);
-            candidate.addView(numberOfVotes, nameParams);
-            candidate.setWeightSum(1.0f);
-            mCandidates.addView(candidate);
+    private void loadData() {
+        SharedPreferences sharedPref = getActivity().getSharedPreferences(Utils.DATA, Context.MODE_PRIVATE);
+        String scannedQR = sharedPref.getString(Utils.QR,null);
+        String territorial_code = sharedPref.getString(Utils.TERRITORIAL_CODE, "Kod terytorialny");
+        String periphery_number = "Nr "+sharedPref.getString(Utils.PERIPHERY_NUMBER, "obwodu");
+        String periphery_name = sharedPref.getString(Utils.PERIPHERY_NAME, "Nazwa");
+        String periphery_address = sharedPref.getString(Utils.PERIPHERY_ADDRESS, "Adres");
+        Spannable spannable = new SpannableString(territorial_code);
+        spannable.setSpan(new ForegroundColorSpan(Color.GREEN), 0 ,territorial_code.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        territorialCodeTextView.setText(spannable);
+        peripheryNumberTextView.setText(periphery_number);
+        peripheryNameTextView.setText(periphery_name);
+        peripheryAddressTextView.setText(periphery_address);
+        if(scannedQR!=null) {
+            QrWrapper qrWrapper = new QrWrapper(scannedQR);
+            totalEntitledToVoteTextView.setText(qrWrapper.getVotingCardsTotalEntitledToVote());
+            totalVotingCardsTextView.setText(qrWrapper.getVotingCardsTotalCards());
+            validCardsTextView.setText(qrWrapper.getVotingCardsValidCards());
+            invalidVotesTextView.setText(qrWrapper.getVotingCardsInvalidVotes());
+            validVotesTextView.setText(qrWrapper.getVotingCardsValidVotes());
         }
     }
 }

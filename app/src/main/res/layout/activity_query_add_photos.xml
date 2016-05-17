@@ -3,14 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="pl.openpkw.openpkwmobile.activities.ElectionResultActivity">
+    tools:context="pl.openpkw.openpkwmobile.activities.QueryAddPhotosActivity">
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/election.result.fragment.container">
+        android:id="@+id/query.add.photos.fragment.container">
     </FrameLayout>
 
 </RelativeLayout>
-
-

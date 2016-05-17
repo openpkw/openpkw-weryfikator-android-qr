@@ -23,10 +23,21 @@
 
     <style name="green_button" parent="@android:style/Widget.Button">
         <item name="android:gravity">center_vertical|center_horizontal</item>
-        <item name="android:textColor">#FFFFFFFF</item>
-        <item name="android:textSize">16dip</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">16sp</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:background">@drawable/button_green</item>
+        <item name="android:background">@drawable/green_button</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:clickable">true</item>
+    </style>
+
+    <style name="orange_button" parent="@android:style/Widget.Button">
+        <item name="android:gravity">center_vertical|center_horizontal</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:background">@drawable/orange_button</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:focusable">true</item>
         <item name="android:clickable">true</item>

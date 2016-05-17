@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/fragment.end.layout.buttons">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <TextView
+                android:id="@+id/fragment.end.label.data.ok"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin.login.left"
+                android:layout_marginEnd="@dimen/margin.login.left"
+                android:layout_marginTop="5dp"
+                android:gravity="center"
+                android:text="Twoje dane zostały poprawnie przesłane na serwer"
+                android:textSize="@dimen/fontsize.login.label" />
+
+            <LinearLayout
+                android:id="@+id/fragment.end.logo.layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_below="@id/fragment.end.label.data.ok"
+                android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/fragment.end.logo"
+                android:foregroundGravity="center_horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/pkw_logo"
+                android:contentDescription="@string/logo" />
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/fragment.end.label.thanks"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/fragment.end.logo.layout"
+                android:layout_marginStart="@dimen/margin.login.left"
+                android:layout_marginEnd="@dimen/margin.login.left"
+                android:layout_marginTop="5dp"
+                android:gravity="center"
+                android:text="Dziękujemy za poświęcony czas i dobrze wykonaną misję społeczną"
+                android:textSize="@dimen/fontsize.login.label" />
+
+        </RelativeLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/fragment.end.layout.buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/fragment.end.button.quit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="@dimen/margin.bottom.buttons"
+            android:text="Zakończ"
+            style="@style/green_button"/>
+
+        <Button
+            android:id="@+id/fragment.end.button.result"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="@dimen/margin.bottom.buttons"
+            android:text="Wyniki"
+            style="@style/orange_button"/>
+    </LinearLayout>
+
+</RelativeLayout>

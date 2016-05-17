@@ -2,11 +2,17 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="pl.openpkw.openpkwmobile">
 
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
+
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.FLASHLIGHT"/>
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
 
     <application
         android:allowBackup="true"
@@ -19,7 +25,6 @@
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -34,8 +39,19 @@
         <activity
             android:name=".views.TestActivity"
             android:label="@string/app.name" />
-        <activity android:name=".activities.RegisterUserActivity"></activity>
-        <activity android:name=".activities.ElectionResultActivity"></activity>
+        <activity android:name=".activities.RegisterUserActivity" />
+        <activity android:name=".activities.EndActivity" />
+        <activity android:name=".activities.CommitteesResultActivity" />
+        <activity android:name=".activities.ElectionCommitteeVotesActivity" />
+        <activity android:name=".activities.QueryAddPhotosActivity" />
+        <activity android:name=".activities.AddPhotosActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activities.NextPhotoActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activities.ThumbnailsActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activities.SendDataActivity"/>
+        <activity android:name=".activities.TimeoutDialogActivity" android:theme="@style/Theme.Transparent"/>
     </application>
 
 </manifest>

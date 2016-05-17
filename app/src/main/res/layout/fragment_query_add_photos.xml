@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/add.photos.take.photo.labell"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/query.add.photos.separator"
+        android:layout_marginStart="@dimen/margin.login.left"
+        android:text="Czy chcesz dodać dokumentację fotograficzną protokołu wyborczego?"
+        android:textSize="@dimen/fontsize.login.label" />
+
+    <View
+        android:id="@+id/query.add.photos.separator"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height.login.separator.top"
+        android:layout_above="@+id/add.photos.camera.ic"
+        android:layout_marginBottom="@dimen/margin.login.separator.bottom"
+        android:layout_marginTop="@dimen/margin.login.separator.top"
+        android:background="@color/green" />
+
+    <LinearLayout
+        android:id="@+id/add.photos.camera.ic"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/query.add.photos.no.button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginTop="@dimen/margin.login.button.login.top"
+            android:text="NIE"
+            style="@style/green_button"/>
+
+        <Button
+            android:id="@+id/query.add.photos.yes.button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginTop="@dimen/margin.login.button.login.top"
+            android:text="TAK"
+            style="@style/orange_button"/>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/query.add.photos.forward.button"
+        android:layout_width="@dimen/width.login.button.register"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/margin.bottom.buttons"
+        android:layout_centerHorizontal="true"
+        android:text="@string/forward.label.button"
+        style="@style/green_button"/>
+
+
+</RelativeLayout>

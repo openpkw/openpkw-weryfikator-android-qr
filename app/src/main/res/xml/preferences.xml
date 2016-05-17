@@ -7,38 +7,38 @@
             <EditTextPreference
                 android:key="url_login_preference"
                 android:title="Adres URL logowania"
-                android:defaultValue="http://rumcajs.open-pkw.pl:9080/openpkw/api/login"
+                android:defaultValue="@string/url.login.default"
                 android:paddingLeft="10dp"
                 android:paddingStart="10dp"
-                android:summary="http://rumcajs.open-pkw.pl:9080/openpkw/api/login"
+                android:summary="@string/url.login.default"
                 android:dialogTitle="Ustaw URL logowania"
                 />
 
             <EditTextPreference
                 android:key="url_register_preference"
                 android:title="Adres URL rej. użytkownika"
-                android:defaultValue="http://rumcajs.open-pkw.pl:9080/openpkw/users/"
+                android:defaultValue="@string/url.user.register.default"
                 android:paddingLeft="10dp"
                 android:paddingStart="10dp"
-                android:summary="http://rumcajs.open-pkw.pl:9080/openpkw/users/"
+                android:summary="@string/url.user.register.default"
                 android:dialogTitle="Ustaw URL rej. użytkownika" />
 
             <EditTextPreference
                 android:key="url_verify_preference"
                 android:title="Adres URL weryfikatora QR"
-                android:defaultValue="http://rumcajs.open-pkw.pl:9080/openpkw/api/qr"
+                android:defaultValue="@string/url.verify.qr.default"
                 android:paddingLeft="10dp"
                 android:paddingStart="10dp"
-                android:summary="http://rumcajs.open-pkw.pl:9080/openpkw/api/qr"
+                android:summary="@string/url.verify.qr.default"
                 android:dialogTitle="Ustaw URL weryfikatora" />
 
             <EditTextPreference
                 android:key="url_election_result_preference"
                 android:title="Adres URL wyników wyborczych"
-                android:defaultValue="http://rumcajs.open-pkw.pl:81/"
+                android:defaultValue="@string/url.election.result.default"
                 android:paddingLeft="10dp"
                 android:paddingStart="10dp"
-                android:summary="http://rumcajs.open-pkw.pl:81/"
+                android:summary="@string/url.election.result.default"
                 android:dialogTitle="Ustaw URL wyników wyborczych" />
 
         </PreferenceCategory>

@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
@@ -17,7 +16,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.security.GeneralSecurityException;
@@ -62,11 +60,6 @@ public class LoginActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_app, menu);
-        //set session timer to 15 min
-        MenuItem timerMenuItem = menu.findItem(R.id.session_timer);
-        TextView sessionTimerTextView = (TextView) MenuItemCompat.getActionView(timerMenuItem);
-        sessionTimerTextView.setPadding(10, 0, 10, 0);
-        sessionTimerTextView.setText(R.string.session_timer_start);
         return true;
     }
 

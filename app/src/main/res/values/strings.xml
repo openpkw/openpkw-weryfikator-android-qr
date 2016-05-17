@@ -51,20 +51,20 @@
     <string name="prestore.label.top">Przypomnij hasło</string>
     <string name="toast.prestore.emailnotvalid">Wprowadzony adres e-mail jest niepoprawny</string>
     <string name="toast.prestore.emailvalid">Na podany adres e-mail został wysłany link do zresetowania hasła. Sprawdź swoją skrzynkę pocztową.</string>
-    <string name="fvoting.commision.label">Obwodowa komisja wyborcza</string>
+    <string name="committee_label">Obwodowa Komisja Wyborcza</string>
     <string name="fvoting.changecommision.button.label">Zmień komisję</string>
-    <string name="fvoting.abletovote.label">I.1.Uprawnionych do głosowania</string>
-    <string name="fvoting.validcards.label">II.11. Kart ważnych</string>
-    <string name="fvoting.nonvalidvotes.label">II.12 Głosów nieważnych</string>
-    <string name="fvoting.validvotes.label">II.13. Głosów ważnych</string>
-    <string name="fvoting.votingcardsdistributed.label">I.4.Wydano kart do głosowania</string>
+    <string name="fvoting.total.entitled.to.vote.label">Uprawnionych do głosowania:</string>
+    <string name="fvoting.validcards.label">Kart ważnych:</string>
+    <string name="fvoting.nonvalidvotes.label">Głosów nieważnych:</string>
+    <string name="fvoting.validvotes.label">Głosów ważnych:</string>
+    <string name="fvoting.votingcardsdistributed.label">Wydano kart do głosowania:</string>
     <string name="title_activity_scan_qrcode">ScanQRcodeActivity</string>
-    <string name="scan.qr.label.scan">Zeskanuj kod QR</string>
+    <string name="scan.qr.label.scan">Skanuj kod QR z ostatniej strony protokołu wyborczego</string>
     <string name="scan.qr.buttonlabel.help">Nie wiesz jak zeskanować?</string>
     <string name="scan.qr.buttonlabel.scan">Skanuj</string>
     <string name="scan.qr.buttonlabel.send">Wyślij</string>
     <string name="scan.qr.buttonlabel.result">Wyniki</string>
-    <string name="scan.qr.label.send">Wyślij zeskanowany kod do Weryfikatora Wyborczego</string>
+    <string name="send.data.label.send">Wyślij dane z Twojej komisji do Weryfikatora Wyborczego</string>
     <string name="scan.qr.label.result">Przejdź do wyników wyborczych</string>
     <string name="scan.qr.label.was.scanned">Kod QR został zeskanowany</string>
     <string name="scan.qr.label.was.uploaded.to.db">Kod został wysłany do Weryfikatora Wyborczego</string>
@@ -90,8 +90,26 @@
     <string name="session_timer_finish">00:00</string>
     <string name="session_timer_start">15:00</string>
     <string name="session_timeout_message">Twoja sesja wygasła. Aby kontynuować musisz ponownie zalogować się do systemu.</string>
-    <string name="seasion_timeout_title">Uwaga</string>
+    <string name="dialog_warning_title">Uwaga</string>
+    <string name="dialog_incorrect_qr_message">Zeskanowany kod QR nie zawiera danych z protokołu wyborczego</string>
     <string name="session_timeout_login">Zaloguj</string>
     <string name="session_timeout_quit">Zamknij</string>
+    <string name="scan.qr.label.committee.id">Obwodowa Komisja Wyborcza nr</string>
+
+    <string name="scan_qr_label_enter_data">Wprowadzasz dane dla</string>
+    <string name="scan.qr.progress.send.data">Przesyłanie danych w toku...</string>
+    <string name="logo">LOGO</string>
+    <string name="scan.qr.buttonlabel.enter.manually">Wprowadź dane ręcznie</string>
+
+    <string name="next.label.button">Dalej</string>
+    <string name="forward.label.button">Wstecz</string>
+
+    <string name="election.committee.name.label">Skrót nazwy \nkomitetu wyborczego</string>
+    <string name="number.of.votes.label">Liczba \ngłosów</string>
+    <string name="name.candidate.label">Imie i Nazwisko \nkandydata</string>
+    <string name="url.election.result.default">http://rumcajs.openpkw.pl:81/</string>
+    <string name="url.verify.qr.default">http://rumcajs.openpkw.pl:9080/openpkw/api/qr</string>
+    <string name="url.user.register.default">http://rumcajs.openpkw.pl:9080/openpkw/users/</string>
+    <string name="url.login.default">http://rumcajs.openpkw.pl:9080/openpkw/api/login</string>
 
 </resources>

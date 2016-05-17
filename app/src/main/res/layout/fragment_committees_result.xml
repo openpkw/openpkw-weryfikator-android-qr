@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/committees.result.label.top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/padding.committee.label"
+        android:paddingTop="@dimen/padding.committee.label"
+        android:paddingLeft="@dimen/padding.committee.label"
+        android:paddingRight="@dimen/padding.committee.label"
+        android:layout_marginStart="0dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginTop="0dp"
+        android:text="Wyniki uzyskane przez poszczególne KW w Twojej komisji wyborczej"
+        android:textColor="@android:color/black"
+        android:gravity="center"
+        android:textSize="@dimen/fontsize.committee.label" />
+
+    <View
+        android:id="@+id/committees.result.separator.top"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height.login.separator.bottom"
+        android:layout_below="@+id/committees.result.label.top"
+        android:layout_marginBottom="0dp"
+        android:layout_marginTop="0dp"
+        android:background="@android:color/black" />
+
+    <TableRow
+        android:id="@+id/committees.result.label.tablerow"
+        android:layout_below="@+id/committees.result.separator.top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/dark_green"
+       >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingStart="@dimen/padding.fvoting.general.data"
+            android:paddingEnd="0dp"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/fontsize.fvoting.general.data"
+            android:text="@string/election.committee.name.label" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingStart="0dp"
+            android:paddingEnd="@dimen/padding.number.of.votes"
+            android:textColor="@android:color/white"
+            android:gravity="end"
+            android:textSize="@dimen/fontsize.fvoting.general.data"
+            android:text="@string/number.of.votes.label" />
+
+    </TableRow>
+
+    <ScrollView
+        android:layout_above="@+id/committees.result.layout.buttons"
+        android:layout_below="@+id/committees.result.label.tablerow"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TableLayout
+                android:id="@+id/committees.result.layout"
+                android:layout_width="match_parent"
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginEnd="0dp"
+                android:layout_height="match_parent"
+                android:background="@color/light_gray_protocol"
+                android:stretchColumns="1">
+
+            </TableLayout>
+
+            <View
+                android:id="@+id/committees.result.separator.button"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/height.login.separator.bottom"
+                android:layout_below="@+id/committees.result.layout"
+                android:layout_marginBottom="0dp"
+                android:layout_marginTop="0dp"
+                android:background="@android:color/black" />
+
+        </RelativeLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/committees.result.layout.buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/committees.result.forward.button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="@dimen/margin.bottom.buttons"
+            android:layout_marginTop="@dimen/margin.bottom.buttons"
+            android:text="@string/forward.label.button"
+            style="@style/green_button"/>
+
+        <Button
+            android:id="@+id/committees.result.next.button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="@dimen/margin.bottom.buttons"
+            android:layout_marginTop="@dimen/margin.bottom.buttons"
+            android:text="@string/next.label.button"
+            style="@style/orange_button"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

@@ -14,10 +14,35 @@
             android:orderInCategory="100"
             app:showAsAction="never" />
     </group>
+
     <group android:id="@+id/grp2">
     <item android:id="@+id/about_project"
         android:title="@string/about.label.about"
         android:orderInCategory="101"
         app:showAsAction="never" />
+    </group>
+
+    <group android:id="@+id/grp3">
+        <item android:id="@+id/manual"
+            android:title="Instrukcja"
+            android:orderInCategory="102"
+            android:enabled="false"
+            app:showAsAction="never" />
+    </group>
+
+    <group android:id="@+id/grp4">
+        <item android:id="@+id/regulamin"
+            android:title="Regulamin"
+            android:orderInCategory="103"
+            android:enabled="false"
+            app:showAsAction="never" />
+    </group>
+
+    <group android:id="@+id/grp5">
+        <item android:id="@+id/authors"
+            android:title="Autorzy"
+            android:enabled="false"
+            android:orderInCategory="104"
+            app:showAsAction="never" />
     </group>
 </menu>

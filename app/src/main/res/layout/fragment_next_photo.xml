@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/next.photo.label.top"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/padding.committee.label"
+            android:paddingTop="@dimen/padding.committee.label"
+            android:paddingLeft="@dimen/padding.committee.label"
+            android:paddingRight="@dimen/padding.committee.label"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginTop="0dp"
+            android:text="@string/scan_qr_label_enter_data"
+            android:gravity="center"
+            android:background="@android:color/white"
+            android:textSize="@dimen/fontsize.committee.label" />
+
+        <View
+            android:id="@+id/next.photo.separator.top"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/height.login.separator.top"
+            android:layout_below="@id/next.photo.label.top"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="0dp"
+            android:background="@android:color/black" />
+
+        <TextView
+            android:id="@+id/next.photo.label.committee.id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/next.photo.separator.top"
+            android:paddingLeft="@dimen/padding.committee.label"
+            android:paddingRight="@dimen/padding.committee.label"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="0dp"
+            android:paddingTop="@dimen/padding.committee.label"
+            android:paddingBottom="@dimen/padding.committee.label"
+            android:text="@string/committee_label"
+            android:gravity="center"
+            android:background="@android:color/darker_gray"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/fontsize.committee.label" />
+
+        <View
+            android:id="@+id/next.photo.committee.label.separator"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/height.login.separator.top"
+            android:layout_below="@id/next.photo.label.committee.id"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="0dp"
+            android:background="@android:color/black" />
+
+        <LinearLayout
+            android:id="@+id/next.photo.committee.id.layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/next.photo.committee.label.separator"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/next.photo.periphery.number"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:paddingBottom="@dimen/padding.committee.label"
+                android:paddingTop="@dimen/padding.committee.label"
+                android:gravity="center"
+                android:background="@android:color/darker_gray"
+                android:textColor="@android:color/black"
+                android:text="Nr obwodu"
+                android:textSize="@dimen/fontsize.committee.label"/>
+
+            <TextView
+                android:id="@+id/next.photo.territorial.code"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:paddingBottom="@dimen/padding.committee.label"
+                android:paddingTop="@dimen/padding.committee.label"
+                android:gravity="center"
+                android:background="@android:color/darker_gray"
+                android:textColor="@android:color/black"
+                android:text="Kod terytorialny"
+                android:textSize="@dimen/fontsize.committee.label"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/next.photo.take.photo.label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/next.photo.committee.id.layout"
+            android:layout_marginStart="@dimen/margin.login.left"
+            android:layout_marginEnd="@dimen/margin.login.left"
+            android:layout_marginBottom="0dp"
+            android:gravity="center_horizontal"
+            android:text="Czy zdjęcie jest wyraźne i dobrze wykadrowane?"
+            android:textSize="@dimen/fontsize.committee.label" />
+
+        <LinearLayout
+            android:id="@+id/next.photo.image.layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:layout_below="@+id/next.photo.take.photo.label"
+            android:layout_above="@+id/next.photo.layout.buttons"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/next.photo.image.view.photo"
+                android:src="@mipmap/ic_camera"
+                android:layout_marginTop="0dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/logo" />
+
+        </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/next.photo.layout.buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/margin.bottom.buttons"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/next.photo.retry.button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginTop="5dp"
+            android:text="Ponów"
+            style="@style/green_button"/>
+
+        <Button
+            android:id="@+id/next.photo.next.button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginTop="5dp"
+            android:text="Kolejne"
+            style="@style/orange_button"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

@@ -1,58 +1,47 @@
 package pl.openpkw.openpkwmobile.fragments;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
+import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
+import android.support.v4.content.ContextCompat;
+import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.text.style.UnderlineSpan;
-import android.util.Base64;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
+import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.zxing.integration.android.IntentIntegrator;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.security.GeneralSecurityException;
-import java.security.PrivateKey;
 import java.security.Security;
 
 import pl.openpkw.openpkwmobile.R;
-import pl.openpkw.openpkwmobile.activities.ElectionResultActivity;
-import pl.openpkw.openpkwmobile.activities.LoginActivity;
-import pl.openpkw.openpkwmobile.activities.ScanQrCodeActivity;
-import pl.openpkw.openpkwmobile.models.OAuthParam;
-import pl.openpkw.openpkwmobile.models.QrDTO;
-import pl.openpkw.openpkwmobile.network.GetAccessToken;
-import pl.openpkw.openpkwmobile.network.NetworkUtils;
-import pl.openpkw.openpkwmobile.network.QrSendResponse;
-import pl.openpkw.openpkwmobile.network.SendQrData;
-import pl.openpkw.openpkwmobile.security.KeyWrapper;
-import pl.openpkw.openpkwmobile.security.SecurityECC;
-import pl.openpkw.openpkwmobile.security.SecurityRSA;
+import pl.openpkw.openpkwmobile.activities.VotingFormActivity;
 import pl.openpkw.openpkwmobile.utils.Utils;
 
 public class ScanQrCodeFragment extends Fragment {
 
-    private String qrString;
-    private OAuthParam oAuthParam;
+
     private IntentIntegrator integratorScan;
     private ContextThemeWrapper contextThemeWrapper;
-    private QrDTO scanQrDTO = null;
+
+    private TextView territorialCodeTextView;
+    private TextView peripheryNumberTextView;
+    private TextView peripheryNameTextView;
+    private TextView peripheryAddressTextView;
+
+    private Button nextButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -67,16 +56,19 @@ public class ScanQrCodeFragment extends Fragment {
         Button scanQrButton = (Button) viewScanQR.findViewById(R.id.scan_qr_button_scan);
         scanQrButton.setOnClickListener(scanQrButtonClickListener);
 
-        Button sendQrButton = (Button) viewScanQR.findViewById(R.id.scan_qr_button_send);
-        sendQrButton.setOnClickListener(sendQrButtonClickListener);
-
-        Button forwardButton = (Button) viewScanQR.findViewById(R.id.scan_qr_button_forward);
-        forwardButton.setOnClickListener(forwardButtonClickListener);
+        nextButton = (Button)viewScanQR.findViewById(R.id.scan_qr_next_button);
+        nextButton.setOnClickListener(nextButtonClickListener);
+        nextButton.setEnabled(true);
 
         Button helpScanQrButton = (Button) viewScanQR.findViewById(R.id.scan_qr_textlink_scan);
         SpannableString buttonText = new SpannableString(helpScanQrButton.getText());
         buttonText.setSpan(new UnderlineSpan(), 0, buttonText.length(), 0);
         helpScanQrButton.setText(buttonText);
+
+        territorialCodeTextView = (TextView) viewScanQR.findViewById(R.id.scan_qr_territorial_code);
+        peripheryNumberTextView = (TextView) viewScanQR.findViewById(R.id.scan_qr_periphery_number);
+        peripheryNameTextView = (TextView) viewScanQR.findViewById(R.id.scan_qr_periphery_name);
+        peripheryAddressTextView = (TextView) viewScanQR.findViewById(R.id.scan_qr_periphery_address);
 
         integratorScan = new IntentIntegrator(getActivity());
 
@@ -85,218 +77,74 @@ public class ScanQrCodeFragment extends Fragment {
 
         contextThemeWrapper = new ContextThemeWrapper(getActivity(), Utils.DIALOG_STYLE);
 
+        loadData();
+
         return viewScanQR;
     }
-
-    public View.OnClickListener sendQrButtonClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-
-            oAuthParam = getOAuthParam();
-
-            if(qrString!=null)
-            {
-                if(NetworkUtils.isNetworkAvailable(getActivity())) {
-                    SharedPreferences sharedPref = getActivity().getSharedPreferences(Utils.DATA, Context.MODE_PRIVATE);
-                    KeyWrapper keyWrapper = new KeyWrapper(getActivity().getApplicationContext(), Utils.KEY_ALIAS);
-                    String privateKeyStr = sharedPref.getString(Utils.PRIVATE_KEY,null);
-                    PrivateKey privateKey = null;
-                    try {
-                        privateKey = keyWrapper.unwrapPrivateKey(Base64.decode(privateKeyStr,Base64.DEFAULT));
-                    } catch (GeneralSecurityException e) {
-                        e.printStackTrace();
-                    }
-                    scanQrDTO = new QrDTO();
-                    scanQrDTO.setQr(qrString);
-                    scanQrDTO.setToken(Base64.encodeToString(SecurityECC.generateSignature(qrString, privateKey), Base64.NO_WRAP));
-
-                    GetAccessTokenAsyncTask getAccessTokenAsyncTask = new GetAccessTokenAsyncTask();
-                    getAccessTokenAsyncTask.execute(oAuthParam);
-
-                    Toast.makeText(getActivity().getApplicationContext(), getString(R.string.scan_qr_toast_send_scanned_qr) +
-                                    " " + qrString,
-                            Toast.LENGTH_LONG).show();
-                }else
-                {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(contextThemeWrapper);
-                    builder.setMessage(R.string.login_toast_no_network_connection_message)
-                            .setTitle(R.string.login_toast_no_network_connection_title)
-                            .setCancelable(false)
-                            .setPositiveButton(R.string.zxing_button_ok, null);
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
-                }
-            }
-            else
-                Toast.makeText(getActivity().getApplicationContext(),getString(R.string.scan_qr_toast_please_scan_qr),
-                        Toast.LENGTH_LONG).show();
-        }
-    };
 
     public View.OnClickListener scanQrButtonClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            //textViewSendQR.setText(getString(R.string.scan_qr_label_send));
-            integratorScan.initiateScan(IntentIntegrator.QR_CODE_TYPES);
+
+            int permissionCamera = ContextCompat.checkSelfPermission(getActivity(),
+                    Manifest.permission.CAMERA);
+            Log.e(Utils.TAG, "PERMISSION CAMERA: "+permissionCamera);
+
+            int permissionFlashlight = ContextCompat.checkSelfPermission(getActivity(),
+                    Manifest.permission.FLASHLIGHT);
+            Log.e(Utils.TAG, "PERMISSION FLASHLIGHT: "+permissionFlashlight);
+
+            if(permissionCamera == PackageManager.PERMISSION_GRANTED ) {
+                integratorScan.initiateScan(IntentIntegrator.QR_CODE_TYPES);
+            }else{
+                final AlertDialog.Builder builder = new AlertDialog.Builder(contextThemeWrapper);
+                builder.setMessage("Aplikacja nie ma uprawnień do obsługi aparatu telefonu")
+                        .setTitle(R.string.dialog_warning_title)
+                        .setCancelable(false)
+                        .setPositiveButton(R.string.zxing_button_ok, null);
+                final AlertDialog dialog = builder.create();
+                dialog.show();
+            }
         }
     };
 
-    public View.OnClickListener forwardButtonClickListener = new View.OnClickListener() {
+    public View.OnClickListener nextButtonClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Intent erIntent = new Intent(getActivity(), ElectionResultActivity.class);
-            erIntent.putExtra(Utils.TIMEOUT,ScanQrCodeActivity.getSessionTimeout());
-            startActivity(erIntent);
-            getActivity().finish();
+            if(isQrScanned()) {
+                Intent vfIntent = new Intent(getActivity(), VotingFormActivity.class);
+                startActivity(vfIntent);
+                getActivity().finish();
+            }else{
+                final AlertDialog.Builder builder = new AlertDialog.Builder(contextThemeWrapper);
+                builder.setMessage("Aby przejść dalej proszę zeskanować kod QR z ostaniej strony protokołu wyborczego")
+                        .setTitle(R.string.dialog_warning_title)
+                        .setCancelable(false)
+                        .setPositiveButton(R.string.zxing_button_ok, null);
+                final AlertDialog dialog = builder.create();
+                dialog.show();
+            }
         }
     };
 
-    private class GetAccessTokenAsyncTask extends AsyncTask<OAuthParam, String, JSONObject>{
-
-        @Override
-        protected JSONObject doInBackground(OAuthParam... oAuthParams) {
-            GetAccessToken jParser = new GetAccessToken();
-            return jParser.getToken(oAuthParams[0].getLoginURL(), oAuthParams[0].getId(),
-                    oAuthParams[0].getSecret(), oAuthParams[0].getRefreshToken());
-        }
-
-        @Override
-        protected void onPostExecute(JSONObject json) {
-
-            if (json != null){
-                Log.e(Utils.TAG, "SERVER RESPONSE ACCESS TOKEN: "+json.toString());
-                try {
-
-                    if(!json.getString(Utils.ERROR).isEmpty())
-                    {
-                        Toast.makeText(getActivity().getApplicationContext(),
-                                "Błąd dostępu do serwera", Toast.LENGTH_LONG).show();
-                    }
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    try {
-                        if(!json.getString(Utils.ACCESS_TOKEN).isEmpty()) {
-                            String access_token = json.getString(Utils.ACCESS_TOKEN);
-
-                            if (!access_token.isEmpty()) {
-                                if(scanQrDTO!=null) {
-                                    Gson gson = new Gson();
-                                    SendQrAsyncTask sendQrAsyncTask = new SendQrAsyncTask();
-                                    sendQrAsyncTask.execute(access_token, gson.toJson(scanQrDTO));
-                                }
-                            }
-                        }
-                    } catch (JSONException e1) {
-                        e1.printStackTrace();
-                    }
-                }
-
-            }else{
-                Toast.makeText(getActivity().getApplicationContext(),
-                        getString(R.string.login_toast_no_connection), Toast.LENGTH_LONG).show();
-            }
-        }
-    }
-
-    private class SendQrAsyncTask extends AsyncTask<String, String, JSONObject>{
-
-        @Override
-        protected JSONObject doInBackground(String... strings) {
-            SendQrData jParser = new SendQrData();
-            return jParser.sendQR(oAuthParam.getSendQrURL(), strings[0], strings[1]);
-        }
-
-        @Override
-        protected void onPostExecute(JSONObject json) {
-            if (json != null) {
-                Log.e(Utils.TAG,"JSON SERVER RESPONSE QR: "+json.toString());
-                try {
-                    if(!json.getString(Utils.ERROR_MESSAGE).isEmpty()) {
-                        Gson gson = new GsonBuilder().create();
-                        QrSendResponse qrSendResponse = gson.fromJson(json.toString(),QrSendResponse.class);
-                        Log.e(Utils.TAG,"ERROR MESSAGE: "+ qrSendResponse.getErrorMessage());
-                        Log.e(Utils.TAG,"PROTOCOL: "+ qrSendResponse.getProtocol());
-                        Toast.makeText(getActivity().getApplicationContext(),
-                                Utils.SERVER_RESPONSE + json.toString(), Toast.LENGTH_LONG).show();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            }else{
-                Toast.makeText(getActivity().getApplicationContext(),
-                        getString(R.string.login_toast_no_connection), Toast.LENGTH_LONG).show();
-            }
-        }
-    }
-
-    private void clearQRSharedPreferences(String keyQR, SharedPreferences sharedPref) {
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString(keyQR, null);
-        editor.apply();
-    }
-
-    private OAuthParam getOAuthParam()
-    {
-        String [] urls = getUrls();
-        OAuthParam oAuthParam = new OAuthParam();
+    private boolean isQrScanned(){
         SharedPreferences sharedPref = getActivity().getSharedPreferences(Utils.DATA, Context.MODE_PRIVATE);
-        oAuthParam.setLoginURL(urls[0]);
-        oAuthParam.setSendQrURL(urls[1]);
-        String decryptToken = SecurityRSA.decrypt(Base64.decode(sharedPref.getString(Utils.REFRESH_TOKEN, null)
-                , Base64.DEFAULT), SecurityRSA.loadPrivateKey(Utils.KEY_ALIAS));
-        oAuthParam.setRefreshToken(decryptToken);
-        qrString = sharedPref.getString(Utils.QR, null);
-        clearQRSharedPreferences(Utils.QR, sharedPref);
-
-        if(sharedPref.getBoolean(Utils.DEFAULT_PARAM_CHANGE,false)){
-            PrivateKey privateKey = SecurityRSA.loadPrivateKey(Utils.KEY_ALIAS);
-            String id = sharedPref.getString(Utils.OAUTH2_ID_PREFERENCE, Utils.ID_DEFAULT).trim();
-            String decryptID = SecurityRSA.decrypt(Base64.decode(id, Base64.DEFAULT), privateKey);
-            oAuthParam.setId(decryptID);
-            String secret = sharedPref.getString(Utils.OAUTH2_SECRET_PREFERENCE, Utils.SECRET_DEFAULT).trim();
-            String decryptSecret = SecurityRSA.decrypt(Base64.decode(secret, Base64.DEFAULT), privateKey);
-            oAuthParam.setSecret(decryptSecret);
-        }
-        else {
-            oAuthParam.setId(sharedPref.getString(Utils.OAUTH2_ID_PREFERENCE, Utils.ID_DEFAULT).trim());
-            oAuthParam.setSecret(sharedPref.getString(Utils.OAUTH2_SECRET_PREFERENCE, Utils.SECRET_DEFAULT).trim());
-        }
-        return oAuthParam;
+        return sharedPref.getString(Utils.QR, null) != null;
     }
 
-    private String [] getUrls(){
-        String [] urls = new String[2];
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity().getBaseContext());
-        urls[0]= sharedPref.getString(Utils.URL_LOGIN_PREFERENCE, Utils.URL_DEFAULT_LOGIN).trim();
-        urls[1]= sharedPref.getString(Utils.URL_VERIFY_PREFERENCE, Utils.URL_DEFAULT__VERIFY_QR).trim();
-        return urls;
-    }
-
-    public void showSessionTimeoutAlertDialog(){
-        final AlertDialog.Builder builder = new AlertDialog.Builder(contextThemeWrapper);
-        builder.setMessage(R.string.session_timeout_message)
-                .setTitle(R.string.seasion_timeout_title)
-                .setCancelable(false)
-                .setPositiveButton(R.string.session_timeout_login, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        Intent loginIntent = new Intent(getActivity(), LoginActivity.class);
-                        startActivity(loginIntent);
-                        dialogInterface.dismiss();
-                        getActivity().finish();
-                    }
-                })
-                .setNegativeButton(R.string.session_timeout_quit, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                        getActivity().finish();
-                    }
-                });
-        final AlertDialog dialog = builder.create();
-        dialog.show();
+    public void loadData() {
+        SharedPreferences sharedPref = getActivity().getSharedPreferences(Utils.DATA, Context.MODE_PRIVATE);
+        String territorial_code = sharedPref.getString(Utils.TERRITORIAL_CODE, "Kod terytorialny");
+        String periphery_number = "Nr "+sharedPref.getString(Utils.PERIPHERY_NUMBER, "obwodu");
+        String periphery_name = sharedPref.getString(Utils.PERIPHERY_NAME, "Nazwa");
+        String periphery_address = sharedPref.getString(Utils.PERIPHERY_ADDRESS, "Adres");
+        Spannable spannable = new SpannableString(territorial_code);
+        spannable.setSpan(new ForegroundColorSpan(Color.GREEN), 0 ,territorial_code.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        territorialCodeTextView.setText( spannable);
+        peripheryNumberTextView.setText(periphery_number);
+        peripheryNameTextView.setText(periphery_name);
+        peripheryAddressTextView.setText(periphery_address);
+        nextButton.setEnabled(true);
     }
 
 }

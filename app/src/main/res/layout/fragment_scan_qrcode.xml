@@ -1,140 +1,227 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <RelativeLayout
+    <ScrollView
+        android:id="@+id/scan.qr.scrollview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:layout_above="@+id/scan.qr.next.button">
 
-        <TextView
-            android:id="@+id/scan.qr.label.top"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/margin.login.left"
-            android:layout_marginStart="@dimen/margin.login.left"
-            android:layout_marginTop="@dimen/margin.login.top"
-            android:text="@string/scan.qr.label.scan"
-            android:textSize="@dimen/fontsize.login.label" />
+            android:layout_marginBottom="0dp">
 
-        <View
-            android:id="@+id/scan.qr.separator.top"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/height.login.separator.top"
-            android:layout_below="@id/scan.qr.label.top"
-            android:layout_marginBottom="@dimen/margin.login.separator.bottom"
-            android:layout_marginTop="@dimen/margin.login.separator.top"
-            android:background="@color/green" />
+            <TextView
+                android:id="@+id/scan.qr.label.top"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/padding.committee.label"
+                android:paddingTop="@dimen/padding.committee.label"
+                android:paddingLeft="@dimen/padding.committee.label"
+                android:paddingRight="@dimen/padding.committee.label"
+                android:layout_marginStart="0dp"
+                android:layout_marginEnd="0dp"
+                android:layout_marginTop="0dp"
+                android:text="@string/scan_qr_label_enter_data"
+                android:gravity="center"
+                android:background="@android:color/white"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/fontsize.committee.label"/>
+
+            <View
+                android:id="@+id/scan.qr.separator.top"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/height.login.separator.top"
+                android:layout_below="@id/scan.qr.label.top"
+                android:layout_marginStart="0dp"
+                android:layout_marginEnd="0dp"
+                android:background="@android:color/black" />
+
+            <TextView
+                android:id="@+id/scan.qr.label.committee"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/scan.qr.separator.top"
+                android:paddingLeft="@dimen/padding.committee.label"
+                android:paddingRight="@dimen/padding.committee.label"
+                android:layout_marginStart="0dp"
+                android:layout_marginEnd="0dp"
+                android:paddingTop="@dimen/padding.committee.label"
+                android:paddingBottom="@dimen/padding.committee.label"
+                android:text="@string/committee_label"
+                android:gravity="center"
+                android:background="@android:color/darker_gray"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/fontsize.committee.label" />
+
+            <View
+                android:id="@+id/scan.qr.committee.label.separator"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/height.login.separator.top"
+                android:layout_below="@id/scan.qr.label.committee"
+                android:layout_marginStart="0dp"
+                android:layout_marginEnd="0dp"
+                android:background="@android:color/black" />
+
+            <LinearLayout
+                android:id="@+id/scan.qr.committee.id.layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/scan.qr.committee.label.separator"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/scan.qr.periphery.number"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:paddingBottom="@dimen/padding.committee.label"
+                    android:paddingTop="@dimen/padding.committee.label"
+                    android:gravity="center"
+                    android:background="@android:color/darker_gray"
+                    android:textColor="@android:color/black"
+                    android:text="Nr obwodu"
+                    android:textSize="@dimen/fontsize.committee.label"/>
+
+                <TextView
+                    android:id="@+id/scan.qr.territorial.code"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:paddingBottom="@dimen/padding.committee.label"
+                    android:paddingTop="@dimen/padding.committee.label"
+                    android:gravity="center"
+                    android:background="@android:color/darker_gray"
+                    android:textColor="@android:color/black"
+                    android:text="Kod terytorialny"
+                    android:textSize="@dimen/fontsize.committee.label"/>
+            </LinearLayout>
+
+            <View
+                android:id="@+id/scan.qr.committee.id.separator"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/height.login.separator.top"
+                android:layout_below="@+id/scan.qr.committee.id.layout"
+                android:layout_marginStart="0dp"
+                android:layout_marginEnd="0dp"
+                android:background="@android:color/black" />
+
+            <TextView
+                android:id="@+id/scan.qr.periphery.name"
+                android:layout_below="@+id/scan.qr.committee.id.separator"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/padding.committee.label"
+                android:paddingTop="@dimen/padding.committee.label"
+                android:paddingLeft="@dimen/padding.committee.label"
+                android:paddingRight="@dimen/padding.committee.label"
+                android:layout_marginStart="0dp"
+                android:layout_marginEnd="0dp"
+                android:layout_marginTop="0dp"
+                android:gravity="center"
+                android:background="@android:color/darker_gray"
+                android:textColor="@android:color/black"
+                android:text="Nazwa"
+                android:textSize="@dimen/fontsize.committee.label"/>
+
+            <View
+                android:id="@+id/scan.qr.committee.name.separator"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/height.login.separator.top"
+                android:layout_below="@+id/scan.qr.periphery.name"
+                android:layout_marginStart="0dp"
+                android:layout_marginEnd="0dp"
+                android:background="@android:color/black" />
+
+            <TextView
+                android:id="@+id/scan.qr.periphery.address"
+                android:layout_below="@+id/scan.qr.committee.name.separator"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/padding.committee.label"
+                android:paddingTop="@dimen/padding.committee.label"
+                android:paddingLeft="@dimen/padding.committee.label"
+                android:paddingRight="@dimen/padding.committee.label"
+                android:layout_marginStart="0dp"
+                android:layout_marginEnd="0dp"
+                android:layout_marginTop="0dp"
+                android:gravity="center"
+                android:background="@android:color/darker_gray"
+                android:textColor="@android:color/black"
+                android:text="Adres"
+                android:textSize="@dimen/fontsize.committee.address"/>
+
+            <View
+                android:id="@+id/scan.qr.committee.address.separator"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/height.login.separator.top"
+                android:layout_below="@+id/scan.qr.periphery.address"
+                android:layout_marginStart="0dp"
+                android:layout_marginEnd="0dp"
+                android:background="@android:color/black" />
+
+            <TextView
+                android:id="@+id/scan.qr.label.scan"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/scan.qr.committee.address.separator"
+                android:layout_marginStart="@dimen/margin.login.left"
+                android:layout_marginTop="10dp"
+                android:text="@string/scan.qr.label.scan"
+                android:textSize="@dimen/fontsize.login.label"/>
 
 
-        <Button
-            android:id="@+id/scan.qr.button.scan"
-            android:layout_width="@dimen/width.login.button.login"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/scan.qr.separator.top"
-            android:layout_marginLeft="@dimen/margin.login.button.login.left"
-            android:layout_marginStart="@dimen/margin.login.button.login.left"
-            android:layout_marginTop="@dimen/margin.login.button.login.top"
-            android:text="@string/scan.qr.buttonlabel.scan"
-            style="@style/green_button"/>
+            <Button
+                android:id="@+id/scan.qr.button.scan"
+                android:layout_width="@dimen/width.login.button.login"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/scan.qr.label.scan"
+                android:layout_marginStart="@dimen/margin.login.button.login.left"
+                android:layout_marginTop="@dimen/margin.login.button.login.top"
+                android:text="@string/scan.qr.buttonlabel.scan"
+                style="@style/green_button"/>
 
-        <Button
-            android:id="@+id/scan.qr.textlink.scan"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/scan.qr.button.scan"
-            android:layout_marginBottom="@dimen/margin.login.textlink.fpassword.top"
-            android:paddingLeft="2dp"
-            android:layout_marginLeft="@dimen/margin.login.textlink.fpassword.left"
-            android:layout_marginTop="@dimen/margin.login.textlink.fpassword.top"
-            android:textAllCaps="false"
-            android:textStyle="normal"
-            android:background="@android:color/transparent"
-            android:text="@string/scan.qr.buttonlabel.help"
-            android:textColor="@color/green"
-            style="?android:attr/borderlessButtonStyle"
-            android:textSize="@dimen/fontsize.login.textlink.fpassword" />
+            <Button
+                android:id="@+id/scan.qr.textlink.scan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/scan.qr.button.scan"
+                android:layout_marginBottom="0dp"
+                android:layout_marginTop="@dimen/margin.login.textlink.fpassword.top"
+                android:layout_marginStart="@dimen/margin.login.left"
+                android:paddingStart="2dp"
+                android:paddingEnd="2dp"
+                android:textAllCaps="false"
+                android:textStyle="normal"
+                android:background="@android:color/transparent"
+                android:text="@string/scan.qr.buttonlabel.help"
+                android:textColor="@color/green"
+                style="?android:attr/borderlessButtonStyle"
+                android:textSize="@dimen/fontsize.login.textlink.fpassword" />
 
-        <View
-            android:id="@+id/scan.separator.bottom"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/height.login.separator.bottom"
-            android:layout_below="@id/scan.qr.textlink.scan"
-            android:background="@color/green" />
+            <View
+                android:id="@+id/scan.qr.separator.button.scan"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/height.login.separator.bottom"
+                android:layout_below="@id/scan.qr.textlink.scan"
+                android:layout_marginBottom="@dimen/margin.login.separator.bottom"
+                android:layout_marginTop="0dp"
+                android:background="@color/green" />
+        </RelativeLayout>
 
-        <TextView
-            android:id="@+id/scan.qr.label.send.top"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/scan.separator.bottom"
-            android:layout_marginLeft="@dimen/margin.login.left"
-            android:layout_marginStart="@dimen/margin.login.left"
-            android:layout_marginTop="@dimen/margin.login.separator.top"
-            android:layout_marginBottom="@dimen/margin.login.separator.top"
-            android:text="@string/scan.qr.label.send"
-            android:textSize="@dimen/fontsize.login.label" />
+    </ScrollView>
 
-        <View
-            android:id="@+id/scan.separator.send.top"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/height.login.separator.bottom"
-            android:layout_below="@id/scan.qr.label.send.top"
-            android:layout_marginBottom="@dimen/margin.login.separator.bottom"
-            android:layout_marginTop="@dimen/margin.login.separator.top"
-            android:background="@color/green" />
+    <Button
+        android:id="@+id/scan.qr.next.button"
+        android:layout_width="@dimen/width.login.button.register"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/margin.bottom.buttons"
+        android:layout_centerHorizontal="true"
+        android:text="@string/next.label.button"
+        style="@style/orange_button"/>
 
-        <Button
-            android:id="@+id/scan.qr.button.send"
-            android:layout_width="@dimen/width.login.button.login"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/scan.separator.send.top"
-            android:layout_marginLeft="@dimen/margin.login.button.login.left"
-            android:layout_marginStart="@dimen/margin.login.button.login.left"
-            android:layout_marginTop="@dimen/margin.login.button.login.top"
-            android:layout_marginBottom="@dimen/margin.login.button.login.top"
-            android:text="@string/scan.qr.buttonlabel.send"
-            style="@style/green_button"/>
-
-        <View
-            android:id="@+id/scan.separator.send.bottom"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/height.login.separator.bottom"
-            android:layout_below="@+id/scan.qr.button.send"
-            android:layout_marginTop="@dimen/margin.login.separator.top"
-            android:background="@color/green" />
-
-        <TextView
-            android:id="@+id/scan.qr.label.send.forward"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/scan.separator.send.bottom"
-            android:layout_marginLeft="@dimen/margin.login.left"
-            android:layout_marginStart="@dimen/margin.login.left"
-            android:layout_marginTop="@dimen/margin.login.button.login.top"
-            android:text="@string/scan.qr.label.result"
-            android:textSize="@dimen/fontsize.login.label" />
-
-
-        <View
-            android:id="@+id/scan.qr.separator.send.top"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/height.login.separator.top"
-            android:layout_below="@+id/scan.qr.label.send.forward"
-            android:layout_marginBottom="@dimen/margin.login.separator.bottom"
-            android:layout_marginTop="@dimen/margin.login.separator.top"
-            android:background="@color/green" />
-
-        <Button
-            android:id="@+id/scan.qr.button.forward"
-            android:layout_width="@dimen/width.login.button.login"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/scan.qr.separator.send.top"
-            android:layout_marginLeft="@dimen/margin.login.button.login.left"
-            android:layout_marginStart="@dimen/margin.login.button.login.left"
-            android:layout_marginTop="@dimen/margin.login.button.login.top"
-            android:text="@string/scan.qr.buttonlabel.result"
-            style="@style/green_button"/>
-
-    </RelativeLayout>
-</ScrollView>
+</RelativeLayout>

@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <TextView
+        android:id="@+id/election.committee.votes.label.top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/padding.committee.label"
+        android:paddingTop="@dimen/padding.committee.label"
+        android:paddingLeft="@dimen/padding.committee.label"
+        android:paddingRight="@dimen/padding.committee.label"
+        android:layout_marginStart="0dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginTop="0dp"
+        android:gravity="center"
+        android:background="@color/dark_green"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/fontsize.committee.label" />
+
+    <View
+        android:id="@+id/election.committee.separator.top"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height.login.separator.top"
+        android:layout_below="@+id/election.committee.votes.label.top"
+        android:layout_marginStart="0dp"
+        android:layout_marginEnd="0dp"
+        android:background="@android:color/black" />
+
+    <TextView
+        android:id="@+id/election.committee.name"
+        android:layout_below="@+id/election.committee.separator.top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/padding.committee.label"
+        android:paddingTop="@dimen/padding.committee.label"
+        android:paddingLeft="@dimen/padding.committee.label"
+        android:paddingRight="@dimen/padding.committee.label"
+        android:layout_marginStart="0dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginTop="0dp"
+        android:gravity="center"
+        android:background="@color/dark_green"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/fontsize.committee.label"/>
+
+    <View
+        android:id="@+id/election.committee.name.separator"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height.login.separator.top"
+        android:layout_below="@+id/election.committee.name"
+        android:layout_marginStart="0dp"
+        android:layout_marginEnd="0dp"
+        android:background="@android:color/black" />
+
+    <TextView
+        android:id="@+id/election.committee.address"
+        android:layout_below="@+id/election.committee.name.separator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/padding.committee.label"
+        android:paddingTop="@dimen/padding.committee.label"
+        android:paddingLeft="@dimen/padding.committee.label"
+        android:paddingRight="@dimen/padding.committee.label"
+        android:layout_marginStart="0dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginTop="0dp"
+        android:gravity="center"
+        android:background="@color/dark_green"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/fontsize.committee.address"/>
+
+    <View
+        android:id="@+id/election.committee.address.separator"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height.login.separator.top"
+        android:layout_below="@+id/election.committee.address"
+        android:layout_marginStart="0dp"
+        android:layout_marginEnd="0dp"
+        android:background="@android:color/black" />
+
+    <TextView
+        android:id="@+id/election.committee.www.address"
+        android:autoLink="web"
+        android:layout_below="@+id/election.committee.address.separator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/padding.committee.label"
+        android:paddingTop="@dimen/padding.committee.label"
+        android:paddingLeft="@dimen/padding.committee.label"
+        android:paddingRight="@dimen/padding.committee.label"
+        android:layout_marginStart="0dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginTop="0dp"
+        android:gravity="center"
+        android:background="@color/dark_green"
+        android:textSize="@dimen/fontsize.committee.address"/>
+
+    <View
+        android:id="@+id/election.committee.www.address.separator"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height.login.separator.top"
+        android:layout_below="@+id/election.committee.www.address"
+        android:layout_marginStart="0dp"
+        android:layout_marginEnd="0dp"
+        android:background="@android:color/black" />
+
+    <TextView
+        android:id="@+id/election.committee.total.number.of.votes"
+        android:layout_below="@+id/election.committee.www.address.separator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/padding.committee.label"
+        android:paddingTop="@dimen/padding.committee.label"
+        android:paddingLeft="@dimen/padding.committee.label"
+        android:paddingRight="@dimen/padding.committee.label"
+        android:layout_marginStart="0dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginTop="0dp"
+        android:gravity="center"
+        android:background="@color/dark_green"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/fontsize.committee.address"/>
+
+    <View
+        android:id="@+id/election.committee.total.number.of.votes.separator"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height.login.separator.top"
+        android:layout_below="@+id/election.committee.total.number.of.votes"
+        android:layout_marginStart="0dp"
+        android:layout_marginEnd="0dp"
+        android:background="@android:color/black" />
+
+    <TableRow
+        android:id="@+id/candidates.result.label.tablerow"
+        android:layout_below="@+id/election.committee.total.number.of.votes.separator"
+        android:background="@color/dark_green"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingStart="@dimen/padding.fvoting.general.data"
+            android:paddingEnd="0dp"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/fontsize.fvoting.general.data"
+            android:text="@string/name.candidate.label" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingStart="0dp"
+            android:paddingEnd="@dimen/padding.number.of.votes"
+            android:textColor="@android:color/white"
+            android:gravity="end"
+            android:textSize="@dimen/fontsize.fvoting.general.data"
+            android:text="@string/number.of.votes.label" />
+    </TableRow>
+
+    <ScrollView
+        android:layout_above="@+id/election.committee.forward.button"
+        android:layout_below="@+id/candidates.result.label.tablerow"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TableLayout
+                android:id="@+id/candidates.votes.number.layout"
+                android:layout_width="match_parent"
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginEnd="0dp"
+                android:layout_height="match_parent"
+                android:background="@color/light_gray_protocol"
+                android:stretchColumns="1">
+
+            </TableLayout>
+
+            <View
+                android:id="@+id/election.committee.bottom.separator"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/height.login.separator.top"
+                android:layout_below="@+id/candidates.votes.number.layout"
+                android:layout_marginStart="0dp"
+                android:layout_marginEnd="0dp"
+                android:background="@android:color/black" />
+
+        </RelativeLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/election.committee.forward.button"
+        android:layout_width="@dimen/width.login.button.login"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/margin.bottom.buttons"
+        android:layout_marginBottom="@dimen/margin.bottom.buttons"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/white"
+        android:text="Wstecz"
+        style="@style/green_button"/>
+
+</RelativeLayout>

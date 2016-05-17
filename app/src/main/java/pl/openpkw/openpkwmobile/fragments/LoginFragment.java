@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.text.SpannableString;
@@ -25,6 +27,7 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.security.PrivateKey;
 
 import pl.openpkw.openpkwmobile.R;
@@ -36,6 +39,7 @@ import pl.openpkw.openpkwmobile.models.UserCredentialsDTO;
 import pl.openpkw.openpkwmobile.network.GetRefreshToken;
 import pl.openpkw.openpkwmobile.network.NetworkUtils;
 import pl.openpkw.openpkwmobile.security.SecurityRSA;
+import pl.openpkw.openpkwmobile.utils.TimerSingleton;
 import pl.openpkw.openpkwmobile.utils.Utils;
 
 
@@ -44,6 +48,8 @@ public class LoginFragment extends Fragment {
     private EditText emailEditText;
     private EditText passwordEditText;
     private ContextThemeWrapper contextThemeWrapper;
+    private LoginAsyncTask loginAsyncTask;
+    public static TimerSingleton timer;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -60,22 +66,27 @@ public class LoginFragment extends Fragment {
         SpannableString buttonText = new SpannableString(restorePasswordButton.getText());
         buttonText.setSpan(new UnderlineSpan(), 0, buttonText.length(), 0);
         restorePasswordButton.setText(buttonText);
+        restorePasswordButton.setOnClickListener(restorePasswordButtonClickListener);
 
         emailEditText = (EditText) v.findViewById(R.id.login_edittext_user);
         passwordEditText = (EditText) v.findViewById(R.id.login_edittext_password);
 
-        restorePasswordButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent prestoreIntent = new Intent(getActivity(), PasswordRestoreActivity.class);
-                startActivity(prestoreIntent);
-            }
-        });
-
         contextThemeWrapper = new ContextThemeWrapper(getActivity(), Utils.DIALOG_STYLE);
+
+        timer = new TimerSingleton(Utils.SESSION_TIMER,1000,getActivity().getApplication());
+
+        clearData();
 
         return v;
     }
+
+    public View.OnClickListener restorePasswordButtonClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Intent prestoreIntent = new Intent(getActivity(), PasswordRestoreActivity.class);
+            startActivity(prestoreIntent);
+        }
+    };
 
     public View.OnClickListener registerUserButtonClickListener = new View.OnClickListener() {
         @Override
@@ -121,7 +132,7 @@ public class LoginFragment extends Fragment {
                     credentials.setEmail(emailEditText.getText().toString().trim());
                     credentials.setPassword(passwordEditText.getText().toString().trim());
                     //run login task
-                    LoginAsyncTask loginAsyncTask = new LoginAsyncTask(getOAuthLoginParam());
+                    loginAsyncTask = new LoginAsyncTask(getOAuthLoginParam());
                     loginAsyncTask.execute(credentials);
                }
                else {
@@ -139,7 +150,9 @@ public class LoginFragment extends Fragment {
                 Toast.makeText(getActivity().getApplicationContext(),getString(R.string.login_toast_enter_login_password),
                         Toast.LENGTH_LONG).show();
             }
+
         }
+
     };
 
     @Override
@@ -152,6 +165,7 @@ public class LoginFragment extends Fragment {
 
         private OAuthParam oAuthParam;
         private ProgressDialog progressBar;
+        private CountDownTimer connectionTimer;
 
         private LoginAsyncTask(OAuthParam oAuthParam) {
             this.oAuthParam = oAuthParam;
@@ -160,20 +174,44 @@ public class LoginFragment extends Fragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            //create progress bar
             progressBar = new ProgressDialog(contextThemeWrapper);
             progressBar.setCancelable(true);
             progressBar.setMessage(getString(R.string.login_label_progress_authorization));
             progressBar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             progressBar.setProgress(0);
             progressBar.setMax(100);
+            progressBar.setCancelable(false);
             progressBar.show();
+            //set connection timeout 10 sec
+            connectionTimer = new CountDownTimer(10000,1000){
+
+                @Override
+                public void onTick(long l) {
+                    Log.e(Utils.TAG, "CONNECTION TIMEOUT TICK");
+                }
+
+                @Override
+                public void onFinish() {
+                    // stop async task if timeout is reach
+                    if (loginAsyncTask.getStatus() == AsyncTask.Status.RUNNING) {
+                        loginAsyncTask.cancel(false);
+
+                        if(progressBar!=null)
+                            progressBar.dismiss();
+
+                        Toast.makeText(getActivity().getApplicationContext(),
+                                getString(R.string.login_toast_no_connection), Toast.LENGTH_LONG).show();
+                    }
+                }
+            }.start();
         }
 
         @Override
         protected JSONObject doInBackground(UserCredentialsDTO... credentials) {
             Log.e(Utils.TAG, "OAUTH URL: "+oAuthParam.getLoginURL());
             Log.e(Utils.TAG, "OAUTH ID: "+oAuthParam.getId());
-            Log.e(Utils.TAG, "OAUTH SECRET: "+oAuthParam.getSecret());
+            Log.e(Utils.TAG, "OAUTH SECRET: " + oAuthParam.getSecret());
             GetRefreshToken jParser = new GetRefreshToken();
             return jParser.getToken(oAuthParam.getLoginURL(), oAuthParam.getId(), oAuthParam.getSecret(),
                     credentials[0].getEmail(), credentials[0].getPassword());
@@ -184,6 +222,8 @@ public class LoginFragment extends Fragment {
 
             progressBar.setProgress(100);
             progressBar.dismiss();
+
+            connectionTimer.cancel();
 
             if (json != null){
                 Log.e(Utils.TAG, "SERVER RESPONSE LOGIN: "+json.toString());
@@ -213,6 +253,7 @@ public class LoginFragment extends Fragment {
                                 writeRefreshTokenToSharedPreferences(Utils.REFRESH_TOKEN, encryptToken);
                                 Intent scanIntent = new Intent(getActivity(), ScanQrCodeActivity.class);
                                 startActivity(scanIntent);
+                                timer.start();
                                 getActivity().finish();
                             }
                         }
@@ -260,5 +301,30 @@ public class LoginFragment extends Fragment {
     private String getLoginUrl(){
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity().getBaseContext());
         return sharedPref.getString(Utils.URL_LOGIN_PREFERENCE, Utils.URL_DEFAULT_LOGIN).trim();
+    }
+
+    private void clearData(){
+        SharedPreferences sharedPref = getActivity().getSharedPreferences(Utils.DATA, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString(Utils.QR, null);
+        editor.putString(Utils.TERRITORIAL_CODE, null);
+        editor.putString(Utils.PERIPHERY_ADDRESS, null);
+        editor.putString(Utils.PERIPHERY_NAME, null);
+        editor.putString(Utils.PERIPHERY_NUMBER, null);
+        editor.apply();
+        File[]photoFiles = getCommitteeProtocolStorageDir(Utils.STORAGE_PROTOCOL_DIRECTORY).listFiles();
+        for(File photoFile : photoFiles){
+            photoFile.delete();
+        }
+    }
+
+    public File getCommitteeProtocolStorageDir(String albumName) {
+        // Get the directory for the user's public pictures directory.
+        File file = new File(Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES), albumName);
+        if (!file.mkdirs()) {
+            Log.e(Utils.TAG, "DIRECTORY NOT CREATED");
+        }
+        return file;
     }
 }
