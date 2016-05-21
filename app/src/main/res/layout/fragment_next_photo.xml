@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
         <TextView
             android:id="@+id/next.photo.label.top"
@@ -88,11 +89,20 @@
                 android:textSize="@dimen/fontsize.committee.label"/>
         </LinearLayout>
 
+        <View
+            android:id="@+id/next.photo.committee.id.separator"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/height.login.separator.top"
+            android:layout_below="@id/next.photo.committee.id.layout"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="0dp"
+            android:background="@android:color/black" />
+
         <TextView
             android:id="@+id/next.photo.take.photo.label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/next.photo.committee.id.layout"
+            android:layout_below="@+id/next.photo.committee.id.separator"
             android:layout_marginStart="@dimen/margin.login.left"
             android:layout_marginEnd="@dimen/margin.login.left"
             android:layout_marginBottom="0dp"
@@ -111,7 +121,7 @@
 
             <ImageView
                 android:id="@+id/next.photo.image.view.photo"
-                android:src="@mipmap/ic_camera"
+                android:src="@mipmap/ic_camera_orange"
                 android:layout_marginTop="0dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -139,16 +149,29 @@
             style="@style/green_button"/>
 
         <Button
-            android:id="@+id/next.photo.next.button"
+            android:id="@+id/next.photo.end.button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
             android:layout_marginStart="5dp"
             android:layout_marginEnd="5dp"
             android:layout_marginTop="5dp"
-            android:text="Kolejne"
+            android:text="Koniec zdjęć"
             style="@style/orange_button"/>
 
     </LinearLayout>
+
+    <Button
+        android:id="@+id/next.photo.take.photo.button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:drawablePadding="0dp"
+        android:background="@android:color/transparent"
+        android:drawableTop="@mipmap/ic_camera_green"
+        android:textColor="@color/light_green"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:text="NASTĘPNE"/>
 
 </RelativeLayout>

@@ -27,8 +27,6 @@
                 android:layout_marginTop="0dp"
                 android:text="@string/scan_qr_label_enter_data"
                 android:gravity="center"
-                android:background="@android:color/white"
-                android:textColor="@android:color/black"
                 android:textSize="@dimen/fontsize.committee.label"/>
 
             <View

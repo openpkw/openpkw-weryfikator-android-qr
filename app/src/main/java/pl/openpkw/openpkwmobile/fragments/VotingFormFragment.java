@@ -13,8 +13,14 @@ import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import pl.openpkw.openpkwmobile.R;
 import pl.openpkw.openpkwmobile.activities.CommitteesResultActivity;
@@ -26,14 +32,13 @@ public class VotingFormFragment extends Fragment {
 
     private TextView territorialCodeTextView;
     private TextView peripheryNumberTextView;
-    private TextView peripheryNameTextView;
-    private TextView peripheryAddressTextView;
-
     private TextView totalEntitledToVoteTextView;
     private TextView totalVotingCardsTextView;
     private TextView validCardsTextView;
     private TextView invalidVotesTextView;
     private TextView validVotesTextView;
+
+    private List<String> spinnerData = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -41,9 +46,6 @@ public class VotingFormFragment extends Fragment {
 
         peripheryNumberTextView = (TextView) v.findViewById(R.id.fvoting_periphery_number);
         territorialCodeTextView= (TextView) v.findViewById(R.id.fvoting_territorial_code);
-        peripheryNameTextView = (TextView) v.findViewById(R.id.fvoting_periphery_name);
-        peripheryAddressTextView = (TextView) v.findViewById(R.id.fvoting_periphery_address);
-
         totalEntitledToVoteTextView = (TextView) v.findViewById(R.id.fvoting_total_entitled_to_vote);
         totalVotingCardsTextView = (TextView) v.findViewById(R.id.fvoting_total_voting_cards);
         validCardsTextView = (TextView) v.findViewById(R.id.fvoting_valid_cards);
@@ -57,8 +59,29 @@ public class VotingFormFragment extends Fragment {
         nextButton.setOnClickListener(nextButtonClickListener);
 
         loadData();
+
+        Spinner protocolDataSpinner = (Spinner) v.findViewById(R.id.fvoting_committee_data_spinner);
+        //set data adapter
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),
+                R.layout.view_spinner_item, spinnerData);
+        adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
+        protocolDataSpinner.setAdapter(adapter);
+        protocolDataSpinner.setOnItemSelectedListener(spinnerItemListener);
+
         return v;
     }
+
+    AdapterView.OnItemSelectedListener spinnerItemListener = new AdapterView.OnItemSelectedListener() {
+        @Override
+        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+            adapterView.setSelection(0);
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> adapterView) {
+
+        }
+    };
 
     View.OnClickListener nextButtonClickListener = new View.OnClickListener() {
         @Override
@@ -91,19 +114,28 @@ public class VotingFormFragment extends Fragment {
         String periphery_number = "Nr "+sharedPref.getString(Utils.PERIPHERY_NUMBER, "obwodu");
         String periphery_name = sharedPref.getString(Utils.PERIPHERY_NAME, "Nazwa");
         String periphery_address = sharedPref.getString(Utils.PERIPHERY_ADDRESS, "Adres");
+        String districtNumber = sharedPref.getString(Utils.DISTRICT_NUMBER, "Okręg Wyborczy Nr");
         Spannable spannable = new SpannableString(territorial_code);
         spannable.setSpan(new ForegroundColorSpan(Color.GREEN), 0 ,territorial_code.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         territorialCodeTextView.setText(spannable);
         peripheryNumberTextView.setText(periphery_number);
-        peripheryNameTextView.setText(periphery_name);
-        peripheryAddressTextView.setText(periphery_address);
+        spinnerData.add(getString(R.string.committee_label));
+        spinnerData.add(periphery_name);
+        spinnerData.add(periphery_address);
+        spinnerData.add(districtNumber);
+
         if(scannedQR!=null) {
             QrWrapper qrWrapper = new QrWrapper(scannedQR);
+            totalEntitledToVoteTextView.setTextColor(Color.BLUE);
             totalEntitledToVoteTextView.setText(qrWrapper.getVotingCardsTotalEntitledToVote());
             totalVotingCardsTextView.setText(qrWrapper.getVotingCardsTotalCards());
+            totalVotingCardsTextView.setTextColor(Color.BLUE);
             validCardsTextView.setText(qrWrapper.getVotingCardsValidCards());
+            validCardsTextView.setTextColor(Color.BLUE);
             invalidVotesTextView.setText(qrWrapper.getVotingCardsInvalidVotes());
+            invalidVotesTextView.setTextColor(Color.BLUE);
             validVotesTextView.setText(qrWrapper.getVotingCardsValidVotes());
+            validVotesTextView.setTextColor(Color.BLUE);
         }
     }
 }

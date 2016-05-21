@@ -9,13 +9,12 @@
         android:layout_height="wrap_content"
         android:paddingBottom="@dimen/padding.committee.label"
         android:paddingTop="@dimen/padding.committee.label"
-        android:paddingLeft="@dimen/padding.committee.label"
-        android:paddingRight="@dimen/padding.committee.label"
+        android:paddingLeft="0dp"
+        android:paddingRight="0dp"
         android:layout_marginStart="0dp"
         android:layout_marginEnd="0dp"
         android:layout_marginTop="0dp"
-        android:text="Wyniki uzyskane przez poszczególne KW w Twojej komisji wyborczej"
-        android:textColor="@android:color/black"
+        android:text="Liczba głosów uzyskana przez poszczególne KW"
         android:gravity="center"
         android:textSize="@dimen/fontsize.committee.label" />
 
@@ -28,9 +27,72 @@
         android:layout_marginTop="0dp"
         android:background="@android:color/black" />
 
+    <Spinner
+        android:id="@+id/committees.result.data.spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/committees.result.separator.top"
+        android:layout_marginTop="0dp"
+        android:gravity="center_horizontal"
+        android:background="@android:color/darker_gray"
+        android:textColor="@android:color/black"
+        android:textSize="20sp"
+        />
+
+    <View
+        android:id="@+id/committees.result.spinner.separator"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height.login.separator.top"
+        android:layout_below="@+id/committees.result.data.spinner"
+        android:layout_marginStart="0dp"
+        android:layout_marginEnd="0dp"
+        android:background="@android:color/black" />
+
+    <LinearLayout
+        android:id="@+id/committees.result.committee.id.layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/committees.result.spinner.separator"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/committees.result.periphery.number"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:paddingBottom="@dimen/padding.committee.label"
+            android:paddingTop="@dimen/padding.committee.label"
+            android:gravity="center"
+            android:background="@android:color/darker_gray"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/fontsize.committee.label"/>
+
+        <TextView
+            android:id="@+id/committees.result.territorial.code"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:paddingBottom="@dimen/padding.committee.label"
+            android:paddingTop="@dimen/padding.committee.label"
+            android:gravity="center"
+            android:background="@android:color/darker_gray"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/fontsize.committee.label"/>
+    </LinearLayout>
+
+    <View
+        android:id="@+id/committees.result.committee.id.separator"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height.login.separator.top"
+        android:layout_below="@+id/committees.result.committee.id.layout"
+        android:layout_marginStart="0dp"
+        android:layout_marginEnd="0dp"
+        android:background="@android:color/black" />
+
+
     <TableRow
         android:id="@+id/committees.result.label.tablerow"
-        android:layout_below="@+id/committees.result.separator.top"
+        android:layout_below="@+id/committees.result.committee.id.separator"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/dark_green"
@@ -40,6 +102,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:maxLines="2"
             android:paddingStart="@dimen/padding.fvoting.general.data"
             android:paddingEnd="0dp"
             android:textColor="@android:color/white"
@@ -50,6 +113,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:maxLines="2"
             android:paddingStart="0dp"
             android:paddingEnd="@dimen/padding.number.of.votes"
             android:textColor="@android:color/white"

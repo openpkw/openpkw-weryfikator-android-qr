@@ -14,13 +14,18 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 
 import pl.openpkw.openpkwmobile.R;
 import pl.openpkw.openpkwmobile.activities.ElectionCommitteeVotesActivity;
@@ -42,6 +47,10 @@ import pl.openpkw.openpkwmobile.utils.Utils;
 public class CommitteesResultFragment extends Fragment {
 
     TableLayout committeesResultLayout;
+    private TextView territorialCodeTextView;
+    private TextView peripheryNumberTextView;
+
+    private List<String> spinnerData = new ArrayList<>();
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -97,6 +106,9 @@ public class CommitteesResultFragment extends Fragment {
         View committeesResultView = inflater.inflate(R.layout.fragment_committees_result, container, false);
         committeesResultLayout = (TableLayout) committeesResultView.findViewById(R.id.committees_result_layout);
 
+        peripheryNumberTextView = (TextView) committeesResultView.findViewById(R.id.committees_result_periphery_number);
+        territorialCodeTextView= (TextView) committeesResultView.findViewById(R.id.committees_result_territorial_code);
+
         Button nextButton = (Button) committeesResultView.findViewById(R.id.committees_result_next_button);
         nextButton.setOnClickListener(nextButtonClickListener);
 
@@ -104,8 +116,28 @@ public class CommitteesResultFragment extends Fragment {
         forwardButton.setOnClickListener(forwardButtonClickListener);
 
         loadData();
+
+        Spinner protocolDataSpinner = (Spinner) committeesResultView.findViewById(R.id.committees_result_data_spinner);
+        //set data adapter
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),
+                R.layout.view_spinner_item, spinnerData);
+        adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
+        protocolDataSpinner.setAdapter(adapter);
+        protocolDataSpinner.setOnItemSelectedListener(spinnerItemListener);
         return committeesResultView;
     }
+
+    AdapterView.OnItemSelectedListener spinnerItemListener = new AdapterView.OnItemSelectedListener() {
+        @Override
+        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+            adapterView.setSelection(0);
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> adapterView) {
+
+        }
+    };
 
     View.OnClickListener nextButtonClickListener = new View.OnClickListener() {
         @Override
@@ -128,9 +160,21 @@ public class CommitteesResultFragment extends Fragment {
     private void loadData(){
         SharedPreferences sharedPref = getActivity().getSharedPreferences(Utils.DATA, Context.MODE_PRIVATE);
         String scannedQR = sharedPref.getString(Utils.QR,null);
+        String territorial_code = sharedPref.getString(Utils.TERRITORIAL_CODE, "Kod terytorialny");
+        String periphery_number = "Nr "+sharedPref.getString(Utils.PERIPHERY_NUMBER, "obwodu");
+        String periphery_name = sharedPref.getString(Utils.PERIPHERY_NAME, "Nazwa");
+        String periphery_address = sharedPref.getString(Utils.PERIPHERY_ADDRESS, "Adres");
+        String districtNumber = sharedPref.getString(Utils.DISTRICT_NUMBER, "Okręg Wyborczy Nr");
+        Spannable spannableGreen = new SpannableString(territorial_code);
+        spannableGreen .setSpan(new ForegroundColorSpan(Color.GREEN), 0 ,territorial_code.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        territorialCodeTextView.setText(spannableGreen);
+        peripheryNumberTextView.setText(periphery_number);
+        spinnerData.add(getString(R.string.committee_label));
+        spinnerData.add(periphery_name);
+        spinnerData.add(periphery_address);
+        spinnerData.add(districtNumber);
 
         if(scannedQR!=null) {
-
             candidatesMap = ScanQrCodeActivity.candidatesHashMap;
             HashSet<String> electionCommitteeDistrictList = ScanQrCodeActivity.electionCommitteeDistrictList;
             electionCommitteeMap = ScanQrCodeActivity.electionCommitteeMap;

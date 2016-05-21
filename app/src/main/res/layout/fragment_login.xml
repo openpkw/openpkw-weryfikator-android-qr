@@ -30,6 +30,7 @@
         android:layout_marginEnd="@dimen/margin.login.edittext.user.right"
         android:layout_marginTop="@dimen/margin.login.edittext.user.top"
         android:hint="@string/login.label.edittext.user"
+        android:inputType="textEmailAddress"
         android:textSize="@dimen/fontsize.login.edittext" />
 
     <EditText

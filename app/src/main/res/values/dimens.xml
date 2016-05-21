@@ -28,7 +28,7 @@
     <dimen name="fontsize.login.label.register">24sp</dimen>
     <dimen name="fontsize.committee.label">20sp</dimen>
     <dimen name="fontsize.committee.name">16sp</dimen>
-    <dimen name="fontsize.committee.address">16sp</dimen>
+    <dimen name="fontsize.committee.address">20sp</dimen>
     <dimen name="fontsize.fvoting.general.data">16sp</dimen>
     <dimen name="fontsize.scan.qr.label">20sp</dimen>
     <dimen name="padding.committee.label">2dp</dimen>

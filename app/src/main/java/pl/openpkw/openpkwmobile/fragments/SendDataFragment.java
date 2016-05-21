@@ -163,6 +163,7 @@ public class SendDataFragment extends Fragment {
         public void onClick(View view) {
 
             oAuthParam = getOAuthParam();
+            final AlertDialog.Builder builder = new AlertDialog.Builder(contextThemeWrapper);
 
             if(qrString!=null)
             {
@@ -185,18 +186,22 @@ public class SendDataFragment extends Fragment {
 
                 }else
                 {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(contextThemeWrapper);
                     builder.setMessage(R.string.login_toast_no_network_connection_message)
                             .setTitle(R.string.login_toast_no_network_connection_title)
                             .setCancelable(false)
                             .setPositiveButton(R.string.zxing_button_ok, null);
-                    AlertDialog dialog = builder.create();
+                    final AlertDialog dialog = builder.create();
                     dialog.show();
                 }
             }
-            else
-                Toast.makeText(getActivity().getApplicationContext(),getString(R.string.scan_qr_toast_please_scan_qr),
-                        Toast.LENGTH_LONG).show();
+            else {
+                builder.setMessage("Proszę zeskanować kod QR z ostaniej strony protokołu wyborczego")
+                        .setTitle(R.string.dialog_warning_title)
+                        .setCancelable(false)
+                        .setPositiveButton(R.string.zxing_button_ok, null);
+                final AlertDialog dialog = builder.create();
+                dialog.show();
+            }
 
         }
     };

@@ -100,6 +100,8 @@ public class LoginFragment extends Fragment {
     public View.OnClickListener loginButtonClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
+            timer.start();
+
             boolean isEmailCorrect;
             if(emailEditText.getText().toString().isEmpty())
             {
@@ -150,7 +152,6 @@ public class LoginFragment extends Fragment {
                 Toast.makeText(getActivity().getApplicationContext(),getString(R.string.login_toast_enter_login_password),
                         Toast.LENGTH_LONG).show();
             }
-
         }
 
     };
@@ -250,10 +251,13 @@ public class LoginFragment extends Fragment {
                             if (!refresh_token.isEmpty()) {
                                 String encryptToken = Base64.encodeToString(
                                         SecurityRSA.encrypt(refresh_token, SecurityRSA.loadPublicKey(Utils.KEY_ALIAS)),Base64.DEFAULT);
+                                //save encrypted refresh token to shared preferences
                                 writeRefreshTokenToSharedPreferences(Utils.REFRESH_TOKEN, encryptToken);
+                                //start session timer
+                                timer.start();
+
                                 Intent scanIntent = new Intent(getActivity(), ScanQrCodeActivity.class);
                                 startActivity(scanIntent);
-                                timer.start();
                                 getActivity().finish();
                             }
                         }
@@ -311,6 +315,7 @@ public class LoginFragment extends Fragment {
         editor.putString(Utils.PERIPHERY_ADDRESS, null);
         editor.putString(Utils.PERIPHERY_NAME, null);
         editor.putString(Utils.PERIPHERY_NUMBER, null);
+        editor.putString(Utils.DISTRICT_NUMBER, null);
         editor.apply();
         File[]photoFiles = getCommitteeProtocolStorageDir(Utils.STORAGE_PROTOCOL_DIRECTORY).listFiles();
         for(File photoFile : photoFiles){

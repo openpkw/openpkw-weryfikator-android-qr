@@ -90,6 +90,7 @@ public class ScanQrCodeActivity extends AppCompatActivity {
                     if(QrValidator.isCorrectQR(scannedQR)) {
                         //decode qr
                         QrWrapper qrWrapper = new QrWrapper(scannedQR);
+                        String district_number = "Okręg Wyborczy Nr "+qrWrapper.getDistrictNumber();
                         String territorial_code = qrWrapper.getTerritorialCode();
                         String periphery_number = qrWrapper.getPeripheryNumber();
                         PeripheryDTO periphery = new PeripheryDTO(periphery_number, territorial_code);
@@ -108,7 +109,7 @@ public class ScanQrCodeActivity extends AppCompatActivity {
                         }
                         //write data to shared preferences
                         writeDataToSharedPreferences(scannedQR, periphery.getTerritorialCode(), periphery.getPeripheryNumber(),
-                                periphery.getPeripheryName(), periphery.getPeripheryAddress());
+                                periphery.getPeripheryName(), periphery.getPeripheryAddress(),district_number);
 
                         FragmentManager fm = getFragmentManager();
                         ScanQrCodeFragment scanQRFragment = (ScanQrCodeFragment)
@@ -146,7 +147,7 @@ public class ScanQrCodeActivity extends AppCompatActivity {
 
     private void writeDataToSharedPreferences(String qr, String territorial_code,
                                               String periphery_number,String periphery_name,
-                                              String periphery_address) {
+                                              String periphery_address, String district_number) {
         SharedPreferences sharedPref = getSharedPreferences(Utils.DATA, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString(Utils.QR,qr);
@@ -154,6 +155,7 @@ public class ScanQrCodeActivity extends AppCompatActivity {
         editor.putString(Utils.PERIPHERY_NUMBER,periphery_number);
         editor.putString(Utils.PERIPHERY_NAME,periphery_name);
         editor.putString(Utils.PERIPHERY_ADDRESS,periphery_address);
+        editor.putString(Utils.DISTRICT_NUMBER,district_number);
         editor.apply();
     }
 
@@ -165,72 +167,43 @@ public class ScanQrCodeActivity extends AppCompatActivity {
         MenuItem timerMenuItem = menu.findItem(R.id.session_timer);
         TextView sessionTimerTextView = (TextView) MenuItemCompat.getActionView(timerMenuItem);
         sessionTimerTextView.setPadding(10, 0, 10, 0);
-        sessionTimerTextView.setText(timer.getTimer());
-        timer.setTimeTextView(sessionTimerTextView);
+        if(timer!=null) {
+            sessionTimerTextView.setText(timer.getTimer());
+            timer.setTimeTextView(sessionTimerTextView);
+        }
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        FragmentManager fm = getFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        Fragment scanQRFragment = getFragmentManager().findFragmentByTag(Utils.SCAN_QR_FRAGMENT_TAG);
+    public boolean onOptionsItemSelected(MenuItem item){
+        //hide action bar
+        ActionBar actionBar = getSupportActionBar();
+        if(actionBar!=null)
+            actionBar.hide();
         //hide keyboard
         View view = this.getCurrentFocus();
         if (view != null) {
             InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
-        //hide action bar
-        ActionBar actionBar = getSupportActionBar();
-        if(actionBar!=null)
-            actionBar.hide();
+        //begin transaction
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.action_settings:
-                // Display the settings fragment as the main content.
-                SettingsFragment settingsFragment = (SettingsFragment)
-                        fm.findFragmentByTag(Utils.SETTINGS_FRAGMENT_TAG);
-                if (settingsFragment == null) {
-                    settingsFragment = new SettingsFragment();
-                    ft.add(R.id.scan_qr_fragment_container, settingsFragment,
-                            Utils.SETTINGS_FRAGMENT_TAG);
-                    ft.hide(scanQRFragment );
-                    ft.addToBackStack(null);
-                    ft.commit();
-                    fm.executePendingTransactions();
-                }
-                else
-                {
-                    ft.show(settingsFragment);
-                    ft.hide(scanQRFragment );
-                    ft.addToBackStack(null);
-                    ft.commit();
-                    fm.executePendingTransactions();
-                }
+                // Create new fragment and transaction
+                Fragment settingsFragment = new SettingsFragment();
+                transaction.replace(android.R.id.content, settingsFragment);
+                transaction.addToBackStack(null);
+                // Commit the transaction
+                transaction.commit();
                 return true;
-
             case R.id.about_project:
-                // Display the about fragment as the main content.
-                AboutFragment aboutFragment = (AboutFragment)
-                        fm.findFragmentByTag(Utils.ABOUT_FRAGMENT_TAG);
-                if (aboutFragment  == null) {
-                    aboutFragment  = new AboutFragment();
-                    ft.add(R.id.scan_qr_fragment_container, aboutFragment,
-                            Utils.ABOUT_FRAGMENT_TAG);
-                    ft.hide(scanQRFragment );
-                    ft.addToBackStack(null);
-                    ft.commit();
-                    fm.executePendingTransactions();
-                }
-                else
-                {
-                    ft.show( aboutFragment);
-                    ft.hide(scanQRFragment);
-                    ft.addToBackStack(null);
-                    ft.commit();
-                    fm.executePendingTransactions();
-                }
+                Fragment aboutFragment = new AboutFragment();
+                transaction.replace(android.R.id.content, aboutFragment);
+                transaction.addToBackStack(null);
+                // Commit the transaction
+                transaction.commit();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -239,52 +212,17 @@ public class ScanQrCodeActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Fragment fragmentSettings = getFragmentManager().findFragmentByTag(Utils.SETTINGS_FRAGMENT_TAG);
-        Fragment fragmentAbout = getFragmentManager().findFragmentByTag(Utils.ABOUT_FRAGMENT_TAG);
-        if(fragmentSettings!=null && fragmentSettings.isVisible())
-        {
+        if(getFragmentManager().getBackStackEntryCount() != 0) {
             //show action bar
             ActionBar actionBar = getSupportActionBar();
             if(actionBar!=null)
                 actionBar.show();
-
-            FragmentManager fm = getFragmentManager();
-            ScanQrCodeFragment scanQRFragment  = (ScanQrCodeFragment)
-                    fm.findFragmentByTag(Utils.SCAN_QR_FRAGMENT_TAG);
-            if (scanQRFragment  != null) {
-                FragmentTransaction ft = fm.beginTransaction();
-                ft.hide(fragmentSettings);
-                ft.show( scanQRFragment );
-                ft.addToBackStack(null);
-                ft.commit();
-                fm.executePendingTransactions();
-            }
-
-        }
-        else if(fragmentAbout !=null && fragmentAbout .isVisible()) {
-            //show action bar
-            ActionBar actionBar = getSupportActionBar();
-            if(actionBar!=null)
-                actionBar.show();
-
-            FragmentManager fm = getFragmentManager();
-            ScanQrCodeFragment scanQRFragment = (ScanQrCodeFragment)
-                    fm.findFragmentByTag(Utils.SCAN_QR_FRAGMENT_TAG);
-            if (scanQRFragment  != null) {
-                FragmentTransaction ft = fm.beginTransaction();
-                ft.hide(fragmentAbout);
-                ft.show( scanQRFragment);
-                ft.addToBackStack(null);
-                ft.commit();
-                fm.executePendingTransactions();
-            }
-        }
-        else {
-
+            //show main fragment
+            getFragmentManager().popBackStack();
+        } else {
             if (doubleBackToExitPressedOnce) {
                 super.onBackPressed();
                 timer.cancel();
-                return;
             }
 
             this.doubleBackToExitPressedOnce = true;

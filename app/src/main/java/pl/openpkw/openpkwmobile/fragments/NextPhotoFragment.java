@@ -1,8 +1,10 @@
 package pl.openpkw.openpkwmobile.fragments;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -17,6 +19,7 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,12 +55,15 @@ public class NextPhotoFragment extends Fragment {
 
     private ImageView photoImageView;
 
+    private Button endButton;
     private Button nextButton;
 
     private String mCurrentPhotoPath;
 
     private TextView territorialCodeTextView;
     private TextView peripheryNumberTextView;
+
+    private ContextThemeWrapper contextThemeWrapper;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -106,11 +112,16 @@ public class NextPhotoFragment extends Fragment {
         Button retryButton = (Button) nextPhotoView.findViewById(R.id.next_photo_retry_button);
         retryButton.setOnClickListener(retryButtonClickListener);
 
-        nextButton = (Button) nextPhotoView.findViewById(R.id.next_photo_next_button);
+        endButton = (Button) nextPhotoView.findViewById(R.id.next_photo_end_button);
+        endButton.setOnClickListener(endButtonClickListener);
+
+        nextButton = (Button) nextPhotoView.findViewById(R.id.next_photo_take_photo_button);
         nextButton.setOnClickListener(nextButtonClickListener);
 
         territorialCodeTextView = (TextView) nextPhotoView.findViewById(R.id.next_photo_territorial_code);
         peripheryNumberTextView = (TextView)nextPhotoView.findViewById(R.id.next_photo_periphery_number);
+
+        contextThemeWrapper = new ContextThemeWrapper(getActivity(), Utils.DIALOG_STYLE);
 
         loadData();
 
@@ -134,27 +145,53 @@ public class NextPhotoFragment extends Fragment {
         }
     };
 
-    View.OnClickListener nextButtonClickListener = new View.OnClickListener() {
+    View.OnClickListener endButtonClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            if(getCommitteeProtocolStorageDir(Utils.STORAGE_PROTOCOL_DIRECTORY).listFiles().length>=Utils.PHOTO_NUMBER)
+            if(getCommitteeProtocolStorageDir(Utils.STORAGE_PROTOCOL_DIRECTORY).listFiles().length==0)
             {
+                final AlertDialog.Builder builder = new AlertDialog.Builder(contextThemeWrapper);
+                builder.setMessage("Nie wykonano żadnego zdjęcia protokołu wyborczego.")
+                        .setTitle(R.string.dialog_warning_title)
+                        .setCancelable(false)
+                        .setPositiveButton(R.string.zxing_button_ok, null);
+                final AlertDialog dialog = builder.create();
+                dialog.show();
+            }else {
                 Intent thumbnailsIntent = new Intent(getActivity(), ThumbnailsActivity.class);
                 startActivity(thumbnailsIntent);
                 getActivity().finish();
+            }
+        }
+    };
 
-            }else
+    View.OnClickListener nextButtonClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            if(getCommitteeProtocolStorageDir(Utils.STORAGE_PROTOCOL_DIRECTORY).listFiles().length>=Utils.MAX_NUMBER_OF_PHOTOS){
+                final AlertDialog.Builder builder = new AlertDialog.Builder(contextThemeWrapper);
+                builder.setMessage("Została wykonana maksymalna liczba zdjęć przewidziana dla protokołu wyborczego.")
+                        .setTitle(R.string.dialog_warning_title)
+                        .setCancelable(false)
+                        .setPositiveButton(R.string.zxing_button_ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                Intent thumbnailsIntent = new Intent(getActivity(), ThumbnailsActivity.class);
+                                startActivity(thumbnailsIntent);
+                                getActivity().finish();
+                            }
+                        });
+                final AlertDialog dialog = builder.create();
+                dialog.show();
+            }else {
                 dispatchTakePictureIntent();
+            }
         }
     };
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
-            if(getCommitteeProtocolStorageDir(Utils.STORAGE_PROTOCOL_DIRECTORY).listFiles().length>=Utils.PHOTO_NUMBER)
-            {
-                nextButton.setText("Koniec");
-            }
             loadImage(mCurrentPhotoPath);
         }
     }
@@ -168,7 +205,7 @@ public class NextPhotoFragment extends Fragment {
             try {
                 photoFile = createImageFile();
             } catch (IOException ex) {
-                // Error occurred while creating the File
+                Log.e(Utils.TAG,"ERROR CREATING PHOTO FILE");
             }
             // Continue only if the File was successfully created
             if (photoFile != null) {

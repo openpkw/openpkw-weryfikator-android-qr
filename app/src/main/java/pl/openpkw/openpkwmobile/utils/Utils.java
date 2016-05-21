@@ -26,6 +26,7 @@ public class Utils {
     public static final String DATA = "data";
     public static final String TERRITORIAL_CODE = "TERRITORIAL_CODE";
     public static final String PERIPHERY_NUMBER = "PERIPHERY_NUMBER";
+    public static final String DISTRICT_NUMBER = "DISTRICT_NUMBER";
     public static final String PERIPHERY_NAME = "PERIPHERY_NAME";
     public static final String PERIPHERY_ADDRESS = " PERIPHERY_ADDRESS";
     public static final String LOGIN_FRAGMENT_TAG = "LOGIN_FRAGMENT_TAG";
@@ -72,9 +73,9 @@ public class Utils {
 
     public static final int RSA_KEY_SIZE = 4096;
     public static final int SESSION_TIMER = 60*1000*15-1000;//14 min 59 sec
-    //public static final int SESSION_TIMER = 20*1000;
+    //public static final int SESSION_TIMER = 60*1000; //test value
     public static final int DIALOG_STYLE = android.R.style.Theme_DeviceDefault_Dialog;
-    public static final int PHOTO_NUMBER = 3;
+    public static final int MAX_NUMBER_OF_PHOTOS = 6;
 
     public static boolean isEmailValid(CharSequence target) {
         return !TextUtils.isEmpty(target) && android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();

@@ -8,7 +8,7 @@
 
     <ImageView
         android:id="@+id/thumbnails.image.view"
-        android:src="@mipmap/ic_camera"
+        android:src="@mipmap/ic_camera_orange"
         android:layout_gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

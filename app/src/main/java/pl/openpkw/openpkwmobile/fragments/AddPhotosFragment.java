@@ -98,7 +98,7 @@ public class AddPhotosFragment extends Fragment {
         Button forwardButton = (Button) addPhotosView.findViewById(R.id.add_photos_forward_button);
         forwardButton.setOnClickListener(forwardButtonClickListener);
 
-        ImageButton takePhotoImageButton = (ImageButton) addPhotosView.findViewById(R.id.add_photos_take_photo_button);
+        Button takePhotoImageButton = (Button) addPhotosView.findViewById(R.id.add_photos_take_photo_button);
         takePhotoImageButton.setOnClickListener(takePhotoImageButtonClickListener);
 
         territorialCodeTextView = (TextView) addPhotosView .findViewById(R.id.add_photos_territorial_code);

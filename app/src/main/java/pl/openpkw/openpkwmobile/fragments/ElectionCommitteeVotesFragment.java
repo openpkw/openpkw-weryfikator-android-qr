@@ -12,19 +12,23 @@ import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import pl.openpkw.openpkwmobile.R;
 import pl.openpkw.openpkwmobile.activities.CommitteesResultActivity;
 import pl.openpkw.openpkwmobile.activities.ScanQrCodeActivity;
-import pl.openpkw.openpkwmobile.activities.VotingFormActivity;
 import pl.openpkw.openpkwmobile.models.CandidateVoteDTO;
 import pl.openpkw.openpkwmobile.utils.Utils;
 
@@ -39,6 +43,9 @@ import pl.openpkw.openpkwmobile.utils.Utils;
 public class ElectionCommitteeVotesFragment extends Fragment {
 
     private TableLayout candiddatesVotesNumberLayout;
+    private List<String> spinnerData = new ArrayList<>();
+
+
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -92,29 +99,43 @@ public class ElectionCommitteeVotesFragment extends Fragment {
         Button forwardButton = (Button) electionCommitteeView.findViewById(R.id.election_committee_forward_button);
         forwardButton.setOnClickListener(forwardButtonClickListener);
 
-        TextView listNumberTextView = (TextView) electionCommitteeView.findViewById(R.id.election_committee_votes_label_top);
-        TextView electionCommitteeNameTextView = (TextView) electionCommitteeView.findViewById(R.id.election_committee_name);
-        TextView addressElectionCommitteeTextView = (TextView) electionCommitteeView.findViewById(R.id.election_committee_address);
-        TextView wwwAddressElectionCommitteeTextView = (TextView) electionCommitteeView.findViewById(R.id.election_committee_www_address);
-        TextView totalVotesTextView = (TextView) electionCommitteeView.findViewById(R.id.election_committee_total_number_of_votes);
+        TextView listNumberTextView = (TextView) electionCommitteeView.findViewById(R.id.election_committee_list_number_label);
 
         Integer listNumber = getArguments().getInt(Utils.LIST_NUMBER,0);
-        int totalNumberOfVotes = getArguments().getInt(Utils.ELECTION_COMMITTEE_NUMBER_OF_VOTES, 0);
-        String nameElectionCommittee = getArguments().getString(Utils.ELECTION_COMMITTEE_NAME,"KOMITET WYBORCZY");
-        String addressElectionCommittee = getArguments().getString(Utils.ELECTION_COMMITTEE_ADDRESS,"Adres");
-        String wwwAddressElectionCommittee = getArguments().getString(Utils.ELECTION_COMMITTEE_WWW_ADDRESS,"Adres WWW");
-
-        listNumberTextView.setText("Lista nr "+listNumber);
-        electionCommitteeNameTextView.setText(nameElectionCommittee);
-        addressElectionCommitteeTextView.setText(addressElectionCommittee);
-        wwwAddressElectionCommitteeTextView.setText(wwwAddressElectionCommittee);
-        String totalVotesStr = "Łączna liczba uzyskanych głosów: "+String.valueOf(totalNumberOfVotes);
-        totalVotesTextView.setText(totalVotesStr);
+        String listNumberStr = "Lista nr " + listNumber;
+        Spannable spannableGreen = new SpannableString(listNumberStr );
+        spannableGreen .setSpan(new ForegroundColorSpan(Color.GREEN), "Lista nr ".length() ,listNumberStr.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        listNumberTextView.setText(spannableGreen);
 
         loadData(listNumber);
 
+        Spinner protocolDataSpinner = (Spinner) electionCommitteeView.findViewById(R.id.election_committee_data_spinner);
+        //set data adapter
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),
+                R.layout.view_spinner_item, spinnerData);
+        adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
+        protocolDataSpinner.setAdapter(adapter);
+        protocolDataSpinner.setOnItemSelectedListener(spinnerItemListener);
+
         return electionCommitteeView;
     }
+
+    AdapterView.OnItemSelectedListener spinnerItemListener = new AdapterView.OnItemSelectedListener() {
+        @Override
+        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+            adapterView.setSelection(0);
+            if(i==2) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW,
+                        Uri.parse(adapterView.getItemAtPosition(i).toString()));
+                startActivity(browserIntent);
+            }
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> adapterView) {
+
+        }
+    };
 
     View.OnClickListener forwardButtonClickListener = new View.OnClickListener() {
         @Override
@@ -126,6 +147,16 @@ public class ElectionCommitteeVotesFragment extends Fragment {
     };
 
     private void loadData(int listNumber) {
+        int totalNumberOfVotes = getArguments().getInt(Utils.ELECTION_COMMITTEE_NUMBER_OF_VOTES, 0);
+        String nameElectionCommittee = getArguments().getString(Utils.ELECTION_COMMITTEE_NAME,"KOMITET WYBORCZY");
+        String addressElectionCommittee = getArguments().getString(Utils.ELECTION_COMMITTEE_ADDRESS,"Adres");
+        String wwwAddressElectionCommittee = getArguments().getString(Utils.ELECTION_COMMITTEE_WWW_ADDRESS,"Adres WWW");
+        String totalVotesStr = "Łączna liczba uzyskanych głosów: "+String.valueOf(totalNumberOfVotes);
+        spinnerData.add(nameElectionCommittee);
+        spinnerData.add(addressElectionCommittee);
+        spinnerData.add(wwwAddressElectionCommittee );
+        spinnerData.add(totalVotesStr);
+
         HashMap<String,CandidateVoteDTO> candidatesMap = ScanQrCodeActivity.candidatesHashMap;
         Iterator it = candidatesMap.entrySet().iterator();
         LayoutInflater layoutInflater = (LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);

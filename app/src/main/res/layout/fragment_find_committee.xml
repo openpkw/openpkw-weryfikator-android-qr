@@ -100,7 +100,7 @@
         android:textSize="@dimen/fontsize.committee.label" />
 
     <View
-        android:id="@+id/fvoting.committee.separator"
+        android:id="@+id/fvoting.committee.spinner.separator"
         android:layout_width="match_parent"
         android:layout_height="@dimen/height.login.separator.top"
         android:layout_below="@+id/find.committee.label"
@@ -113,7 +113,7 @@
         android:id="@+id/fvoting.committee.id.layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/fvoting.committee.separator"
+        android:layout_below="@+id/fvoting.committee.spinner.separator"
         android:orientation="horizontal">
 
         <TextView

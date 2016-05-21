@@ -61,65 +61,35 @@ public class VotingFormActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        android.app.FragmentManager fm = getFragmentManager();
-        android.app.FragmentTransaction ft = fm.beginTransaction();
-        Fragment votingFormFragment = getFragmentManager().findFragmentByTag(Utils.VOTING_FORM_FRAGMENT_TAG);
+    public boolean onOptionsItemSelected(MenuItem item){
+        //hide action bar
+        ActionBar actionBar = getSupportActionBar();
+        if(actionBar!=null)
+            actionBar.hide();
         //hide keyboard
         View view = this.getCurrentFocus();
         if (view != null) {
             InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
-        //hide action bar
-        ActionBar actionBar = getSupportActionBar();
-        if(actionBar!=null)
-            actionBar.hide();
+        //begin transaction
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.action_settings:
-                // Display the settings fragment as the main content.
-                SettingsFragment settingsFragment = (SettingsFragment)
-                        fm.findFragmentByTag(Utils.SETTINGS_FRAGMENT_TAG);
-                if (settingsFragment == null) {
-                    settingsFragment = new SettingsFragment();
-                    ft.add(R.id.voting_form_fragment_container, settingsFragment,
-                            Utils.SETTINGS_FRAGMENT_TAG);
-                    ft.hide(votingFormFragment);
-                    ft.addToBackStack(null);
-                    ft.commit();
-                }
-                else
-                {
-                    ft.show(settingsFragment);
-                    ft.hide(votingFormFragment);
-                    ft.addToBackStack(null);
-                    ft.commit();
-                    fm.executePendingTransactions();
-                }
+                // Create new fragment and transaction
+                Fragment settingsFragment = new SettingsFragment();
+                transaction.replace(android.R.id.content, settingsFragment);
+                transaction.addToBackStack(null);
+                // Commit the transaction
+                transaction.commit();
                 return true;
-
             case R.id.about_project:
-                // Display the about fragment as the main content.
-                AboutFragment aboutFragment = (AboutFragment)
-                        fm.findFragmentByTag(Utils.ABOUT_FRAGMENT_TAG);
-                if (aboutFragment  == null) {
-                    aboutFragment  = new AboutFragment();
-                    ft.add(R.id.voting_form_fragment_container, aboutFragment,
-                            Utils.ABOUT_FRAGMENT_TAG);
-                    ft.hide(votingFormFragment);
-                    ft.addToBackStack(null);
-                    ft.commit();
-                    fm.executePendingTransactions();
-                }
-                else
-                {
-                    ft.show( aboutFragment);
-                    ft.hide(votingFormFragment );
-                    ft.addToBackStack(null);
-                    ft.commit();
-                    fm.executePendingTransactions();
-                }
+                Fragment aboutFragment = new AboutFragment();
+                transaction.replace(android.R.id.content, aboutFragment);
+                transaction.addToBackStack(null);
+                // Commit the transaction
+                transaction.commit();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -128,52 +98,17 @@ public class VotingFormActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Fragment fragmentSettings = getFragmentManager().findFragmentByTag(Utils.SETTINGS_FRAGMENT_TAG);
-        Fragment fragmentAbout = getFragmentManager().findFragmentByTag(Utils.ABOUT_FRAGMENT_TAG);
-        if(fragmentSettings!=null && fragmentSettings.isVisible())
-        {
+        if(getFragmentManager().getBackStackEntryCount() != 0) {
             //show action bar
             ActionBar actionBar = getSupportActionBar();
             if(actionBar!=null)
                 actionBar.show();
-
-            FragmentManager fm = getFragmentManager();
-            VotingFormFragment votingFormFragment  = (VotingFormFragment)
-                    fm.findFragmentByTag(Utils.VOTING_FORM_FRAGMENT_TAG);
-            if (votingFormFragment  != null) {
-                FragmentTransaction ft = fm.beginTransaction();
-                ft.hide(fragmentSettings);
-                ft.show( votingFormFragment);
-                ft.addToBackStack(null);
-                ft.commit();
-                fm.executePendingTransactions();
-            }
-
-        }
-        else if(fragmentAbout !=null && fragmentAbout .isVisible()) {
-            //show action bar
-            ActionBar actionBar = getSupportActionBar();
-            if(actionBar!=null)
-                actionBar.show();
-
-            FragmentManager fm = getFragmentManager();
-            VotingFormFragment votingFormFragment = ( VotingFormFragment)
-                    fm.findFragmentByTag(Utils.VOTING_FORM_FRAGMENT_TAG);
-            if (votingFormFragment  != null) {
-                FragmentTransaction ft = fm.beginTransaction();
-                ft.hide(fragmentAbout);
-                ft.show(votingFormFragment);
-                ft.addToBackStack(null);
-                ft.commit();
-                fm.executePendingTransactions();
-            }
-        }
-        else {
-
+            //show main fragment
+            getFragmentManager().popBackStack();
+        } else {
             if (doubleBackToExitPressedOnce) {
                 super.onBackPressed();
                 timer.cancel();
-                return;
             }
 
             this.doubleBackToExitPressedOnce = true;

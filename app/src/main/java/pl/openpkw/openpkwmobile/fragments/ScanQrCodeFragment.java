@@ -111,7 +111,8 @@ public class ScanQrCodeFragment extends Fragment {
     public View.OnClickListener nextButtonClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            if(isQrScanned()) {
+            //if(isQrScanned()) {
+            if(true) {
                 Intent vfIntent = new Intent(getActivity(), VotingFormActivity.class);
                 startActivity(vfIntent);
                 getActivity().finish();

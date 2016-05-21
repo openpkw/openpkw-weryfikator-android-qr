@@ -30,6 +30,8 @@ import pl.openpkw.openpkwmobile.security.KeyWrapper;
 import pl.openpkw.openpkwmobile.security.SecurityECC;
 import pl.openpkw.openpkwmobile.utils.Utils;
 
+import static pl.openpkw.openpkwmobile.fragments.LoginFragment.timer;
+
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -64,10 +66,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        FragmentManager fm = getFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        Fragment loginFragment = getFragmentManager().findFragmentByTag(Utils.LOGIN_FRAGMENT_TAG);
+    public boolean onOptionsItemSelected(MenuItem item){
         //hide action bar
         ActionBar actionBar = getSupportActionBar();
         if(actionBar!=null)
@@ -78,48 +77,24 @@ public class LoginActivity extends AppCompatActivity {
             InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
+        //begin transaction
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.action_settings:
-                // Display the settings fragment as the main content.
-                SettingsFragment settingsFragment = (SettingsFragment) fm.findFragmentByTag(Utils.SETTINGS_FRAGMENT_TAG);
-                if (settingsFragment == null) {
-                    settingsFragment = new SettingsFragment();
-                    ft.add(R.id.login_fragment_container, settingsFragment, Utils.SETTINGS_FRAGMENT_TAG);
-                    ft.hide(loginFragment);
-                    ft.addToBackStack(null);
-                    ft.commit();
-                    fm.executePendingTransactions();
-                }
-                else
-                {
-                    ft.show(settingsFragment);
-                    ft.hide(loginFragment);
-                    ft.addToBackStack(null);
-                    ft.commit();
-                    fm.executePendingTransactions();
-                }
+                // Create new fragment and transaction
+                Fragment settingsFragment = new SettingsFragment();
+                transaction.replace(android.R.id.content, settingsFragment);
+                transaction.addToBackStack(null);
+                // Commit the transaction
+                transaction.commit();
                 return true;
-
             case R.id.about_project:
-                // Display the about fragment as the main content.
-                AboutFragment aboutFragment = (AboutFragment) fm.findFragmentByTag(Utils.ABOUT_FRAGMENT_TAG);
-                if (aboutFragment  == null) {
-                    aboutFragment  = new AboutFragment();
-                    ft.add(R.id.login_fragment_container, aboutFragment , Utils.ABOUT_FRAGMENT_TAG);
-                    ft.hide(loginFragment);
-                    ft.addToBackStack(null);
-                    ft.commit();
-                    fm.executePendingTransactions();
-                }
-                else
-                {
-                    ft.show( aboutFragment);
-                    ft.hide(loginFragment);
-                    ft.addToBackStack(null);
-                    ft.commit();
-                    fm.executePendingTransactions();
-                }
+                Fragment aboutFragment = new AboutFragment();
+                transaction.replace(android.R.id.content, aboutFragment);
+                transaction.addToBackStack(null);
+                // Commit the transaction
+                transaction.commit();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -128,48 +103,17 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Fragment fragmentSettings = getFragmentManager().findFragmentByTag(Utils.SETTINGS_FRAGMENT_TAG);
-        Fragment fragmentAbout = getFragmentManager().findFragmentByTag(Utils.ABOUT_FRAGMENT_TAG);
-        if(fragmentSettings!=null && fragmentSettings.isVisible())
-        {
+        if(getFragmentManager().getBackStackEntryCount() != 0) {
             //show action bar
             ActionBar actionBar = getSupportActionBar();
             if(actionBar!=null)
                 actionBar.show();
-
-            FragmentManager fm = getFragmentManager();
-            LoginFragment loginFragment = (LoginFragment) fm.findFragmentByTag(Utils.LOGIN_FRAGMENT_TAG);
-            if (loginFragment != null) {
-                FragmentTransaction ft = fm.beginTransaction();
-                ft.hide(fragmentSettings);
-                ft.show( loginFragment);
-                ft.addToBackStack(null);
-                ft.commit();
-                fm.executePendingTransactions();
-            }
-        }
-        else if(fragmentAbout !=null && fragmentAbout .isVisible()) {
-            //show action bar
-            ActionBar actionBar = getSupportActionBar();
-            if(actionBar!=null)
-                actionBar.show();
-
-            FragmentManager fm = getFragmentManager();
-            LoginFragment loginFragment = (LoginFragment) fm.findFragmentByTag(Utils.LOGIN_FRAGMENT_TAG);
-            if (loginFragment != null) {
-                FragmentTransaction ft = fm.beginTransaction();
-                ft.hide(fragmentAbout);
-                ft.show( loginFragment);
-                ft.addToBackStack(null);
-                ft.commit();
-                fm.executePendingTransactions();
-            }
-        }
-        else
-        {
+            //show main fragment
+            getFragmentManager().popBackStack();
+        } else {
             if (doubleBackToExitPressedOnce) {
                 super.onBackPressed();
-                return;
+                timer.cancel();
             }
 
             this.doubleBackToExitPressedOnce = true;

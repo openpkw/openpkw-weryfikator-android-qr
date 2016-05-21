@@ -88,25 +88,39 @@
             android:textSize="@dimen/fontsize.committee.label"/>
     </LinearLayout>
 
+    <View
+        android:id="@+id/add.photos.committee.id.separator"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height.login.separator.top"
+        android:layout_below="@id/add.photos.committee.id.layout"
+        android:layout_marginStart="0dp"
+        android:layout_marginEnd="0dp"
+        android:background="@android:color/black" />
+
     <TextView
         android:id="@+id/add.photos.take.photo.label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/add.photos.committee.id.layout"
-        android:layout_marginStart="@dimen/margin.login.left"
-        android:layout_marginEnd="@dimen/margin.login.left"
+        android:layout_below="@+id/add.photos.committee.id.separator"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:maxLines="2"
         android:gravity="center_horizontal"
         android:text="Zrób zdjęcie każdej pojedynczej i kolejnej stronie protokołu wyborczego"
         android:textSize="@dimen/fontsize.committee.label" />
 
-    <ImageButton
+    <Button
         android:id="@+id/add.photos.take.photo.button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:orientation="horizontal"
-        android:src="@mipmap/ic_camera"
-        android:contentDescription="@string/logo"  />
+        android:drawablePadding="0dp"
+        android:background="@android:color/transparent"
+        android:drawableTop="@mipmap/ic_camera_orange"
+        android:textColor="@android:color/holo_orange_dark"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:text="Zrób zdjęcie"/>
 
     <Button
         android:id="@+id/add.photos.forward.button"
@@ -117,6 +131,5 @@
         android:layout_centerHorizontal="true"
         android:text="@string/forward.label.button"
         style="@style/green_button"/>
-
 
 </RelativeLayout>

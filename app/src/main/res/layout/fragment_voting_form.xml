@@ -24,35 +24,37 @@
                 android:layout_marginStart="0dp"
                 android:layout_marginEnd="0dp"
                 android:layout_marginTop="0dp"
-                android:text="Dane z protokołu wyborczego:"
+                android:text="Dane z protokołu wyborczego"
                 android:gravity="center"
-                android:textColor="@android:color/black"
-                android:background="@android:color/white"
-                android:textSize="@dimen/fontsize.committee.label" />
-
-            <TextView
-                android:id="@+id/fvoting.committee.label"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/fvoting.label.top"
-                android:paddingBottom="@dimen/padding.committee.label"
-                android:paddingTop="@dimen/padding.committee.label"
-                android:paddingLeft="@dimen/padding.committee.label"
-                android:paddingRight="@dimen/padding.committee.label"
-                android:layout_marginStart="0dp"
-                android:layout_marginEnd="0dp"
-                android:layout_marginTop="0dp"
-                android:text="@string/committee_label"
-                android:gravity="center"
-                android:background="@android:color/darker_gray"
-                android:textColor="@android:color/black"
                 android:textSize="@dimen/fontsize.committee.label" />
 
             <View
-                android:id="@+id/fvoting.committee.separator"
+                android:id="@+id/fvoting.committee.top.separator"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/height.login.separator.top"
-                android:layout_below="@+id/fvoting.committee.label"
+                android:layout_below="@+id/fvoting.label.top"
+                android:layout_marginStart="0dp"
+                android:layout_marginEnd="0dp"
+                android:background="@android:color/black" />
+
+            <Spinner
+                android:id="@+id/fvoting.committee.data.spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/fvoting.committee.top.separator"
+                android:layout_marginTop="0dp"
+                android:layout_marginStart="0dp"
+                android:layout_marginEnd="0dp"
+                android:gravity="center_horizontal"
+                android:background="@android:color/darker_gray"
+                android:textColor="@android:color/black"
+                android:textSize="20sp"/>
+
+            <View
+                android:id="@+id/fvoting.committee.spinner.separator"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/height.login.separator.top"
+                android:layout_below="@+id/fvoting.committee.data.spinner"
                 android:layout_marginStart="0dp"
                 android:layout_marginEnd="0dp"
                 android:background="@android:color/black" />
@@ -62,7 +64,7 @@
                 android:id="@+id/fvoting.committee.id.layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/fvoting.committee.separator"
+                android:layout_below="@+id/fvoting.committee.spinner.separator"
                 android:orientation="horizontal">
 
                 <TextView
@@ -99,62 +101,9 @@
                 android:layout_marginEnd="0dp"
                 android:background="@android:color/black" />
 
-            <TextView
-                android:id="@+id/fvoting.periphery.name"
-                android:layout_below="@+id/fvoting.committee.id.separator"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingBottom="@dimen/padding.committee.label"
-                android:paddingTop="@dimen/padding.committee.label"
-                android:paddingLeft="@dimen/padding.committee.label"
-                android:paddingRight="@dimen/padding.committee.label"
-                android:layout_marginStart="0dp"
-                android:layout_marginEnd="0dp"
-                android:layout_marginTop="0dp"
-                android:gravity="center"
-                android:background="@android:color/darker_gray"
-                android:textColor="@android:color/black"
-                android:textSize="@dimen/fontsize.committee.label"/>
-
-            <View
-                android:id="@+id/fvoting.committee.name.separator"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/height.login.separator.top"
-                android:layout_below="@+id/fvoting.periphery.name"
-                android:layout_marginStart="0dp"
-                android:layout_marginEnd="0dp"
-                android:background="@android:color/black" />
-
-            <TextView
-                android:id="@+id/fvoting.periphery.address"
-                android:layout_below="@+id/fvoting.committee.name.separator"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingBottom="@dimen/padding.committee.label"
-                android:paddingTop="@dimen/padding.committee.label"
-                android:paddingLeft="@dimen/padding.committee.label"
-                android:paddingRight="@dimen/padding.committee.label"
-                android:layout_marginStart="0dp"
-                android:layout_marginEnd="0dp"
-                android:layout_marginTop="0dp"
-                android:gravity="center"
-                android:background="@android:color/darker_gray"
-                android:textColor="@android:color/black"
-                android:textSize="@dimen/fontsize.committee.address"/>
-
-            <View
-                android:id="@+id/fvoting.committee.address.separator"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/height.login.separator.top"
-                android:layout_below="@+id/fvoting.periphery.address"
-                android:layout_marginStart="0dp"
-                android:layout_marginEnd="0dp"
-                android:background="@android:color/black" />
-
-
             <TableLayout
                 android:id="@+id/fvoting.generaldata.layout"
-                android:layout_below="@+id/fvoting.committee.address.separator"
+                android:layout_below="@+id/fvoting.committee.id.separator"
                 android:layout_width="match_parent"
                 android:layout_marginStart="0dp"
                 android:layout_marginTop="0dp"
@@ -168,9 +117,11 @@
                     android:layout_height="wrap_content">
 
                     <TextView
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:ellipsize="none"
+                        android:maxLines="3"
                         android:paddingStart="@dimen/padding.fvoting.general.data"
                         android:paddingEnd="0dp"
                         android:textColor="@android:color/black"
@@ -181,9 +132,10 @@
 
                     <TextView
                         android:id="@+id/fvoting.total.entitled.to.vote"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:layout_weight="0"
+                        android:singleLine="true"
                         android:paddingStart="0dp"
                         android:paddingEnd="@dimen/padding.number.of.votes"
                         android:textColor="@android:color/black"
@@ -215,9 +167,11 @@
 
                     <TextView
                         android:id="@+id/fvoting.total.voting.cards.label"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:ellipsize="none"
+                        android:maxLines="3"
                         android:paddingStart="@dimen/padding.fvoting.general.data"
                         android:paddingEnd="0dp"
                         android:textColor="@android:color/black"
@@ -228,9 +182,10 @@
 
                     <TextView
                         android:id="@+id/fvoting.total.voting.cards"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:layout_weight="0"
+                        android:singleLine="true"
                         android:paddingStart="0dp"
                         android:paddingEnd="@dimen/padding.number.of.votes"
                         android:textColor="@android:color/black"
@@ -262,9 +217,11 @@
 
                     <TextView
                         android:id="@+id/fvoting.valid.cards.label"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:ellipsize="none"
+                        android:maxLines="3"
                         android:paddingStart="@dimen/padding.fvoting.general.data"
                         android:paddingEnd="0dp"
                         android:textColor="@android:color/black"
@@ -275,9 +232,10 @@
 
                     <TextView
                         android:id="@+id/fvoting.valid.cards"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:layout_weight="0"
+                        android:singleLine="true"
                         android:paddingStart="0dp"
                         android:paddingEnd="@dimen/padding.number.of.votes"
                         android:textColor="@android:color/black"
@@ -309,9 +267,10 @@
 
                     <TextView
                         android:id="@+id/fvoting.invalid.votes.label"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:ellipsize="none"
                         android:paddingStart="@dimen/padding.fvoting.general.data"
                         android:paddingEnd="0dp"
                         android:textColor="@android:color/black"
@@ -322,9 +281,10 @@
 
                     <TextView
                         android:id="@+id/fvoting.invalid.votes"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:layout_weight="0"
+                        android:singleLine="true"
                         android:paddingStart="0dp"
                         android:paddingEnd="@dimen/padding.number.of.votes"
                         android:textColor="@android:color/black"
@@ -356,9 +316,10 @@
 
                     <TextView
                         android:id="@+id/fvoting.valid.votes.label"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:ellipsize="none"
                         android:paddingStart="@dimen/padding.fvoting.general.data"
                         android:paddingEnd="0dp"
                         android:textColor="@android:color/black"
@@ -369,12 +330,13 @@
 
                     <TextView
                         android:id="@+id/fvoting.valid.votes"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:layout_weight="0"
+                        android:singleLine="true"
                         android:paddingStart="0dp"
                         android:paddingEnd="@dimen/padding.number.of.votes"
-                        android:textColor="@android:color/black"
+                        android:textColor="@android:color/holo_purple"
                         android:gravity="end"
                         android:paddingBottom="@dimen/padding.committee.label"
                         android:paddingTop="@dimen/padding.committee.label"

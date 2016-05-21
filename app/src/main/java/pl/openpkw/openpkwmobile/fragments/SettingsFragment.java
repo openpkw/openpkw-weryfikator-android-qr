@@ -54,10 +54,28 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         urlVerifyPreference.setSummary(sharedPref.getString(Utils.URL_VERIFY_PREFERENCE,""));
         urlElectionResultPreference  = (EditTextPreference) findPreference(Utils.URL_ELECTION_RESULT_PREFERENCE);
         urlElectionResultPreference.setSummary(sharedPref.getString(Utils.URL_ELECTION_RESULT_PREFERENCE,""));
-        //
+
         Preference setIdAndSecretPreference = findPreference(Utils.OAUTH2_PREFERENCE);
         setIdAndSecretPreference.setOnPreferenceClickListener(setIdAndSecretPreferenceClickListener);
+    }
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = super.onCreateView(inflater, container, savedInstanceState);
+        if(view!=null)
+            view.setBackgroundColor(getResources().getColor(android.R.color.white));
+        return view;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        View rootView = getView();
+        if(rootView!=null) {
+            ListView list = (ListView) rootView.findViewById(android.R.id.list);
+            list.setDivider(new ColorDrawable(getResources().getColor(R.color.green)));
+            list.setDividerHeight(4);
+        }
     }
 
     public Preference.OnPreferenceClickListener setIdAndSecretPreferenceClickListener = new Preference.OnPreferenceClickListener() {
@@ -128,17 +146,6 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
             return false;
         }
     };
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        View rootView = getView();
-        if(rootView!=null) {
-            ListView list = (ListView) rootView.findViewById(android.R.id.list);
-            list.setDivider(new ColorDrawable(getResources().getColor(R.color.green)));
-            list.setDividerHeight(4);
-        }
-    }
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
