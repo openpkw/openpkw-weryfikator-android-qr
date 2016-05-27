@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.security.KeyPair;
 import java.security.Security;
@@ -146,6 +147,8 @@ public class LoginActivity extends AppCompatActivity {
             }
         } catch (GeneralSecurityException e) {
             Log.e(Utils.TAG, "GeneralSecurityException: " + e.getMessage());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

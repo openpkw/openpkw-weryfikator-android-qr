@@ -101,11 +101,7 @@ public class ScanQrCodeActivity extends AppCompatActivity {
 
                             //read asynchronous candidates data
                             CandidatesDataLoad candidatesDataLoad = new CandidatesDataLoad();
-                            candidatesDataLoad.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, scannedQR);
-
-                            //read asynchronous election committees data
-                            ElectionCommitteesDataLoad electionCommitteesDataLoad = new ElectionCommitteesDataLoad();
-                            electionCommitteesDataLoad.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                            candidatesDataLoad.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, scannedQR);
                         }
                         //write data to shared preferences
                         writeDataToSharedPreferences(scannedQR, periphery.getTerritorialCode(), periphery.getPeripheryNumber(),
@@ -262,7 +258,9 @@ public class ScanQrCodeActivity extends AppCompatActivity {
         protected void onPostExecute(HashMap<String, CandidateVoteDTO> hashMap) {
             candidatesHashMap = hashMap;
             electionCommitteeDistrictList = electionCommitteesList;
-
+            //read asynchronous election committees data
+            ElectionCommitteesDataLoad electionCommitteesDataLoad = new ElectionCommitteesDataLoad();
+            electionCommitteesDataLoad.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
         }
     }
 
@@ -321,6 +319,7 @@ public class ScanQrCodeActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Integer totalNumberOfVotes) {
+            Log.e(Utils.TAG, "TOTAL TEST NUMBER OF VOTES: " + totalNumberOfVotes);
             ElectionCommitteeDTO electionCommittee = electionCommitteeMap.get(electionCommitteeName);
             if(electionCommittee!=null){
                 electionCommittee.setTotalNumberOfVotes(totalNumberOfVotes);

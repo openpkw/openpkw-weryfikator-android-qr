@@ -3,7 +3,10 @@ package pl.openpkw.openpkwmobile.security;
 /**
  * Created by Admin on 02.02.16.
  */
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Build;
+import android.util.Log;
 
 import org.spongycastle.jce.interfaces.ECPrivateKey;
 import org.spongycastle.jce.interfaces.ECPublicKey;
@@ -13,6 +16,7 @@ import java.security.GeneralSecurityException;
 import java.security.InvalidKeyException;
 import java.security.KeyPair;
 import java.security.KeyStore;
+import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 
@@ -21,55 +25,54 @@ import javax.crypto.IllegalBlockSizeException;
 
 import pl.openpkw.openpkwmobile.utils.Utils;
 
+import static pl.openpkw.openpkwmobile.utils.Utils.ENCRYPTION_MODE_RSA;
+
 public class KeyWrapper {
     private  Cipher cipher;
-    private  KeyPair keyPair;
+    private PrivateKey privateKey;
+    private PublicKey publicKey;
     /**
      * Create a wrapper using the public/private key pair with the given alias.
      * If no pair with that alias exists, it will be generated.
      */
+    @SuppressLint("GetInstance")
     public KeyWrapper(Context context, String alias)
     {
         try {
-            cipher = Cipher.getInstance(Utils.ENCRYPTION_MODE_RSA, Utils.PROVIDER_OPEN_SSL);
+            cipher = Cipher.getInstance(ENCRYPTION_MODE_RSA);
             final KeyStore keyStore = KeyStore.getInstance(Utils.ANDROID_KEY_STORE);
             keyStore.load(null);
             if (!keyStore.containsAlias(alias)) {
-                SecurityRSA.generateKeyPair(context, alias);
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M)
+                    SecurityRSA.generateKeyPair(alias);
+                else
+                    SecurityRSA.generateKeyPair(context, alias);
+
             }
-            // Even if we just generated the key, always read it back to ensure we
-            // can read it successfully.
-            final KeyStore.PrivateKeyEntry entry = (KeyStore.PrivateKeyEntry) keyStore.getEntry(
-                    alias, null);
-            keyPair = new KeyPair(entry.getCertificate().getPublicKey(), entry.getPrivateKey());
+            privateKey = (PrivateKey) keyStore.getKey(alias, null);
+            publicKey = keyStore.getCertificate(alias).getPublicKey();
         } catch (GeneralSecurityException | IOException e) {
             e.printStackTrace();
         }
     }
 
-    public byte[] wrapPrivateKey(PrivateKey key) {
-        try {
-            cipher.init(Cipher.WRAP_MODE, keyPair.getPublic());
-            return cipher.wrap(key);
-        } catch (InvalidKeyException | IllegalBlockSizeException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public ECPrivateKey unwrapPrivateKey(byte[] blob) throws GeneralSecurityException {
-        cipher.init(Cipher.UNWRAP_MODE, keyPair.getPrivate());
-        return (ECPrivateKey) cipher.unwrap(blob, Utils.ECDSA, Cipher.PRIVATE_KEY);
-    }
-
-    public byte[] wrapPublicKey(PublicKey key) throws GeneralSecurityException {
-        cipher.init(Cipher.WRAP_MODE, keyPair.getPublic());
+    public synchronized byte[] wrapPublicKey(PublicKey key) throws GeneralSecurityException, IOException {
+        cipher.init(Cipher.WRAP_MODE, publicKey);
         return cipher.wrap(key);
     }
 
-    public ECPublicKey unwrapPublicKey(byte[] blob) throws GeneralSecurityException {
-        cipher.init(Cipher.UNWRAP_MODE, keyPair.getPrivate());
-        return (ECPublicKey) cipher.unwrap(blob, Utils.ECDSA, Cipher.PUBLIC_KEY);
+    public synchronized PublicKey unwrapPublicKey(byte[] blob) throws GeneralSecurityException, IOException {
+        cipher.init(Cipher.UNWRAP_MODE, privateKey);
+        return (PublicKey) cipher.unwrap(blob, "ECDSA", Cipher.PUBLIC_KEY);
     }
 
+    public synchronized byte[] wrapPrivateKey(PrivateKey key) throws GeneralSecurityException, IOException {
+        cipher.init(Cipher.WRAP_MODE, publicKey);
+        return cipher.wrap(key);
+    }
+
+    public synchronized PrivateKey unwrapPrivateKey(byte[] blob) throws GeneralSecurityException, IOException {
+        cipher.init(Cipher.UNWRAP_MODE, privateKey);
+        return (PrivateKey) cipher.unwrap(blob, "ECDSA", Cipher.PRIVATE_KEY);
+    }
 }

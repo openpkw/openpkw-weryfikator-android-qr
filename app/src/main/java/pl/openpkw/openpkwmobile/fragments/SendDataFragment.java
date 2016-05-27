@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -30,12 +31,14 @@ import com.google.gson.GsonBuilder;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.security.PrivateKey;
 
 import pl.openpkw.openpkwmobile.R;
 import pl.openpkw.openpkwmobile.activities.EndActivity;
 import pl.openpkw.openpkwmobile.activities.QueryAddPhotosActivity;
+import pl.openpkw.openpkwmobile.activities.ScanQrCodeActivity;
 import pl.openpkw.openpkwmobile.models.OAuthParam;
 import pl.openpkw.openpkwmobile.models.QrDTO;
 import pl.openpkw.openpkwmobile.network.GetAccessToken;
@@ -174,12 +177,17 @@ public class SendDataFragment extends Fragment {
                     PrivateKey privateKey = null;
                     try {
                         privateKey = keyWrapper.unwrapPrivateKey(Base64.decode(privateKeyStr,Base64.DEFAULT));
-                    } catch (GeneralSecurityException e) {
-                        e.printStackTrace();
+                    } catch (GeneralSecurityException | IOException e) {
+                        Log.e(Utils.TAG, "ERROR UNWRAP PRIVATE KEY ECDSA: "+e.getMessage());
                     }
+
                     scanQrDTO = new QrDTO();
                     scanQrDTO.setQr(qrString);
-                    scanQrDTO.setToken(Base64.encodeToString(SecurityECC.generateSignature(qrString, privateKey), Base64.NO_WRAP));
+                    byte [] signature = SecurityECC.generateSignature(qrString, privateKey);
+                    if(signature!=null) {
+                        scanQrDTO.setToken(Base64.encodeToString(signature, Base64.NO_WRAP));
+                    }else
+                        Log.e(Utils.TAG, "SIGNATURE FAILED");
 
                     GetAccessTokenAsyncTask getAccessTokenAsyncTask = new GetAccessTokenAsyncTask();
                     getAccessTokenAsyncTask.execute(oAuthParam);
@@ -198,7 +206,15 @@ public class SendDataFragment extends Fragment {
                 builder.setMessage("Proszę zeskanować kod QR z ostaniej strony protokołu wyborczego")
                         .setTitle(R.string.dialog_warning_title)
                         .setCancelable(false)
-                        .setPositiveButton(R.string.zxing_button_ok, null);
+                        .setPositiveButton(R.string.zxing_button_ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                //start scan activity
+                                Intent scanIntent = new Intent(getActivity(), ScanQrCodeActivity.class);
+                                startActivity(scanIntent);
+                                getActivity().finish();
+                            }
+                        });
                 final AlertDialog dialog = builder.create();
                 dialog.show();
             }

@@ -52,7 +52,9 @@
         <activity android:name=".activities.ThumbnailsActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".activities.SendDataActivity"/>
-        <activity android:name=".activities.TimeoutDialogActivity" android:theme="@style/Theme.Transparent"/>
+        <activity android:name=".activities.TimeoutDialogActivity"
+            android:theme="@style/Theme.Transparent"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

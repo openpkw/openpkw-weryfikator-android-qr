@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -46,6 +47,7 @@ import java.security.PrivateKey;
 
 import pl.openpkw.openpkwmobile.R;
 import pl.openpkw.openpkwmobile.activities.EndActivity;
+import pl.openpkw.openpkwmobile.activities.ScanQrCodeActivity;
 import pl.openpkw.openpkwmobile.models.OAuthParam;
 import pl.openpkw.openpkwmobile.models.QrDTO;
 import pl.openpkw.openpkwmobile.network.GetAccessToken;
@@ -170,12 +172,13 @@ public class ThumbnailsFragment extends Fragment {
                     SharedPreferences sharedPref = getActivity().getSharedPreferences(Utils.DATA, Context.MODE_PRIVATE);
                     KeyWrapper keyWrapper = new KeyWrapper(getActivity().getApplicationContext(), Utils.KEY_ALIAS);
                     String privateKeyStr = sharedPref.getString(Utils.PRIVATE_KEY,null);
-                    PrivateKey privateKey = null;
+                    PrivateKey privateKey  = null;
                     try {
                         privateKey = keyWrapper.unwrapPrivateKey(Base64.decode(privateKeyStr,Base64.DEFAULT));
-                    } catch (GeneralSecurityException e) {
+                    } catch (GeneralSecurityException | IOException e) {
                         e.printStackTrace();
                     }
+
                     scanQrDTO = new QrDTO();
                     scanQrDTO.setQr(qrString);
                     scanQrDTO.setToken(Base64.encodeToString(SecurityECC.generateSignature(qrString, privateKey), Base64.NO_WRAP));
@@ -198,13 +201,30 @@ public class ThumbnailsFragment extends Fragment {
                 builder.setMessage("Proszę zeskanować kod QR z ostaniej strony protokołu wyborczego")
                     .setTitle(R.string.dialog_warning_title)
                     .setCancelable(false)
-                    .setPositiveButton(R.string.zxing_button_ok, null);
+                    .setPositiveButton(R.string.zxing_button_ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            //start scan activity
+                            Intent scanIntent = new Intent(getActivity(), ScanQrCodeActivity.class);
+                            startActivity(scanIntent);
+                            getActivity().finish();
+                            clearData();
+                        }
+                    });
                 final AlertDialog dialog = builder.create();
                 dialog.show();
             }
         }
     };
 
+    private void clearData(){
+        File[]photoFiles = getCommitteeProtocolStorageDir(Utils.STORAGE_PROTOCOL_DIRECTORY).listFiles();
+        if(photoFiles!=null) {
+            for (File photoFile : photoFiles) {
+                photoFile.delete();
+            }
+        }
+    }
 
     private OAuthParam getOAuthParam()
     {

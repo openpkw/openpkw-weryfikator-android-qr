@@ -14,6 +14,8 @@ import pl.openpkw.openpkwmobile.utils.Utils;
 
 public class TimeoutDialogActivity extends Activity implements DialogInterface.OnCancelListener {
 
+    private AlertDialog dialog;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,22 +44,21 @@ public class TimeoutDialogActivity extends Activity implements DialogInterface.O
                         Intent loginIntent = new Intent(TimeoutDialogActivity.this, LoginActivity.class);
                         loginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(loginIntent);
-                        dialogInterface.dismiss();
                         finish();
                     }
                 })
                 .setNegativeButton(R.string.session_timeout_quit, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
                         Intent finishIntent = new Intent(TimeoutDialogActivity.this,TimeoutDialogActivity.class);
                         finishIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                         finishIntent.putExtra("EXIT",true);
                         startActivity(finishIntent);
                     }
                 });
-        final AlertDialog dialog = builder.create();
-        dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+        dialog = builder.create();
+        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.M)
+            dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
         dialog.show();
     }
 
@@ -65,6 +66,13 @@ public class TimeoutDialogActivity extends Activity implements DialogInterface.O
         Intent dialogIntent = new Intent(context, TimeoutDialogActivity.class);
         dialogIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(dialogIntent);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if(dialog!=null)
+            dialog.dismiss();
     }
 
 }

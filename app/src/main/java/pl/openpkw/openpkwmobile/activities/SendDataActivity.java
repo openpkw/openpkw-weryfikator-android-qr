@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.net.Uri;
 import android.os.Handler;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
@@ -25,7 +26,7 @@ import pl.openpkw.openpkwmobile.utils.Utils;
 
 import static pl.openpkw.openpkwmobile.fragments.LoginFragment.timer;
 
-public class SendDataActivity extends AppCompatActivity {
+public class SendDataActivity extends AppCompatActivity implements SendDataFragment.OnFragmentInteractionListener{
 
     private boolean doubleBackToExitPressedOnce = false;
 
@@ -118,5 +119,10 @@ public class SendDataActivity extends AppCompatActivity {
                 }
             }, 3000);
         }
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
     }
 }

@@ -73,7 +73,7 @@ public class Utils {
 
     public static final int RSA_KEY_SIZE = 4096;
     public static final int SESSION_TIMER = 60*1000*15-1000;//14 min 59 sec
-    //public static final int SESSION_TIMER = 60*1000; //test value
+    //public static final int SESSION_TIMER = 10*1000; //test value
     public static final int DIALOG_STYLE = android.R.style.Theme_DeviceDefault_Dialog;
     public static final int MAX_NUMBER_OF_PHOTOS = 6;
 

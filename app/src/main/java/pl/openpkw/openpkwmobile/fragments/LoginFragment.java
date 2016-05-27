@@ -250,7 +250,7 @@ public class LoginFragment extends Fragment {
 
                             if (!refresh_token.isEmpty()) {
                                 String encryptToken = Base64.encodeToString(
-                                        SecurityRSA.encrypt(refresh_token, SecurityRSA.loadPublicKey(Utils.KEY_ALIAS)),Base64.DEFAULT);
+                                       SecurityRSA.encrypt(refresh_token, SecurityRSA.loadPublicKey(Utils.KEY_ALIAS)),Base64.DEFAULT);
                                 //save encrypted refresh token to shared preferences
                                 writeRefreshTokenToSharedPreferences(Utils.REFRESH_TOKEN, encryptToken);
                                 //start session timer
@@ -317,9 +317,12 @@ public class LoginFragment extends Fragment {
         editor.putString(Utils.PERIPHERY_NUMBER, null);
         editor.putString(Utils.DISTRICT_NUMBER, null);
         editor.apply();
+
         File[]photoFiles = getCommitteeProtocolStorageDir(Utils.STORAGE_PROTOCOL_DIRECTORY).listFiles();
-        for(File photoFile : photoFiles){
-            photoFile.delete();
+        if(photoFiles!=null) {
+            for (File photoFile : photoFiles) {
+                photoFile.delete();
+            }
         }
     }
 

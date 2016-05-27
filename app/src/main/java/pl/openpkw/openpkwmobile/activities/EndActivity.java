@@ -2,6 +2,7 @@ package pl.openpkw.openpkwmobile.activities;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.net.Uri;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,7 +12,7 @@ import pl.openpkw.openpkwmobile.R;
 import pl.openpkw.openpkwmobile.fragments.EndFragment;
 import pl.openpkw.openpkwmobile.utils.Utils;
 
-public class EndActivity extends AppCompatActivity {
+public class EndActivity extends AppCompatActivity implements EndFragment.OnFragmentInteractionListener{
 
     private boolean doubleBackToExitPressedOnce = false;
 
@@ -47,5 +48,10 @@ public class EndActivity extends AppCompatActivity {
                 doubleBackToExitPressedOnce = false;
             }
         }, 3000);
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
     }
 }

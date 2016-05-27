@@ -7,9 +7,6 @@ import pl.openpkw.openpkwmobile.R;
 import pl.openpkw.openpkwmobile.activities.LoginActivity;
 import pl.openpkw.openpkwmobile.fragments.SplashFragment;
 
-/**
- * Created by Wojciech Radzioch on 2015-04-21.
- */
 public class SplashActivity extends FragmentActivity {
 
     public static final int SPLASH_TIME = 4000;

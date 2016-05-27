@@ -29,6 +29,7 @@ import com.google.gson.GsonBuilder;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.security.PublicKey;
 import java.util.regex.Matcher;
@@ -175,7 +176,7 @@ public class RegisterUserFragment extends Fragment {
                     PublicKey publicKey = null;
                     try {
                         publicKey = keyWrapper.unwrapPublicKey(Base64.decode(publicKeyStr,Base64.DEFAULT));
-                    } catch (GeneralSecurityException e) {
+                    } catch (GeneralSecurityException | IOException e) {
                         e.printStackTrace();
                     }
                     if (publicKey != null) {

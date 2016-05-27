@@ -98,7 +98,7 @@ public class ScanQrCodeFragment extends Fragment {
                 integratorScan.initiateScan(IntentIntegrator.QR_CODE_TYPES);
             }else{
                 final AlertDialog.Builder builder = new AlertDialog.Builder(contextThemeWrapper);
-                builder.setMessage("Aplikacja nie ma uprawnień do obsługi aparatu telefonu")
+                builder.setMessage("Aplikacja nie ma uprawnień do obsługi aparatu telefonu. Proszę zezwolić aplikacji na korzystanie z apratu.")
                         .setTitle(R.string.dialog_warning_title)
                         .setCancelable(false)
                         .setPositiveButton(R.string.zxing_button_ok, null);

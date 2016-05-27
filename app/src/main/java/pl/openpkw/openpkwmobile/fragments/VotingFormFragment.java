@@ -60,6 +60,7 @@ public class VotingFormFragment extends Fragment {
 
         loadData();
 
+
         Spinner protocolDataSpinner = (Spinner) v.findViewById(R.id.fvoting_committee_data_spinner);
         //set data adapter
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),
@@ -137,5 +138,17 @@ public class VotingFormFragment extends Fragment {
             validVotesTextView.setText(qrWrapper.getVotingCardsValidVotes());
             validVotesTextView.setTextColor(Color.BLUE);
         }
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        if( spinnerData!=null)
+            spinnerData.clear();
     }
 }

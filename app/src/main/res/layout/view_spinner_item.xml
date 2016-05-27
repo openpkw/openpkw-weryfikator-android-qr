@@ -7,8 +7,11 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:textSize="@dimen/fontsize.committee.label"
+    android:maxLines="2"
+    android:singleLine="false"
+    android:ellipsize="none"
     android:gravity="center_horizontal"
+    android:scrollHorizontally="false"
     android:drawablePadding="0dip"
     android:drawableBottom="@android:drawable/arrow_down_float"
-    android:ellipsize="marquee"
     />
