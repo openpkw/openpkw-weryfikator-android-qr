@@ -9,355 +9,370 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <RelativeLayout
+        <TableLayout
+            android:id="@+id/fvoting.protocol.data.tablelayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin.protocol.data"
+            android:layout_marginRight="@dimen/margin.protocol.data"
+            android:layout_marginBottom="@dimen/margin.protocol.data"
+            android:layout_marginTop="@dimen/margin.top.protocol.data"
+            android:background="@drawable/protocol_border"
+            android:stretchColumns="1">
 
-            <TextView
-                android:id="@+id/fvoting.label.top"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingBottom="@dimen/padding.committee.label"
-                android:paddingTop="@dimen/padding.committee.label"
-                android:paddingLeft="@dimen/padding.committee.label"
-                android:paddingRight="@dimen/padding.committee.label"
-                android:layout_marginStart="0dp"
-                android:layout_marginEnd="0dp"
-                android:layout_marginTop="0dp"
-                android:text="Dane z protokołu wyborczego"
+            <TableRow
                 android:gravity="center"
-                android:textSize="@dimen/fontsize.committee.label" />
-
-            <View
-                android:id="@+id/fvoting.committee.top.separator"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/height.login.separator.top"
-                android:layout_below="@+id/fvoting.label.top"
-                android:layout_marginStart="0dp"
-                android:layout_marginEnd="0dp"
-                android:background="@android:color/black" />
-
-            <Spinner
-                android:id="@+id/fvoting.committee.data.spinner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/fvoting.committee.top.separator"
-                android:layout_marginTop="0dp"
-                android:layout_marginStart="0dp"
-                android:layout_marginEnd="0dp"
-                android:spinnerMode="dropdown"
-                android:gravity="center_horizontal"
-                android:background="@android:color/darker_gray"
-                android:textColor="@android:color/black"
-                android:textSize="20sp"/>
+                android:background="@color/rules.fragment.background">
 
-            <View
-                android:id="@+id/fvoting.committee.spinner.separator"
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/padding.committee.label"
+                    android:paddingRight="@dimen/padding.committee.label"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginEnd="0dp"
+                    android:paddingTop="@dimen/padding.committee.label"
+                    android:paddingBottom="@dimen/padding.committee.label"
+                    android:text="Dane z protokołu wyborczego"
+                    android:gravity="center"
+                    android:textColor="@android:color/black"
+                    android:textSize="@dimen/fontsize.committee.label" />
+            </TableRow>
+
+            <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/height.login.separator.top"
-                android:layout_below="@+id/fvoting.committee.data.spinner"
-                android:layout_marginStart="0dp"
-                android:layout_marginEnd="0dp"
-                android:background="@android:color/black" />
+                android:layout_height="match_parent">
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/height.login.separator.bottom"
+                    android:layout_weight="1"
+                    android:layout_marginBottom="0dp"
+                    android:layout_marginTop="0dp"
+                    android:background="@android:color/black" />
+            </TableRow>
 
-            <LinearLayout
-                android:id="@+id/fvoting.committee.id.layout"
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+
+                <Spinner
+                    android:id="@+id/fvoting.committee.data.spinner"
+                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginEnd="0dp"
+                    android:spinnerMode="dropdown"
+                    android:gravity="center_horizontal"
+                    android:background="@android:color/darker_gray"
+                    android:textColor="@android:color/black"
+                    android:textSize="20sp"/>
+            </TableRow>
+
+            <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/fvoting.committee.spinner.separator"
-                android:orientation="horizontal">
+                android:layout_height="match_parent">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/height.login.separator.bottom"
+                    android:layout_weight="1"
+                    android:layout_marginBottom="0dp"
+                    android:layout_marginTop="0dp"
+                    android:background="@android:color/black" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
                 <TextView
                     android:id="@+id/fvoting.periphery.number"
-                    android:layout_width="0dip"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.5"
+                    android:layout_weight="1"
                     android:paddingBottom="@dimen/padding.committee.label"
                     android:paddingTop="@dimen/padding.committee.label"
                     android:gravity="center"
                     android:background="@android:color/darker_gray"
                     android:textColor="@android:color/black"
+                    android:text="Nr obwodu"
                     android:textSize="@dimen/fontsize.committee.label"/>
 
                 <TextView
                     android:id="@+id/fvoting.territorial.code"
-                    android:layout_width="0dip"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.5"
+                    android:layout_weight="1"
                     android:paddingBottom="@dimen/padding.committee.label"
                     android:paddingTop="@dimen/padding.committee.label"
                     android:gravity="center"
                     android:background="@android:color/darker_gray"
                     android:textColor="@android:color/black"
+                    android:text="Kod terytorialny"
                     android:textSize="@dimen/fontsize.committee.label"/>
-            </LinearLayout>
+            </TableRow>
 
-            <View
-                android:id="@+id/fvoting.committee.id.separator"
+            <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/height.login.separator.top"
-                android:layout_below="@+id/fvoting.committee.id.layout"
-                android:layout_marginStart="0dp"
-                android:layout_marginEnd="0dp"
-                android:background="@android:color/black" />
+                android:layout_height="match_parent">
 
-            <TableLayout
-                android:id="@+id/fvoting.generaldata.layout"
-                android:layout_below="@+id/fvoting.committee.id.separator"
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/height.login.separator.bottom"
+                    android:layout_weight="1"
+                    android:layout_marginBottom="0dp"
+                    android:layout_marginTop="0dp"
+                    android:background="@android:color/black" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@color/light_gray_protocol">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ellipsize="none"
+                    android:maxLines="3"
+                    android:paddingStart="@dimen/padding.fvoting.general.data"
+                    android:paddingEnd="0dp"
+                    android:textColor="@android:color/black"
+                    android:paddingBottom="@dimen/padding.committee.label"
+                    android:paddingTop="@dimen/padding.committee.label"
+                    android:textSize="@dimen/fontsize.committee.label"
+                    android:text="@string/fvoting.total.entitled.to.vote.label" />
+
+                <TextView
+                    android:id="@+id/fvoting.total.entitled.to.vote"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:singleLine="true"
+                    android:paddingStart="0dp"
+                    android:paddingEnd="@dimen/padding.number.of.votes"
+                    android:textColor="@android:color/black"
+                    android:gravity="end"
+                    android:paddingBottom="@dimen/padding.committee.label"
+                    android:paddingTop="@dimen/padding.committee.label"
+                    android:textSize="@dimen/fontsize.committee.label"
+                    />
+
+            </TableRow>
+
+            <TableRow
                 android:layout_width="match_parent"
-                android:layout_marginStart="0dp"
-                android:layout_marginTop="0dp"
-                android:layout_marginEnd="0dp"
+                android:layout_height="match_parent">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/height.login.separator.bottom"
+                    android:layout_weight="1"
+                    android:layout_marginBottom="0dp"
+                    android:layout_marginTop="0dp"
+                    android:background="@android:color/black" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@color/light_gray_protocol">
+
+                <TextView
+                    android:id="@+id/fvoting.total.voting.cards.label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ellipsize="none"
+                    android:maxLines="3"
+                    android:paddingStart="@dimen/padding.fvoting.general.data"
+                    android:paddingEnd="0dp"
+                    android:textColor="@android:color/black"
+                    android:paddingBottom="@dimen/padding.committee.label"
+                    android:paddingTop="@dimen/padding.committee.label"
+                    android:textSize="@dimen/fontsize.committee.label"
+                    android:text="@string/fvoting.votingcardsdistributed.label" />
+
+                <TextView
+                    android:id="@+id/fvoting.total.voting.cards"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:singleLine="true"
+                    android:paddingStart="0dp"
+                    android:paddingEnd="@dimen/padding.number.of.votes"
+                    android:textColor="@android:color/black"
+                    android:gravity="end"
+                    android:paddingBottom="@dimen/padding.committee.label"
+                    android:paddingTop="@dimen/padding.committee.label"
+                    android:textSize="@dimen/fontsize.committee.label"
+                    />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/height.login.separator.bottom"
+                    android:layout_weight="1"
+                    android:layout_marginBottom="0dp"
+                    android:layout_marginTop="0dp"
+                    android:background="@android:color/black" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@color/light_gray_protocol">
+
+                <TextView
+                    android:id="@+id/fvoting.valid.cards.label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ellipsize="none"
+                    android:maxLines="3"
+                    android:paddingStart="@dimen/padding.fvoting.general.data"
+                    android:paddingEnd="0dp"
+                    android:textColor="@android:color/black"
+                    android:paddingBottom="@dimen/padding.committee.label"
+                    android:paddingTop="@dimen/padding.committee.label"
+                    android:textSize="@dimen/fontsize.committee.label"
+                    android:text="@string/fvoting.validcards.label" />
+
+                <TextView
+                    android:id="@+id/fvoting.valid.cards"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:singleLine="true"
+                    android:paddingStart="0dp"
+                    android:paddingEnd="@dimen/padding.number.of.votes"
+                    android:textColor="@android:color/black"
+                    android:gravity="end"
+                    android:paddingBottom="@dimen/padding.committee.label"
+                    android:paddingTop="@dimen/padding.committee.label"
+                    android:textSize="@dimen/fontsize.committee.label"
+                    />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/light_gray_protocol"
-                android:stretchColumns="1">
+                android:background="@color/light_gray_protocol">
 
-                <TableRow
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:ellipsize="none"
-                        android:maxLines="3"
-                        android:paddingStart="@dimen/padding.fvoting.general.data"
-                        android:paddingEnd="0dp"
-                        android:textColor="@android:color/black"
-                        android:paddingBottom="@dimen/padding.committee.label"
-                        android:paddingTop="@dimen/padding.committee.label"
-                        android:textSize="@dimen/fontsize.committee.label"
-                        android:text="@string/fvoting.total.entitled.to.vote.label" />
-
-                    <TextView
-                        android:id="@+id/fvoting.total.entitled.to.vote"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0"
-                        android:singleLine="true"
-                        android:paddingStart="0dp"
-                        android:paddingEnd="@dimen/padding.number.of.votes"
-                        android:textColor="@android:color/black"
-                        android:gravity="end"
-                        android:paddingBottom="@dimen/padding.committee.label"
-                        android:paddingTop="@dimen/padding.committee.label"
-                        android:textSize="@dimen/fontsize.committee.label"
-                         />
-
-                </TableRow>
-
-                <TableRow
+                <View
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="@dimen/height.login.separator.bottom"
+                    android:layout_weight="1"
+                    android:layout_marginBottom="0dp"
+                    android:layout_marginTop="0dp"
+                    android:background="@android:color/black" />
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/height.login.separator.bottom"
-                        android:layout_weight="1"
-                        android:layout_marginBottom="0dp"
-                        android:layout_marginTop="0dp"
-                        android:background="@android:color/black" />
+            </TableRow>
 
-                </TableRow>
+            <TableRow
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@color/light_gray_protocol">
 
-                <TableRow
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/fvoting.invalid.votes.label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ellipsize="none"
+                    android:paddingStart="@dimen/padding.fvoting.general.data"
+                    android:paddingEnd="0dp"
+                    android:textColor="@android:color/black"
+                    android:paddingBottom="@dimen/padding.committee.label"
+                    android:paddingTop="@dimen/padding.committee.label"
+                    android:textSize="@dimen/fontsize.committee.label"
+                    android:text="@string/fvoting.nonvalidvotes.label" />
 
-                    <TextView
-                        android:id="@+id/fvoting.total.voting.cards.label"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:ellipsize="none"
-                        android:maxLines="3"
-                        android:paddingStart="@dimen/padding.fvoting.general.data"
-                        android:paddingEnd="0dp"
-                        android:textColor="@android:color/black"
-                        android:paddingBottom="@dimen/padding.committee.label"
-                        android:paddingTop="@dimen/padding.committee.label"
-                        android:textSize="@dimen/fontsize.committee.label"
-                        android:text="@string/fvoting.votingcardsdistributed.label" />
+                <TextView
+                    android:id="@+id/fvoting.invalid.votes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:singleLine="true"
+                    android:paddingStart="0dp"
+                    android:paddingEnd="@dimen/padding.number.of.votes"
+                    android:textColor="@android:color/black"
+                    android:gravity="end"
+                    android:paddingBottom="@dimen/padding.committee.label"
+                    android:paddingTop="@dimen/padding.committee.label"
+                    android:textSize="@dimen/fontsize.committee.label"
+                    />
 
-                    <TextView
-                        android:id="@+id/fvoting.total.voting.cards"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0"
-                        android:singleLine="true"
-                        android:paddingStart="0dp"
-                        android:paddingEnd="@dimen/padding.number.of.votes"
-                        android:textColor="@android:color/black"
-                        android:gravity="end"
-                        android:paddingBottom="@dimen/padding.committee.label"
-                        android:paddingTop="@dimen/padding.committee.label"
-                        android:textSize="@dimen/fontsize.committee.label"
-                        />
+            </TableRow>
 
-                </TableRow>
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/height.login.separator.bottom"
-                        android:layout_weight="1"
-                        android:layout_marginBottom="0dp"
-                        android:layout_marginTop="0dp"
-                        android:background="@android:color/black" />
-
-                </TableRow>
-
-                <TableRow
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:id="@+id/fvoting.valid.cards.label"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:ellipsize="none"
-                        android:maxLines="3"
-                        android:paddingStart="@dimen/padding.fvoting.general.data"
-                        android:paddingEnd="0dp"
-                        android:textColor="@android:color/black"
-                        android:paddingBottom="@dimen/padding.committee.label"
-                        android:paddingTop="@dimen/padding.committee.label"
-                        android:textSize="@dimen/fontsize.committee.label"
-                        android:text="@string/fvoting.validcards.label" />
-
-                    <TextView
-                        android:id="@+id/fvoting.valid.cards"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0"
-                        android:singleLine="true"
-                        android:paddingStart="0dp"
-                        android:paddingEnd="@dimen/padding.number.of.votes"
-                        android:textColor="@android:color/black"
-                        android:gravity="end"
-                        android:paddingBottom="@dimen/padding.committee.label"
-                        android:paddingTop="@dimen/padding.committee.label"
-                        android:textSize="@dimen/fontsize.committee.label"
-                       />
-
-                </TableRow>
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/height.login.separator.bottom"
-                        android:layout_weight="1"
-                        android:layout_marginBottom="0dp"
-                        android:layout_marginTop="0dp"
-                        android:background="@android:color/black" />
-
-                </TableRow>
-
-                <TableRow
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:id="@+id/fvoting.invalid.votes.label"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:ellipsize="none"
-                        android:paddingStart="@dimen/padding.fvoting.general.data"
-                        android:paddingEnd="0dp"
-                        android:textColor="@android:color/black"
-                        android:paddingBottom="@dimen/padding.committee.label"
-                        android:paddingTop="@dimen/padding.committee.label"
-                        android:textSize="@dimen/fontsize.committee.label"
-                        android:text="@string/fvoting.nonvalidvotes.label" />
-
-                    <TextView
-                        android:id="@+id/fvoting.invalid.votes"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0"
-                        android:singleLine="true"
-                        android:paddingStart="0dp"
-                        android:paddingEnd="@dimen/padding.number.of.votes"
-                        android:textColor="@android:color/black"
-                        android:gravity="end"
-                        android:paddingBottom="@dimen/padding.committee.label"
-                        android:paddingTop="@dimen/padding.committee.label"
-                        android:textSize="@dimen/fontsize.committee.label"
-                        />
-
-                </TableRow>
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/height.login.separator.bottom"
-                        android:layout_weight="1"
-                        android:layout_marginBottom="0dp"
-                        android:layout_marginTop="0dp"
-                        android:background="@android:color/black" />
-
-                </TableRow>
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:id="@+id/fvoting.valid.votes.label"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:ellipsize="none"
-                        android:paddingStart="@dimen/padding.fvoting.general.data"
-                        android:paddingEnd="0dp"
-                        android:textColor="@android:color/black"
-                        android:paddingBottom="@dimen/padding.committee.label"
-                        android:paddingTop="@dimen/padding.committee.label"
-                        android:textSize="@dimen/fontsize.committee.label"
-                        android:text="@string/fvoting.validvotes.label" />
-
-                    <TextView
-                        android:id="@+id/fvoting.valid.votes"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0"
-                        android:singleLine="true"
-                        android:paddingStart="0dp"
-                        android:paddingEnd="@dimen/padding.number.of.votes"
-                        android:textColor="@android:color/holo_purple"
-                        android:gravity="end"
-                        android:paddingBottom="@dimen/padding.committee.label"
-                        android:paddingTop="@dimen/padding.committee.label"
-                        android:textSize="@dimen/fontsize.committee.label"
-                         />
-
-                </TableRow>
-
-            </TableLayout>
-
-            <View
-                android:id="@+id/fvoting.separator.button"
+            <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/height.login.separator.bottom"
-                android:layout_below="@+id/fvoting.generaldata.layout"
-                android:layout_marginBottom="0dp"
-                android:layout_marginTop="0dp"
-                android:background="@android:color/black" />
+                android:layout_height="match_parent">
 
-        </RelativeLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/height.login.separator.bottom"
+                    android:layout_weight="1"
+                    android:layout_marginBottom="0dp"
+                    android:layout_marginTop="0dp"
+                    android:background="@android:color/black" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/light_gray_protocol">
+
+                <TextView
+                    android:id="@+id/fvoting.valid.votes.label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ellipsize="none"
+                    android:paddingStart="@dimen/padding.fvoting.general.data"
+                    android:paddingEnd="0dp"
+                    android:textColor="@android:color/black"
+                    android:paddingBottom="@dimen/padding.committee.label"
+                    android:paddingTop="@dimen/padding.committee.label"
+                    android:textSize="@dimen/fontsize.committee.label"
+                    android:text="@string/fvoting.validvotes.label" />
+
+                <TextView
+                    android:id="@+id/fvoting.valid.votes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:singleLine="true"
+                    android:paddingStart="0dp"
+                    android:paddingEnd="@dimen/padding.number.of.votes"
+                    android:textColor="@android:color/holo_purple"
+                    android:gravity="end"
+                    android:paddingBottom="@dimen/padding.committee.label"
+                    android:paddingTop="@dimen/padding.committee.label"
+                    android:textSize="@dimen/fontsize.committee.label"
+                    />
+
+            </TableRow>
+
+        </TableLayout>
+
     </ScrollView>
 
     <LinearLayout

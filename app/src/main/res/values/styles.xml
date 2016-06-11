@@ -28,13 +28,14 @@
     <style name="MyPreferenceTheme" parent="@android:style/Theme.Dialog">
         <item name="android:listSeparatorTextViewStyle">@style/ListSeparator</item>
         <item name="android:listPreferredItemPaddingLeft">10dp</item>
-        <item name="android:textColor">@color/dark_gray</item>
+        <item name="android:textColor">@android:color/black</item>
         <item name="android:textColorSecondary">@color/light_gray</item>
+        <item name="android:textSize">@dimen/fontsize.settings.item</item>
         <item name="android:gravity">left</item>
         <item name="android:listDivider">@color/green</item>
         <item name="android:paddingRight">0dp</item>
         <item name="android:paddingLeft">0dp</item>
-        <item name="android:alertDialogIcon">@android:color/transparent</item>
+        <item name="android:dialogTitle">PreferenceTitleDialogStyle</item>
         <item name="android:dialogTheme">@style/PreferenceDialogStyle</item>
         <item name="android:alertDialogTheme">@style/PreferenceDialogStyle</item>
     </style>
@@ -45,9 +46,8 @@
 
     <style name="ListSeparator">
         <item name="android:background">@color/green</item>
-        <item name="android:height">@dimen/abc_action_bar_default_height_material</item>
         <item name="android:gravity">center_vertical</item>
-        <item name="android:textSize">@dimen/fontsize.login.label</item>
+        <item name="android:textSize">@dimen/fontsize.settings.group</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_marginRight">0dp</item>
         <item name="android:layout_marginLeft">0dp</item>

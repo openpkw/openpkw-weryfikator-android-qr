@@ -1,5 +1,6 @@
 package pl.openpkw.openpkwmobile.activities;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -8,9 +9,14 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -49,6 +55,7 @@ import pl.openpkw.openpkwmobile.qr.QrWrapper;
 import pl.openpkw.openpkwmobile.utils.Utils;
 
 import static pl.openpkw.openpkwmobile.fragments.LoginFragment.timer;
+import static pl.openpkw.openpkwmobile.utils.Utils.PERMISSION_REQUEST_CAMERA;
 
 public class ScanQrCodeActivity extends AppCompatActivity {
 
@@ -57,10 +64,14 @@ public class ScanQrCodeActivity extends AppCompatActivity {
     public static HashSet<String> electionCommitteeDistrictList;
     public static HashMap<String,ElectionCommitteeDTO> electionCommitteeMap;
 
+    private View scanLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan_qrcode);
+
+        scanLayout = findViewById(R.id.scan_qr_fragment_container);
 
         FragmentManager fm = getFragmentManager();
         ScanQrCodeFragment scanQRFragment = (ScanQrCodeFragment)
@@ -72,7 +83,93 @@ public class ScanQrCodeActivity extends AppCompatActivity {
             ft.commit();
             fm.executePendingTransactions();
         }
+
+        //check access to camera
+        checkPermissions();
     }
+
+    private void showProcessInfo() {
+        Snackbar.make(scanLayout, "Krok 3 - Skanowanie kodu QR",
+                Snackbar.LENGTH_SHORT)
+                .show();
+    }
+
+    private void checkPermissions() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+            requestCameraPermission();
+        }else
+            showProcessInfo();
+    }
+
+    private void requestCameraPermission() {
+        // Permission has not been granted and must be requested.
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                Manifest.permission.CAMERA)) {
+            // Provide an additional rationale to the user if the permission was not granted
+            // and the user would benefit from additional context for the use of the permission.
+            // Display a SnackBar with a button to request the missing permission.
+
+            Snackbar snackbar = Snackbar.make(scanLayout,"Zezwól na dostęp do aparatu w celu zeskanowania kodu QR.",
+                    Snackbar.LENGTH_INDEFINITE).setAction("OK",new View.OnClickListener(){
+
+                @Override
+                public void onClick(View view) {
+                    // Request the permission
+                    ActivityCompat.requestPermissions(ScanQrCodeActivity.this,
+                            new String[]{Manifest.permission.CAMERA},
+                            PERMISSION_REQUEST_CAMERA);
+                }
+            });
+
+            snackbar.show();
+
+            TextView snackBarTextView = (TextView)snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+            snackBarTextView.setMaxLines(5);
+
+        } else {
+            Snackbar.make(scanLayout,
+                    "Permission is not available. Requesting camera permission.",
+                    Snackbar.LENGTH_SHORT).show();
+            // Request the permission. The result will be received in onRequestPermissionResult().
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA},
+                    PERMISSION_REQUEST_CAMERA);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+
+        CountDownTimer delayTimer = new CountDownTimer(1000,2000) {
+            @Override
+            public void onTick(long l) {
+
+            }
+
+            @Override
+            public void onFinish() {
+                showProcessInfo();
+            }
+        };
+
+        if (requestCode == PERMISSION_REQUEST_CAMERA) {
+            // Request for camera permission.
+            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Snackbar.make(scanLayout, "Aplikacja ma zezwolenie na dostęp do aparatu.",
+                        Snackbar.LENGTH_SHORT)
+                        .show();
+                delayTimer.start();
+            } else {
+                // Permission request was denied.
+                Snackbar.make(scanLayout, "Aplikacja nie ma zezwolenia na dostep do aparatu.",
+                        Snackbar.LENGTH_SHORT)
+                        .show();
+                delayTimer.start();
+            }
+        }
+    }
+
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch(requestCode) {
@@ -114,6 +211,11 @@ public class ScanQrCodeActivity extends AppCompatActivity {
                         if (scanQRFragment != null) {
                             scanQRFragment.loadData();
                         }
+
+                        //show info QR scanned
+                        Snackbar.make(scanLayout, "Kod QR został zeskanowany. Przejdź dalej.",
+                                Snackbar.LENGTH_LONG)
+                                .show();
                     }else{
                         showDialogIncorrectQr();
                     }
@@ -218,7 +320,9 @@ public class ScanQrCodeActivity extends AppCompatActivity {
         } else {
             if (doubleBackToExitPressedOnce) {
                 super.onBackPressed();
-                timer.cancel();
+
+                if(timer!=null)
+                    timer.cancel();
             }
 
             this.doubleBackToExitPressedOnce = true;

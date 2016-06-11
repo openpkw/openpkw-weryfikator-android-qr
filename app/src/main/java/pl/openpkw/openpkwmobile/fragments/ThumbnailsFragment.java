@@ -19,15 +19,18 @@ import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.text.Spannable;
 import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
+import android.text.style.BackgroundColorSpan;
 import android.util.Base64;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -44,6 +47,8 @@ import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.security.GeneralSecurityException;
 import java.security.PrivateKey;
+import java.util.ArrayList;
+import java.util.List;
 
 import pl.openpkw.openpkwmobile.R;
 import pl.openpkw.openpkwmobile.activities.EndActivity;
@@ -89,6 +94,8 @@ public class ThumbnailsFragment extends Fragment {
 
     private TextView territorialCodeTextView;
     private TextView peripheryNumberTextView;
+
+    private List<String> spinnerData = new ArrayList<>();
 
     private ContextThemeWrapper contextThemeWrapper;
 
@@ -147,17 +154,45 @@ public class ThumbnailsFragment extends Fragment {
 
         loadThumbnails();
 
+
+        Spinner protocolDataSpinner = (Spinner) thumbnailsView.findViewById(R.id.thumbnails_data_spinner);
+        //set data adapter
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),
+                R.layout.view_spinner_item, spinnerData);
+        adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
+        protocolDataSpinner.setAdapter(adapter);
+        protocolDataSpinner.setOnItemSelectedListener(spinnerItemListener);
+
         return thumbnailsView;
     }
 
-    public void loadData() {
+    AdapterView.OnItemSelectedListener spinnerItemListener = new AdapterView.OnItemSelectedListener() {
+        @Override
+        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+            adapterView.setSelection(0);
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> adapterView) {
+
+        }
+    };
+
+    private void loadData() {
         SharedPreferences sharedPref = getActivity().getSharedPreferences(Utils.DATA, Context.MODE_PRIVATE);
-        String territorial_code = sharedPref.getString(Utils.TERRITORIAL_CODE, "Kod terytorialny");
-        String periphery_number = "Nr " + sharedPref.getString(Utils.PERIPHERY_NUMBER, "obwodu");
+        String territorial_code = "  "+sharedPref.getString(Utils.TERRITORIAL_CODE, "Kod terytorialny")+"  ";
+        String periphery_number = "Nr "+sharedPref.getString(Utils.PERIPHERY_NUMBER, "obwodu");
+        String periphery_name = sharedPref.getString(Utils.PERIPHERY_NAME, "Nazwa");
+        String periphery_address = sharedPref.getString(Utils.PERIPHERY_ADDRESS, "Adres");
+        String districtNumber = sharedPref.getString(Utils.DISTRICT_NUMBER, "Okręg Wyborczy Nr");
         Spannable spannable = new SpannableString(territorial_code);
-        spannable.setSpan(new ForegroundColorSpan(Color.GREEN), 0, territorial_code.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannable.setSpan(new BackgroundColorSpan(Color.GREEN),0, territorial_code.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         territorialCodeTextView.setText(spannable);
         peripheryNumberTextView.setText(periphery_number);
+        spinnerData.add(getString(R.string.committee_label));
+        spinnerData.add(periphery_name);
+        spinnerData.add(periphery_address);
+        spinnerData.add(districtNumber);
     }
 
     View.OnClickListener sendPhotosClickListener = new View.OnClickListener() {

@@ -9,7 +9,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Spannable;
 import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
+import android.text.style.BackgroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,7 +59,6 @@ public class VotingFormFragment extends Fragment {
         nextButton.setOnClickListener(nextButtonClickListener);
 
         loadData();
-
 
         Spinner protocolDataSpinner = (Spinner) v.findViewById(R.id.fvoting_committee_data_spinner);
         //set data adapter
@@ -111,13 +110,13 @@ public class VotingFormFragment extends Fragment {
     private void loadData() {
         SharedPreferences sharedPref = getActivity().getSharedPreferences(Utils.DATA, Context.MODE_PRIVATE);
         String scannedQR = sharedPref.getString(Utils.QR,null);
-        String territorial_code = sharedPref.getString(Utils.TERRITORIAL_CODE, "Kod terytorialny");
+        String territorial_code = "  "+sharedPref.getString(Utils.TERRITORIAL_CODE, "Kod terytorialny")+"  ";
         String periphery_number = "Nr "+sharedPref.getString(Utils.PERIPHERY_NUMBER, "obwodu");
         String periphery_name = sharedPref.getString(Utils.PERIPHERY_NAME, "Nazwa");
         String periphery_address = sharedPref.getString(Utils.PERIPHERY_ADDRESS, "Adres");
         String districtNumber = sharedPref.getString(Utils.DISTRICT_NUMBER, "Okręg Wyborczy Nr");
         Spannable spannable = new SpannableString(territorial_code);
-        spannable.setSpan(new ForegroundColorSpan(Color.GREEN), 0 ,territorial_code.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannable.setSpan(new BackgroundColorSpan(Color.GREEN),0, territorial_code.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         territorialCodeTextView.setText(spannable);
         peripheryNumberTextView.setText(periphery_number);
         spinnerData.add(getString(R.string.committee_label));

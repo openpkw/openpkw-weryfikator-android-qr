@@ -13,7 +13,6 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
-
     <application
         android:allowBackup="true"
         android:largeHeap="true"
@@ -29,29 +28,49 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.LoginActivity" />
+        <activity android:name=".activities.LoginActivity"
+            android:label="Krok 1 z 9"
+            android:screenOrientation="portrait"
+            />
         <activity android:name=".activities.PasswordRestoreActivity" />
         <activity
             android:name=".activities.ScanQrCodeActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden"
+            android:label="Krok 3 z 9"/>
         <activity
             android:name=".activities.VotingFormActivity"
-            android:windowSoftInputMode="stateHidden" />
+            android:windowSoftInputMode="stateHidden"
+            android:screenOrientation="portrait"
+            android:label="Krok 4 z 9"/>
         <activity
             android:name=".views.TestActivity"
             android:label="@string/app.name" />
-        <activity android:name=".activities.RegisterUserActivity" />
-        <activity android:name=".activities.EndActivity" />
-        <activity android:name=".activities.CommitteesResultActivity" />
-        <activity android:name=".activities.ElectionCommitteeVotesActivity" />
-        <activity android:name=".activities.QueryAddPhotosActivity" />
+        <activity android:name=".activities.RegisterUserActivity"
+            android:screenOrientation="portrait"
+            android:label="Krok 2 z 9"/>
+        <activity android:name=".activities.EndActivity"
+            android:screenOrientation="portrait"
+            android:label="Dziękujemy"/>
+        <activity android:name=".activities.CommitteesResultActivity"
+            android:screenOrientation="portrait"
+            android:label="Krok 5 z 9"/>
+        <activity android:name=".activities.ElectionCommitteeVotesActivity"
+            android:screenOrientation="portrait"
+            android:label="Krok 6 z 9"/>
+        <activity android:name=".activities.QueryAddPhotosActivity"
+            android:label="Krok 7 z 9"/>
         <activity android:name=".activities.AddPhotosActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:label="Krok 8 z 9"/>
         <activity android:name=".activities.NextPhotoActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:label="Krok 8 z 9"/>
         <activity android:name=".activities.ThumbnailsActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".activities.SendDataActivity"/>
+            android:screenOrientation="portrait"
+            android:label="Krok 9 z 9"/>
+        <activity android:name=".activities.SendDataActivity"
+            android:label="Krok 9 z 9"/>
         <activity android:name=".activities.TimeoutDialogActivity"
             android:theme="@style/Theme.Transparent"
             android:screenOrientation="portrait"/>

@@ -11,7 +11,7 @@
         <TextView
             android:id="@+id/about.label.top"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/abc_action_bar_default_height_material"
+            android:layout_height="wrap_content"
             android:gravity ="center_vertical"
             android:text="@string/about.label.about"
             android:paddingStart="@dimen/margin.login.left"
@@ -21,7 +21,7 @@
             android:textStyle="bold"
             android:background="@color/green"
             android:textColor="@android:color/white"
-            android:textSize="@dimen/fontsize.login.label" />
+            android:textSize="@dimen/fontsize.settings.group" />
 
         <TextView
             android:id="@+id/about.description"
@@ -29,7 +29,9 @@
             android:layout_height="wrap_content"
             android:gravity ="center_vertical"
             android:text="@string/about.label.about.description"
-            android:textSize="@dimen/abc_text_size_medium_material"
+            android:textSize="@dimen/fontsize.settings.item"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
             android:paddingStart="@dimen/margin.login.left"
             android:paddingEnd="@dimen/margin.login.left"
             android:paddingLeft="@dimen/margin.login.left"
@@ -41,7 +43,7 @@
         <TextView
             android:id="@+id/about.label.what"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/abc_action_bar_default_height_material"
+            android:layout_height="wrap_content"
             android:gravity ="center_vertical"
             android:text="@string/about.label.what"
             android:paddingStart="@dimen/margin.login.left"
@@ -52,7 +54,7 @@
             android:background="@color/green"
             android:textColor="@android:color/white"
             android:layout_below="@+id/about.description"
-            android:textSize="@dimen/fontsize.login.label" />
+            android:textSize="@dimen/fontsize.settings.group" />
 
         <TextView
             android:id="@+id/about.label.what.description"
@@ -60,7 +62,9 @@
             android:layout_height="wrap_content"
             android:gravity ="center_vertical"
             android:text="@string/about.label.what.description"
-            android:textSize="@dimen/abc_text_size_medium_material"
+            android:textSize="@dimen/fontsize.settings.item"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
             android:paddingStart="@dimen/margin.login.left"
             android:paddingEnd="@dimen/margin.login.left"
             android:paddingLeft="@dimen/margin.login.left"
@@ -72,7 +76,7 @@
         <TextView
             android:id="@+id/about.label.help"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/abc_action_bar_default_height_material"
+            android:layout_height="wrap_content"
             android:gravity ="center_vertical"
             android:text="@string/about.label.help"
             android:paddingStart="@dimen/margin.login.left"
@@ -83,7 +87,7 @@
             android:background="@color/green"
             android:textColor="@android:color/white"
             android:layout_below="@+id/about.label.what.description"
-            android:textSize="@dimen/fontsize.login.label" />
+            android:textSize="@dimen/fontsize.settings.group" />
 
         <TextView
             android:id="@+id/about.label.form"
@@ -91,11 +95,13 @@
             android:layout_height="wrap_content"
             android:gravity ="center_vertical"
             android:text="@string/about.label.form"
-            android:textSize="@dimen/abc_text_size_medium_material"
+            android:textSize="@dimen/fontsize.settings.item"
             android:paddingStart="@dimen/margin.login.left"
             android:paddingEnd="@dimen/margin.login.left"
             android:paddingLeft="@dimen/margin.login.left"
             android:paddingRight="@dimen/margin.login.left"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
             android:textColor="@color/dark_gray"
             android:layout_below="@+id/about.label.help"
             android:layout_alignParentStart="true" />
@@ -107,7 +113,7 @@
             android:layout_height="wrap_content"
             android:gravity ="center_vertical"
             android:text="@string/about.label.link.form"
-            android:textSize="@dimen/abc_text_size_medium_material"
+            android:textSize="@dimen/fontsize.settings.item"
             android:paddingStart="@dimen/margin.login.left"
             android:paddingEnd="@dimen/margin.login.left"
             android:paddingLeft="@dimen/margin.login.left"
@@ -122,7 +128,7 @@
             android:layout_height="wrap_content"
             android:gravity ="center_vertical"
             android:text="@string/about.label.forum"
-            android:textSize="@dimen/abc_text_size_medium_material"
+            android:textSize="@dimen/fontsize.settings.item"
             android:paddingStart="@dimen/margin.login.left"
             android:paddingEnd="@dimen/margin.login.left"
             android:paddingLeft="@dimen/margin.login.left"
@@ -138,7 +144,7 @@
             android:layout_height="wrap_content"
             android:gravity ="center_vertical"
             android:text="@string/about.label.link.forum"
-            android:textSize="@dimen/abc_text_size_medium_material"
+            android:textSize="@dimen/fontsize.settings.item"
             android:paddingStart="@dimen/margin.login.left"
             android:paddingEnd="@dimen/margin.login.left"
             android:paddingLeft="@dimen/margin.login.left"
@@ -153,7 +159,7 @@
             android:layout_height="wrap_content"
             android:gravity ="center_vertical"
             android:text="@string/about.label.news"
-            android:textSize="@dimen/abc_text_size_medium_material"
+            android:textSize="@dimen/fontsize.settings.item"
             android:paddingStart="@dimen/margin.login.left"
             android:paddingEnd="@dimen/margin.login.left"
             android:paddingLeft="@dimen/margin.login.left"
@@ -169,7 +175,7 @@
             android:layout_height="wrap_content"
             android:gravity ="center_vertical"
             android:text="@string/about.label.link.news"
-            android:textSize="@dimen/abc_text_size_medium_material"
+            android:textSize="@dimen/fontsize.settings.item"
             android:paddingStart="@dimen/margin.login.left"
             android:paddingEnd="@dimen/margin.login.left"
             android:paddingLeft="@dimen/margin.login.left"

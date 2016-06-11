@@ -1,161 +1,170 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/committees.result.label.top"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingBottom="@dimen/padding.committee.label"
-        android:paddingTop="@dimen/padding.committee.label"
-        android:paddingLeft="0dp"
-        android:paddingRight="0dp"
-        android:layout_marginStart="0dp"
-        android:layout_marginEnd="0dp"
-        android:layout_marginTop="0dp"
-        android:text="Liczba głosów uzyskana przez poszczególne KW"
-        android:gravity="center"
-        android:textSize="@dimen/fontsize.committee.label" />
-
-    <View
-        android:id="@+id/committees.result.separator.top"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/height.login.separator.bottom"
-        android:layout_below="@+id/committees.result.label.top"
-        android:layout_marginBottom="0dp"
-        android:layout_marginTop="0dp"
-        android:background="@android:color/black" />
-
-    <Spinner
-        android:id="@+id/committees.result.data.spinner"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/committees.result.separator.top"
-        android:layout_marginTop="0dp"
-        android:gravity="center_horizontal"
-        android:background="@android:color/darker_gray"
-        android:textColor="@android:color/black"
-        android:textSize="20sp"
-        />
-
-    <View
-        android:id="@+id/committees.result.spinner.separator"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/height.login.separator.top"
-        android:layout_below="@+id/committees.result.data.spinner"
-        android:layout_marginStart="0dp"
-        android:layout_marginEnd="0dp"
-        android:background="@android:color/black" />
-
-    <LinearLayout
-        android:id="@+id/committees.result.committee.id.layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/committees.result.spinner.separator"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/committees.result.periphery.number"
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:paddingBottom="@dimen/padding.committee.label"
-            android:paddingTop="@dimen/padding.committee.label"
-            android:gravity="center"
-            android:background="@android:color/darker_gray"
-            android:textColor="@android:color/black"
-            android:textSize="@dimen/fontsize.committee.label"/>
-
-        <TextView
-            android:id="@+id/committees.result.territorial.code"
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:paddingBottom="@dimen/padding.committee.label"
-            android:paddingTop="@dimen/padding.committee.label"
-            android:gravity="center"
-            android:background="@android:color/darker_gray"
-            android:textColor="@android:color/black"
-            android:textSize="@dimen/fontsize.committee.label"/>
-    </LinearLayout>
-
-    <View
-        android:id="@+id/committees.result.committee.id.separator"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/height.login.separator.top"
-        android:layout_below="@+id/committees.result.committee.id.layout"
-        android:layout_marginStart="0dp"
-        android:layout_marginEnd="0dp"
-        android:background="@android:color/black" />
-
-
-    <TableRow
-        android:id="@+id/committees.result.label.tablerow"
-        android:layout_below="@+id/committees.result.committee.id.separator"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/dark_green"
-       >
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:maxLines="2"
-            android:paddingStart="@dimen/padding.fvoting.general.data"
-            android:paddingEnd="0dp"
-            android:textColor="@android:color/white"
-            android:textSize="@dimen/fontsize.fvoting.general.data"
-            android:text="@string/election.committee.name.label" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:maxLines="2"
-            android:paddingStart="0dp"
-            android:paddingEnd="@dimen/padding.number.of.votes"
-            android:textColor="@android:color/white"
-            android:gravity="end"
-            android:textSize="@dimen/fontsize.fvoting.general.data"
-            android:text="@string/number.of.votes.label" />
-
-    </TableRow>
-
-    <ScrollView
+    <RelativeLayout
+        android:id="@+id/testLayout"
         android:layout_above="@+id/committees.result.layout.buttons"
-        android:layout_below="@+id/committees.result.label.tablerow"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/margin.protocol.data"
+        android:layout_marginRight="@dimen/margin.protocol.data"
+        android:layout_marginBottom="0dp"
+        android:layout_marginTop="@dimen/margin.top.protocol.data"
+        android:background="@drawable/protocol_border"
+        android:stretchColumns="1">
 
-            <TableLayout
-                android:id="@+id/committees.result.layout"
-                android:layout_width="match_parent"
-                android:layout_marginStart="0dp"
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <Spinner
+                android:id="@+id/committees.result.data.spinner"
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="0dp"
+                android:layout_marginStart="0dp"
                 android:layout_marginEnd="0dp"
-                android:layout_height="match_parent"
-                android:background="@color/light_gray_protocol"
-                android:stretchColumns="1">
+                android:spinnerMode="dropdown"
+                android:gravity="center_horizontal"
+                android:background="@android:color/darker_gray"
+                android:textColor="@android:color/black"
+                android:textSize="20sp"/>
+        </TableRow>
 
-            </TableLayout>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
             <View
-                android:id="@+id/committees.result.separator.button"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/height.login.separator.bottom"
-                android:layout_below="@+id/committees.result.layout"
+                android:layout_weight="1"
                 android:layout_marginBottom="0dp"
                 android:layout_marginTop="0dp"
                 android:background="@android:color/black" />
 
-        </RelativeLayout>
-    </ScrollView>
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/committees.result.periphery.number"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingBottom="@dimen/padding.committee.label"
+                android:paddingTop="@dimen/padding.committee.label"
+                android:gravity="center"
+                android:background="@android:color/darker_gray"
+                android:textColor="@android:color/black"
+                android:text="Nr obwodu"
+                android:textSize="@dimen/fontsize.committee.label"/>
+
+            <TextView
+                android:id="@+id/committees.result.territorial.code"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingBottom="@dimen/padding.committee.label"
+                android:paddingTop="@dimen/padding.committee.label"
+                android:gravity="center"
+                android:background="@android:color/darker_gray"
+                android:textColor="@android:color/black"
+                android:text="Kod terytorialny"
+                android:textSize="@dimen/fontsize.committee.label"/>
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/height.login.separator.bottom"
+                android:layout_weight="1"
+                android:layout_marginBottom="0dp"
+                android:layout_marginTop="0dp"
+                android:background="@android:color/black" />
+
+        </TableRow>
+
+
+        <TableRow
+            android:id="@+id/committees.result.label.tablerow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/dark_green"
+            >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingBottom="@dimen/padding.committee.label"
+                android:paddingTop="@dimen/padding.committee.label"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:gravity="start"
+                android:maxLines="2"
+                android:textColor="@android:color/white"
+                android:text="@string/election.committee.name.label"
+                android:textSize="@dimen/fontsize.committee.name"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingBottom="@dimen/padding.committee.label"
+                android:paddingTop="@dimen/padding.committee.label"
+                android:paddingStart="5dp"
+                android:paddingEnd="2dp"
+                android:gravity="end"
+                android:maxLines="2"
+                android:textColor="@android:color/white"
+                android:text="@string/number.of.votes.label"
+                android:textSize="@dimen/fontsize.committee.name"/>
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ScrollView
+                android:id="@+id/committees.result.layout.scroll"
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="0dp">
+
+                <TableLayout
+                    android:id="@+id/committees.result.layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginRight="2dp"
+                    android:layout_marginBottom="2dp"
+                    android:layout_marginTop="2dp"
+                    >
+
+                </TableLayout>
+
+            </ScrollView>
+
+        </TableRow>
+
+    </TableLayout>
+
+    </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/committees.result.layout.buttons"

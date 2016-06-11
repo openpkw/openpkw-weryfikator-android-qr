@@ -6,6 +6,7 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Handler;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -29,11 +30,14 @@ import static pl.openpkw.openpkwmobile.fragments.LoginFragment.timer;
 public class SendDataActivity extends AppCompatActivity implements SendDataFragment.OnFragmentInteractionListener{
 
     private boolean doubleBackToExitPressedOnce = false;
+    private View sendDataLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_send_data);
+
+        sendDataLayout = findViewById(R.id.send_data_fragment_container);
 
         FragmentManager fm = getFragmentManager();
         SendDataFragment sendDataFragment = (SendDataFragment) fm.findFragmentByTag(Utils.SEND_DATA_FRAGMENT_TAG );
@@ -43,6 +47,14 @@ public class SendDataActivity extends AppCompatActivity implements SendDataFragm
             ft.commit();
             fm.executePendingTransactions();
         }
+
+        showProcessInfo();
+    }
+
+    private void showProcessInfo() {
+        Snackbar.make( sendDataLayout, "Krok 9 - Przesłanie danych na serwer.",
+                Snackbar.LENGTH_SHORT)
+                .show();
     }
 
     @Override

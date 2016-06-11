@@ -6,6 +6,7 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -29,11 +30,14 @@ public class VotingFormActivity extends AppCompatActivity {
 
     private boolean doubleBackToExitPressedOnce = false;
     public static TextView sessionTimerTextView;
+    private View votingFormLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_voting_form);
+
+        votingFormLayout = findViewById(R.id.voting_form_fragment_container);
 
         FragmentManager fm = getFragmentManager();
         VotingFormFragment votingFormFragment = (VotingFormFragment)
@@ -45,6 +49,15 @@ public class VotingFormActivity extends AppCompatActivity {
             ft.commit();
             fm.executePendingTransactions();
         }
+
+        //show process info
+        showProcessInfo();
+    }
+
+    private void showProcessInfo() {
+        Snackbar.make(votingFormLayout, "Krok 4 - Przegląd danych z protokołu wyborczego.",
+                Snackbar.LENGTH_SHORT)
+                .show();
     }
 
     @Override

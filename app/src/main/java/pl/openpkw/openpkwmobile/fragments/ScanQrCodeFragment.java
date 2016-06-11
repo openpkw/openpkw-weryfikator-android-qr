@@ -4,17 +4,18 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.text.Spannable;
 import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
+import android.text.style.BackgroundColorSpan;
 import android.text.style.UnderlineSpan;
-import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,8 +31,9 @@ import pl.openpkw.openpkwmobile.R;
 import pl.openpkw.openpkwmobile.activities.VotingFormActivity;
 import pl.openpkw.openpkwmobile.utils.Utils;
 
-public class ScanQrCodeFragment extends Fragment {
+import static pl.openpkw.openpkwmobile.utils.Utils.PERMISSION_REQUEST_CAMERA;
 
+public class ScanQrCodeFragment extends Fragment {
 
     private IntentIntegrator integratorScan;
     private ContextThemeWrapper contextThemeWrapper;
@@ -88,11 +90,6 @@ public class ScanQrCodeFragment extends Fragment {
 
             int permissionCamera = ContextCompat.checkSelfPermission(getActivity(),
                     Manifest.permission.CAMERA);
-            Log.e(Utils.TAG, "PERMISSION CAMERA: "+permissionCamera);
-
-            int permissionFlashlight = ContextCompat.checkSelfPermission(getActivity(),
-                    Manifest.permission.FLASHLIGHT);
-            Log.e(Utils.TAG, "PERMISSION FLASHLIGHT: "+permissionFlashlight);
 
             if(permissionCamera == PackageManager.PERMISSION_GRANTED ) {
                 integratorScan.initiateScan(IntentIntegrator.QR_CODE_TYPES);
@@ -101,7 +98,15 @@ public class ScanQrCodeFragment extends Fragment {
                 builder.setMessage("Aplikacja nie ma uprawnień do obsługi aparatu telefonu. Proszę zezwolić aplikacji na korzystanie z apratu.")
                         .setTitle(R.string.dialog_warning_title)
                         .setCancelable(false)
-                        .setPositiveButton(R.string.zxing_button_ok, null);
+                        .setPositiveButton(R.string.zxing_button_ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                // Request the camera permission
+                                ActivityCompat.requestPermissions(getActivity(),
+                                        new String[]{Manifest.permission.CAMERA},
+                                        PERMISSION_REQUEST_CAMERA);
+                            }
+                        });
                 final AlertDialog dialog = builder.create();
                 dialog.show();
             }
@@ -135,13 +140,13 @@ public class ScanQrCodeFragment extends Fragment {
 
     public void loadData() {
         SharedPreferences sharedPref = getActivity().getSharedPreferences(Utils.DATA, Context.MODE_PRIVATE);
-        String territorial_code = sharedPref.getString(Utils.TERRITORIAL_CODE, "Kod terytorialny");
+        String territorial_code = "  "+sharedPref.getString(Utils.TERRITORIAL_CODE, "Kod terytorialny")+"  ";
         String periphery_number = "Nr "+sharedPref.getString(Utils.PERIPHERY_NUMBER, "obwodu");
         String periphery_name = sharedPref.getString(Utils.PERIPHERY_NAME, "Nazwa");
         String periphery_address = sharedPref.getString(Utils.PERIPHERY_ADDRESS, "Adres");
         Spannable spannable = new SpannableString(territorial_code);
-        spannable.setSpan(new ForegroundColorSpan(Color.GREEN), 0 ,territorial_code.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        territorialCodeTextView.setText( spannable);
+        spannable.setSpan(new BackgroundColorSpan(Color.GREEN),0, territorial_code.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        territorialCodeTextView.setText(spannable);
         peripheryNumberTextView.setText(periphery_number);
         peripheryNameTextView.setText(periphery_name);
         peripheryAddressTextView.setText(periphery_address);

@@ -10,7 +10,7 @@
         android:layout_above="@+id/query.add.photos.separator"
         android:layout_marginStart="@dimen/margin.login.left"
         android:text="Czy chcesz dodać dokumentację fotograficzną protokołu wyborczego?"
-        android:textSize="@dimen/fontsize.login.label" />
+        android:textSize="@dimen/fontsize.query" />
 
     <View
         android:id="@+id/query.add.photos.separator"

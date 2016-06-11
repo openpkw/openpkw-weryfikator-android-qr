@@ -1,5 +1,6 @@
 <resources>
     <string name="app.name">Projekt OpenPKW</string>
+    <string name="add.photos.label.take.photo">Zrób zdjęcie każdej \npojedynczej i kolejnej \nstronie protokołu wyborczego</string>
     <string name="rules.url">https://openpkw.pl/</string>
     <string name="rules.text">Zasady korzystania z aplikacji</string>
     <string name="action_settings">Ustawienia</string>
@@ -59,7 +60,7 @@
     <string name="fvoting.validvotes.label">Głosów ważnych:</string>
     <string name="fvoting.votingcardsdistributed.label">Wydano kart do głosowania:</string>
     <string name="title_activity_scan_qrcode">ScanQRcodeActivity</string>
-    <string name="scan.qr.label.scan">Skanuj kod QR z ostatniej strony protokołu wyborczego</string>
+    <string name="scan.qr.label.scan">Skanuj kod QR z ostatniej \nstrony protokołu wyborczego</string>
     <string name="scan.qr.buttonlabel.help">Nie wiesz jak zeskanować?</string>
     <string name="scan.qr.buttonlabel.scan">Skanuj</string>
     <string name="scan.qr.buttonlabel.send">Wyślij</string>

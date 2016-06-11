@@ -6,6 +6,7 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Handler;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -29,11 +30,14 @@ import static pl.openpkw.openpkwmobile.fragments.LoginFragment.timer;
 public class QueryAddPhotosActivity extends AppCompatActivity implements QueryAddPhotosFragment.OnFragmentInteractionListener {
 
     private boolean doubleBackToExitPressedOnce = false;
+    private View queryAddPhotosLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_query_add_photos);
+
+        queryAddPhotosLayout = findViewById(R.id.query_add_photos_fragment_container);
 
         FragmentManager fm = getFragmentManager();
         QueryAddPhotosFragment queryAddPhotosFragment = (QueryAddPhotosFragment) fm.findFragmentByTag(Utils.QUERY_ADD_PHOTOS_FRAGMENT_TAG);
@@ -43,6 +47,15 @@ public class QueryAddPhotosActivity extends AppCompatActivity implements QueryAd
             ft.commit();
             fm.executePendingTransactions();
         }
+
+        //show process info
+        showProcessInfo();
+    }
+
+    private void showProcessInfo() {
+        Snackbar.make(queryAddPhotosLayout, "Krok 7 - Udziel odpowiedzi na pytanie.",
+                Snackbar.LENGTH_SHORT)
+                .show();
     }
 
     @Override

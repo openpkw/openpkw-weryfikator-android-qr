@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="rules.fragment.background">#fff</color>
+    <item name="territorial.code.green" type="color">#FF00FF00</item>
     <item name="light_green" type="color">#59FF18</item>
     <item name="green" type="color">#86B404</item>
     <item name="dark_green" type="color">#4B610B</item>
     <item name="dark_gray" type="color">#666666</item>
-    <item name="light_gray" type="color">#808080</item><item name="light_gray_protocol" type="color">#dbdbdb</item>
+    <item name="light_gray" type="color">#808080</item>
+    <item name="light_gray_protocol" type="color">#dbdbdb</item>
 </resources>

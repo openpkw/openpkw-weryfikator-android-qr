@@ -22,7 +22,8 @@
                 android:layout_marginTop="5dp"
                 android:gravity="center"
                 android:text="Twoje dane zostały poprawnie przesłane na serwer"
-                android:textSize="@dimen/fontsize.login.label" />
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/fontsize.thank.you" />
 
             <LinearLayout
                 android:id="@+id/fragment.end.logo.layout"
@@ -33,13 +34,13 @@
                 android:layout_below="@id/fragment.end.label.data.ok"
                 android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/fragment.end.logo"
-                android:foregroundGravity="center_horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/pkw_logo"
-                android:contentDescription="@string/logo" />
+                <ImageView
+                    android:id="@+id/fragment.end.logo"
+                    android:foregroundGravity="center_horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/pkw_logo"
+                    android:contentDescription="@string/logo" />
             </LinearLayout>
 
 
@@ -52,8 +53,9 @@
                 android:layout_marginEnd="@dimen/margin.login.left"
                 android:layout_marginTop="5dp"
                 android:gravity="center"
+                android:textColor="@android:color/black"
                 android:text="Dziękujemy za poświęcony czas i dobrze wykonaną misję społeczną"
-                android:textSize="@dimen/fontsize.login.label" />
+                android:textSize="@dimen/fontsize.thank.you" />
 
         </RelativeLayout>
     </ScrollView>

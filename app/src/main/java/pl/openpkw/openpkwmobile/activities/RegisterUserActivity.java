@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -21,10 +22,15 @@ import pl.openpkw.openpkwmobile.utils.Utils;
 
 public class RegisterUserActivity extends AppCompatActivity {
 
+    private View userRegisterLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_user);
+
+        userRegisterLayout = findViewById(R.id.register_fragment_container);
+
         FragmentManager fm = getFragmentManager();
         RegisterUserFragment registerUserFragment = (RegisterUserFragment )
                 fm.findFragmentByTag(Utils.REGISTER_USER_FRAGMENT_TAG);
@@ -35,6 +41,15 @@ public class RegisterUserActivity extends AppCompatActivity {
             ft.commit();
             fm.executePendingTransactions();
         }
+
+        //show process info user registration
+        showProcessInfo();
+    }
+
+    private void showProcessInfo() {
+        Snackbar.make(userRegisterLayout, "Krok 2 - Rejestracja użytkownika w systemie",
+                Snackbar.LENGTH_LONG)
+                .show();
     }
 
     @Override

@@ -3,130 +3,162 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/add.photos.label.top"
+    <TableLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="@dimen/padding.committee.label"
-        android:paddingTop="@dimen/padding.committee.label"
-        android:paddingLeft="@dimen/padding.committee.label"
-        android:paddingRight="@dimen/padding.committee.label"
-        android:layout_marginStart="0dp"
-        android:layout_marginEnd="0dp"
-        android:layout_marginTop="0dp"
-        android:text="@string/scan_qr_label_enter_data"
-        android:gravity="center"
-        android:background="@android:color/white"
-        android:textSize="@dimen/fontsize.committee.label" />
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="@dimen/margin.protocol.data"
+        android:layout_marginRight="@dimen/margin.protocol.data"
+        android:layout_marginBottom="0dp"
+        android:layout_marginTop="@dimen/margin.top.protocol.data"
+        android:background="@drawable/protocol_border"
+        android:layout_above="@+id/add.photos.forward.button"
+        android:stretchColumns="1">
 
-    <View
-        android:id="@+id/add.photos.separator.top"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/height.login.separator.top"
-        android:layout_below="@id/add.photos.label.top"
-        android:layout_marginStart="0dp"
-        android:layout_marginEnd="0dp"
-        android:background="@android:color/black" />
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/add.photos.label.committee.id"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/add.photos.separator.top"
-        android:paddingLeft="@dimen/padding.committee.label"
-        android:paddingRight="@dimen/padding.committee.label"
-        android:layout_marginStart="0dp"
-        android:layout_marginEnd="0dp"
-        android:paddingTop="@dimen/padding.committee.label"
-        android:paddingBottom="@dimen/padding.committee.label"
-        android:text="@string/committee_label"
-        android:gravity="center"
-        android:background="@android:color/darker_gray"
-        android:textColor="@android:color/black"
-        android:textSize="@dimen/fontsize.committee.label" />
+            <Spinner
+                android:id="@+id/add.photos.data.spinner"
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="0dp"
+                android:layout_marginStart="0dp"
+                android:layout_marginEnd="0dp"
+                android:spinnerMode="dropdown"
+                android:gravity="center_horizontal"
+                android:background="@android:color/darker_gray"
+                android:textColor="@android:color/black"
+                android:textSize="20sp"/>
+        </TableRow>
 
-    <View
-        android:id="@+id/add.photos.committee.label.separator"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/height.login.separator.top"
-        android:layout_below="@id/add.photos.label.committee.id"
-        android:layout_marginStart="0dp"
-        android:layout_marginEnd="0dp"
-        android:background="@android:color/black" />
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    <LinearLayout
-        android:id="@+id/add.photos.committee.id.layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/add.photos.committee.label.separator"
-        android:orientation="horizontal">
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/height.login.separator.bottom"
+                android:layout_weight="1"
+                android:layout_marginBottom="0dp"
+                android:layout_marginTop="0dp"
+                android:background="@android:color/black" />
 
-        <TextView
-            android:id="@+id/add.photos.periphery.number"
-            android:layout_width="0dip"
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/add.photos.periphery.number"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingBottom="@dimen/padding.committee.label"
+                android:paddingTop="@dimen/padding.committee.label"
+                android:gravity="center"
+                android:background="@android:color/darker_gray"
+                android:textColor="@android:color/black"
+                android:text="Nr obwodu"
+                android:textSize="@dimen/fontsize.committee.label"/>
+
+            <TextView
+                android:id="@+id/add.photos.territorial.code"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingBottom="@dimen/padding.committee.label"
+                android:paddingTop="@dimen/padding.committee.label"
+                android:gravity="center"
+                android:background="@android:color/darker_gray"
+                android:textColor="@android:color/black"
+                android:text="Kod terytorialny"
+                android:textSize="@dimen/fontsize.committee.label"/>
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/height.login.separator.bottom"
+                android:layout_weight="1"
+                android:layout_marginBottom="0dp"
+                android:layout_marginTop="0dp"
+                android:background="@android:color/black" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:paddingBottom="@dimen/padding.committee.label"
-            android:paddingTop="@dimen/padding.committee.label"
-            android:gravity="center"
-            android:background="@android:color/darker_gray"
-            android:textColor="@android:color/black"
-            android:text="Nr obwodu"
-            android:textSize="@dimen/fontsize.committee.label"/>
+            >
 
-        <TextView
-            android:id="@+id/add.photos.territorial.code"
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:paddingBottom="@dimen/padding.committee.label"
-            android:paddingTop="@dimen/padding.committee.label"
-            android:gravity="center"
-            android:background="@android:color/darker_gray"
-            android:textColor="@android:color/black"
-            android:text="Kod terytorialny"
-            android:textSize="@dimen/fontsize.committee.label"/>
-    </LinearLayout>
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginLeft="@dimen/margin.protocol.data"
+                android:layout_marginRight="@dimen/margin.protocol.data"
+                android:layout_marginBottom="@dimen/margin.protocol.data"
+                android:layout_marginTop="@dimen/margin.protocol.data"
+                android:background="@drawable/row_button_border"
+                >
 
-    <View
-        android:id="@+id/add.photos.committee.id.separator"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/height.login.separator.top"
-        android:layout_below="@id/add.photos.committee.id.layout"
-        android:layout_marginStart="0dp"
-        android:layout_marginEnd="0dp"
-        android:background="@android:color/black" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:gravity="center_horizontal"
+                    android:layout_marginTop="30dp"
+                    android:layout_weight="1"
+                    android:textColor="@android:color/black"
+                    android:text="@string/add.photos.label.take.photo"
+                    android:textSize="@dimen/fontsize.committee.label"/>
 
-    <TextView
-        android:id="@+id/add.photos.take.photo.label"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/add.photos.committee.id.separator"
-        android:layout_marginStart="5dp"
-        android:layout_marginEnd="5dp"
-        android:maxLines="2"
-        android:gravity="center_horizontal"
-        android:text="Zrób zdjęcie każdej pojedynczej i kolejnej stronie protokołu wyborczego"
-        android:textSize="@dimen/fontsize.committee.label" />
+                <Button
+                    android:layout_gravity="center_horizontal"
+                    android:id="@+id/add.photos.take.photo.button"
+                    android:layout_width="@dimen/width.login.button.login"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin.login.button.login.top"
+                    android:text="Zrób zdjęcie"
+                    style="@style/orange_button"/>
 
-    <Button
-        android:id="@+id/add.photos.take.photo.button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:drawablePadding="0dp"
-        android:background="@android:color/transparent"
-        android:drawableTop="@mipmap/ic_camera_orange"
-        android:textColor="@android:color/holo_orange_dark"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:text="Zrób zdjęcie"/>
+                <Button
+                    android:id="@+id/scan.qr.textlink.scan"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="0dp"
+                    android:enabled="false"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginStart="@dimen/margin.login.left"
+                    android:paddingStart="2dp"
+                    android:paddingEnd="2dp"
+                    android:textAllCaps="false"
+                    android:textStyle="normal"
+                    android:background="@android:color/transparent"
+                    android:text="@string/scan.qr.buttonlabel.help"
+                    android:textColor="@android:color/transparent"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:textSize="@dimen/fontsize.login.textlink.fpassword" />
+
+            </LinearLayout>
+
+        </TableRow>
+
+    </TableLayout>
 
     <Button
         android:id="@+id/add.photos.forward.button"
         android:layout_width="@dimen/width.login.button.register"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:layout_marginTop="@dimen/margin.bottom.buttons"
         android:layout_marginBottom="@dimen/margin.bottom.buttons"
         android:layout_centerHorizontal="true"
         android:text="@string/forward.label.button"

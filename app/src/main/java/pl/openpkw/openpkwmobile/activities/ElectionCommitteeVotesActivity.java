@@ -7,6 +7,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -30,11 +31,14 @@ import static pl.openpkw.openpkwmobile.fragments.LoginFragment.timer;
 public class ElectionCommitteeVotesActivity extends AppCompatActivity implements ElectionCommitteeVotesFragment.OnFragmentInteractionListener{
 
     private boolean doubleBackToExitPressedOnce = false;
+    private View electionCommitteeVotesLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_election_committee_votes);
+
+        electionCommitteeVotesLayout = findViewById(R.id.election_committee_votes_fragment_container);
 
         Bundle extras = getIntent().getExtras();
         Integer listNumber;
@@ -73,7 +77,17 @@ public class ElectionCommitteeVotesActivity extends AppCompatActivity implements
             ft.commit();
             fm.executePendingTransactions();
         }
+
+        //show process info
+        showProcessInfo();
     }
+
+    private void showProcessInfo() {
+        Snackbar.make(electionCommitteeVotesLayout, "Krok 6 - Liczba głosów uzyskana przez poszczególnych kandydatów.",
+                Snackbar.LENGTH_SHORT)
+                .show();
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -14,8 +14,6 @@ import pl.openpkw.openpkwmobile.R;
 import pl.openpkw.openpkwmobile.activities.AddPhotosActivity;
 import pl.openpkw.openpkwmobile.activities.CommitteesResultActivity;
 import pl.openpkw.openpkwmobile.activities.SendDataActivity;
-import pl.openpkw.openpkwmobile.activities.VotingFormActivity;
-import pl.openpkw.openpkwmobile.utils.Utils;
 
 /**
  * A simple {@link Fragment} subclass.

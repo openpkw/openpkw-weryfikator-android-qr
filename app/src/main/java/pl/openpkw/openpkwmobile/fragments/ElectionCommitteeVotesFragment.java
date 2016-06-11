@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -102,9 +103,10 @@ public class ElectionCommitteeVotesFragment extends Fragment {
         TextView listNumberTextView = (TextView) electionCommitteeView.findViewById(R.id.election_committee_list_number_label);
 
         Integer listNumber = getArguments().getInt(Utils.LIST_NUMBER,0);
-        String listNumberStr = "Lista nr " + listNumber;
+        String listNumberStr = "Lista nr " + "  "+listNumber+"  ";
+
         Spannable spannableGreen = new SpannableString(listNumberStr );
-        spannableGreen .setSpan(new ForegroundColorSpan(Color.GREEN), "Lista nr ".length() ,listNumberStr.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannableGreen .setSpan(new BackgroundColorSpan(Color.GREEN), "Lista nr ".length() ,listNumberStr.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         listNumberTextView.setText(spannableGreen);
 
         loadData(listNumber);

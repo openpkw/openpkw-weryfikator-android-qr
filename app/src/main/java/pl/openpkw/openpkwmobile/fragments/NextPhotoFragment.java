@@ -17,20 +17,25 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.Spannable;
 import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
+import android.text.style.BackgroundColorSpan;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import pl.openpkw.openpkwmobile.R;
 import pl.openpkw.openpkwmobile.activities.ThumbnailsActivity;
@@ -62,6 +67,8 @@ public class NextPhotoFragment extends Fragment {
 
     private TextView territorialCodeTextView;
     private TextView peripheryNumberTextView;
+
+    private List<String> spinnerData = new ArrayList<>();
 
     private ContextThemeWrapper contextThemeWrapper;
 
@@ -119,25 +126,51 @@ public class NextPhotoFragment extends Fragment {
         nextButton.setOnClickListener(nextButtonClickListener);
 
         territorialCodeTextView = (TextView) nextPhotoView.findViewById(R.id.next_photo_territorial_code);
-        peripheryNumberTextView = (TextView)nextPhotoView.findViewById(R.id.next_photo_periphery_number);
+        peripheryNumberTextView = (TextView) nextPhotoView.findViewById(R.id.next_photo_periphery_number);
 
         contextThemeWrapper = new ContextThemeWrapper(getActivity(), Utils.DIALOG_STYLE);
 
         loadData();
 
+        Spinner protocolDataSpinner = (Spinner) nextPhotoView.findViewById(R.id.next_photo_data_spinner);
+        //set data adapter
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),
+                R.layout.view_spinner_item, spinnerData);
+        adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
+        protocolDataSpinner.setAdapter(adapter);
+        protocolDataSpinner.setOnItemSelectedListener(spinnerItemListener);
+
         return nextPhotoView;
     }
 
-    public void loadData() {
-        SharedPreferences sharedPref = getActivity().getSharedPreferences(Utils.DATA, Context.MODE_PRIVATE);
-        String territorial_code = sharedPref.getString(Utils.TERRITORIAL_CODE, "Kod terytorialny");
-        String periphery_number = "Nr "+sharedPref.getString(Utils.PERIPHERY_NUMBER, "obwodu");
-        Spannable spannable = new SpannableString(territorial_code);
-        spannable.setSpan(new ForegroundColorSpan(Color.GREEN), 0 ,territorial_code.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        territorialCodeTextView.setText( spannable);
-        peripheryNumberTextView.setText(periphery_number);
-    }
+    AdapterView.OnItemSelectedListener spinnerItemListener = new AdapterView.OnItemSelectedListener() {
+        @Override
+        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+            adapterView.setSelection(0);
+        }
 
+        @Override
+        public void onNothingSelected(AdapterView<?> adapterView) {
+
+        }
+    };
+
+    private void loadData(){
+        SharedPreferences sharedPref = getActivity().getSharedPreferences(Utils.DATA, Context.MODE_PRIVATE);
+        String territorial_code = "  "+sharedPref.getString(Utils.TERRITORIAL_CODE, "Kod terytorialny")+"  ";
+        String periphery_number = "Nr "+sharedPref.getString(Utils.PERIPHERY_NUMBER, "obwodu");
+        String periphery_name = sharedPref.getString(Utils.PERIPHERY_NAME, "Nazwa");
+        String periphery_address = sharedPref.getString(Utils.PERIPHERY_ADDRESS, "Adres");
+        String districtNumber = sharedPref.getString(Utils.DISTRICT_NUMBER, "Okręg Wyborczy Nr");
+        Spannable spannable = new SpannableString(territorial_code);
+        spannable.setSpan(new BackgroundColorSpan(Color.GREEN),0, territorial_code.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        territorialCodeTextView.setText(spannable);
+        peripheryNumberTextView.setText(periphery_number);
+        spinnerData.add(getString(R.string.committee_label));
+        spinnerData.add(periphery_name);
+        spinnerData.add(periphery_address);
+        spinnerData.add(districtNumber);
+    }
     View.OnClickListener retryButtonClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {

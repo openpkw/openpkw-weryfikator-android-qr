@@ -2,7 +2,6 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
-    <dimen name="fontsize.login.label">24sp</dimen>
     <dimen name="margin.login.top">20dp</dimen>
     <dimen name="margin.login.left">10dp</dimen>
     <dimen name="margin.login.separator.top">5dp</dimen>
@@ -19,18 +18,26 @@
     <dimen name="margin.login.button.login.top">10dp</dimen>
     <dimen name="margin.login.textlink.fpassword.left">20dp</dimen>
     <dimen name="margin.login.textlink.fpassword.top">5dp</dimen>
-    <dimen name="fontsize.login.textlink.fpassword">16sp</dimen>
     <dimen name="margin.login.edittext.password.left">20dp</dimen>
     <dimen name="margin.login.edittext.password.right">20dp</dimen>
     <dimen name="margin.login.edittext.password.top">10dp</dimen>
     <dimen name="margin.login.textlink.fpassword.bottom">10dp</dimen>
     <dimen name="margin.bottom.buttons">5dp</dimen>
+    <dimen name="fontsize.login.label">24sp</dimen>
+    <dimen name="fontsize.settings.group">22sp</dimen>
+    <dimen name="fontsize.settings.dialog.label">20sp</dimen>
+    <dimen name="fontsize.settings.dialog.edittext">18sp</dimen>
+    <dimen name="fontsize.settings.item">18sp</dimen>
     <dimen name="fontsize.login.label.register">24sp</dimen>
-    <dimen name="fontsize.committee.label">20sp</dimen>
+    <dimen name="fontsize.committee.label">18sp</dimen>
     <dimen name="fontsize.committee.name">16sp</dimen>
-    <dimen name="fontsize.committee.address">20sp</dimen>
+    <dimen name="fontsize.committee.address">16sp</dimen>
     <dimen name="fontsize.fvoting.general.data">16sp</dimen>
     <dimen name="fontsize.scan.qr.label">20sp</dimen>
+    <dimen name="fontsize.list.number">20sp</dimen>
+    <dimen name="fontsize.thank.you">20sp</dimen>
+    <dimen name="fontsize.query">20sp</dimen>
+    <dimen name="fontsize.login.textlink.fpassword">16sp</dimen>
     <dimen name="padding.committee.label">2dp</dimen>
     <dimen name="padding.result.committee.label">10dp</dimen>
     <dimen name="padding.fvoting.general.data">10dp</dimen>
@@ -42,4 +49,6 @@
     <dimen name="height.votingform.min.header">120dp</dimen>
     <dimen name="height.votingform.max.header">300dp</dimen>
     <dimen name="margin.top.enter.manually.button">20dp</dimen>
+    <dimen name="margin.protocol.data">5dp</dimen>
+    <dimen name="margin.top.protocol.data">10dp</dimen>
 </resources>

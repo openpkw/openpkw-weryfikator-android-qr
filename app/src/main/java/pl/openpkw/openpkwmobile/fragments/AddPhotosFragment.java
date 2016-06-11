@@ -1,35 +1,50 @@
 package pl.openpkw.openpkwmobile.fragments;
 
+import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageButton;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import pl.openpkw.openpkwmobile.R;
 import pl.openpkw.openpkwmobile.activities.NextPhotoActivity;
 import pl.openpkw.openpkwmobile.activities.QueryAddPhotosActivity;
 import pl.openpkw.openpkwmobile.utils.Utils;
+
+import static pl.openpkw.openpkwmobile.utils.Utils.PERMISSION_REQUEST_CAMERA;
+import static pl.openpkw.openpkwmobile.utils.Utils.PERMISSION_WRITE_EXTERNAL_STORAGE;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -51,6 +66,10 @@ public class AddPhotosFragment extends Fragment {
 
     private TextView territorialCodeTextView;
     private TextView peripheryNumberTextView;
+
+    private ContextThemeWrapper contextThemeWrapper;
+
+    private List<String> spinnerData = new ArrayList<>();
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -104,25 +123,88 @@ public class AddPhotosFragment extends Fragment {
         territorialCodeTextView = (TextView) addPhotosView .findViewById(R.id.add_photos_territorial_code);
         peripheryNumberTextView = (TextView) addPhotosView .findViewById(R.id.add_photos_periphery_number);
 
+        contextThemeWrapper = new ContextThemeWrapper(getActivity(), Utils.DIALOG_STYLE);
+
         loadData();
+
+        Spinner protocolDataSpinner = (Spinner) addPhotosView.findViewById(R.id.add_photos_data_spinner);
+        //set data adapter
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),
+                R.layout.view_spinner_item, spinnerData);
+        adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
+        protocolDataSpinner.setAdapter(adapter);
+        protocolDataSpinner.setOnItemSelectedListener(spinnerItemListener);
 
         return addPhotosView;
     }
 
-    public void loadData() {
+    AdapterView.OnItemSelectedListener spinnerItemListener = new AdapterView.OnItemSelectedListener() {
+        @Override
+        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+            adapterView.setSelection(0);
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> adapterView) {
+
+        }
+    };
+
+    private void loadData(){
         SharedPreferences sharedPref = getActivity().getSharedPreferences(Utils.DATA, Context.MODE_PRIVATE);
-        String territorial_code = sharedPref.getString(Utils.TERRITORIAL_CODE, "Kod terytorialny");
+        String territorial_code = "  "+sharedPref.getString(Utils.TERRITORIAL_CODE, "Kod terytorialny")+"  ";
         String periphery_number = "Nr "+sharedPref.getString(Utils.PERIPHERY_NUMBER, "obwodu");
+        String periphery_name = sharedPref.getString(Utils.PERIPHERY_NAME, "Nazwa");
+        String periphery_address = sharedPref.getString(Utils.PERIPHERY_ADDRESS, "Adres");
+        String districtNumber = sharedPref.getString(Utils.DISTRICT_NUMBER, "Okręg Wyborczy Nr");
         Spannable spannable = new SpannableString(territorial_code);
-        spannable.setSpan(new ForegroundColorSpan(Color.GREEN), 0 ,territorial_code.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        territorialCodeTextView.setText( spannable);
+        spannable.setSpan(new BackgroundColorSpan(Color.GREEN),0, territorial_code.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        territorialCodeTextView.setText(spannable);
         peripheryNumberTextView.setText(periphery_number);
+        spinnerData.add(getString(R.string.committee_label));
+        spinnerData.add(periphery_name);
+        spinnerData.add(periphery_address);
+        spinnerData.add(districtNumber);
     }
 
     View.OnClickListener takePhotoImageButtonClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            dispatchTakePictureIntent();
+
+            final int permissionCamera = ContextCompat.checkSelfPermission(getActivity(),
+                    Manifest.permission.CAMERA);
+
+            final int permissionWriteStorage =  ContextCompat.checkSelfPermission(getActivity(),
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+            if(permissionCamera == PackageManager.PERMISSION_GRANTED &&
+                    permissionWriteStorage == PackageManager.PERMISSION_GRANTED) {
+                dispatchTakePictureIntent();
+
+            }else{
+                final AlertDialog.Builder builder = new AlertDialog.Builder(contextThemeWrapper);
+                builder.setMessage("Aplikacja nie ma uprawnień dostępu do aparatu lub/i pamięci urządzenia.")
+                        .setTitle(R.string.dialog_warning_title)
+                        .setCancelable(false)
+                        .setPositiveButton(R.string.zxing_button_ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                // Request the camera permission
+                                if(permissionCamera != PackageManager.PERMISSION_GRANTED) {
+                                    ActivityCompat.requestPermissions(getActivity(),
+                                            new String[]{Manifest.permission.CAMERA},
+                                            PERMISSION_REQUEST_CAMERA);
+                                }
+
+                                if(permissionWriteStorage  != PackageManager.PERMISSION_GRANTED)
+                                    ActivityCompat.requestPermissions(getActivity(),
+                                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                            PERMISSION_WRITE_EXTERNAL_STORAGE);
+                            }
+                        });
+                final AlertDialog dialog = builder.create();
+                dialog.show();
+            }
         }
     };
 

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/register.relative.layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -7,7 +8,7 @@
         android:id="@+id/register.label.top"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/margin.login.left"
+        android:layout_marginStart="@dimen/margin.login.left"
         android:layout_marginTop="@dimen/margin.login.top"
         android:text="@string/register.label.register"
         android:textSize="@dimen/fontsize.login.label" />
@@ -26,8 +27,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/register.separator.top"
-        android:layout_marginLeft="@dimen/margin.login.edittext.user.left"
-        android:layout_marginRight="@dimen/margin.login.edittext.user.right"
+        android:layout_marginStart="@dimen/margin.login.edittext.user.left"
+        android:layout_marginEnd="@dimen/margin.login.edittext.user.right"
         android:layout_marginTop="@dimen/margin.login.edittext.user.top"
         android:hint="@string/register.label.edittext.name"
         android:textSize="@dimen/fontsize.login.edittext"
@@ -38,8 +39,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/register.edittext.name"
-        android:layout_marginLeft="@dimen/margin.login.edittext.password.left"
-        android:layout_marginRight="@dimen/margin.login.edittext.password.right"
+        android:layout_marginEnd="@dimen/margin.login.edittext.password.left"
+        android:layout_marginStart="@dimen/margin.login.edittext.password.right"
         android:layout_marginTop="@dimen/margin.login.edittext.password.top"
         android:hint="@string/register.label.edittext.surname"
         android:textSize="@dimen/fontsize.login.edittext"
@@ -50,8 +51,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/register.edittext.surname"
-        android:layout_marginLeft="@dimen/margin.login.edittext.password.left"
-        android:layout_marginRight="@dimen/margin.login.edittext.password.right"
+        android:layout_marginEnd="@dimen/margin.login.edittext.password.left"
+        android:layout_marginStart="@dimen/margin.login.edittext.password.right"
         android:layout_marginTop="@dimen/margin.login.edittext.password.top"
         android:hint="@string/register.label.edittext.email"
         android:textSize="@dimen/fontsize.login.edittext"
@@ -62,8 +63,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/register.edittext.email"
-        android:layout_marginLeft="@dimen/margin.login.edittext.password.left"
-        android:layout_marginRight="@dimen/margin.login.edittext.password.right"
+        android:layout_marginEnd="@dimen/margin.login.edittext.password.left"
+        android:layout_marginStart="@dimen/margin.login.edittext.password.right"
         android:layout_marginTop="@dimen/margin.login.edittext.password.top"
         android:hint="@string/register.label.edittext.password"
         android:textSize="@dimen/fontsize.login.edittext"
@@ -75,8 +76,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/register.edittext.password"
-        android:layout_marginLeft="@dimen/margin.login.edittext.password.left"
-        android:layout_marginRight="@dimen/margin.login.edittext.password.right"
+        android:layout_marginEnd="@dimen/margin.login.edittext.password.left"
+        android:layout_marginStart="@dimen/margin.login.edittext.password.right"
         android:layout_marginTop="@dimen/margin.login.edittext.password.top"
         android:hint="@string/register.label.edittext.password.confirm"
         android:textSize="@dimen/fontsize.login.edittext"
@@ -88,11 +89,9 @@
         android:layout_width="@dimen/width.login.button.login"
         android:layout_height="wrap_content"
         android:layout_below="@id/register.edittext.password.confirm"
-        android:layout_marginLeft="@dimen/margin.login.button.login.left"
+        android:layout_marginStart="@dimen/margin.login.button.login.left"
         android:layout_marginTop="@dimen/margin.login.button.login.top"
         android:text="@string/register.buttonlabel.register.user"
         style="@style/green_button"/>
-
-
 
 </RelativeLayout>

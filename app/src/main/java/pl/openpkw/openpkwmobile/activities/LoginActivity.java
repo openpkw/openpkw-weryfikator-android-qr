@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat.OnRequestPermissionsResultCallback;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
@@ -33,15 +35,17 @@ import pl.openpkw.openpkwmobile.utils.Utils;
 
 import static pl.openpkw.openpkwmobile.fragments.LoginFragment.timer;
 
-
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements OnRequestPermissionsResultCallback{
 
     private boolean doubleBackToExitPressedOnce = false;
+    private View loginLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        loginLayout = findViewById(R.id.login_fragment_container);
 
         FragmentManager fm = getFragmentManager();
         LoginFragment loginFragment = (LoginFragment) fm.findFragmentByTag(Utils.LOGIN_FRAGMENT_TAG);
@@ -57,6 +61,15 @@ public class LoginActivity extends AppCompatActivity {
 
         //generate and wrap ECDSA keys
         generateKeys();
+
+        //show process info log in
+        showProcessInfo();
+    }
+
+    private void showProcessInfo() {
+        Snackbar.make(loginLayout, "Krok 1 - Logowanie do systemu",
+                Snackbar.LENGTH_SHORT)
+                .show();
     }
 
     @Override

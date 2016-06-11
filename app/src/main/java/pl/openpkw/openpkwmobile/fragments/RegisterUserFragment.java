@@ -11,6 +11,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Base64;
@@ -21,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -58,13 +60,15 @@ public class RegisterUserFragment extends Fragment {
     private EditText passwordEditText;
     private EditText passwordConfirmEditText;
 
-    private boolean isPasswordCorrect = false;
+    private RelativeLayout userRegisterRelativeLayout;
+
+    boolean isDataCorrect = true;
 
     private ContextThemeWrapper contextThemeWrapper;
 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         android.view.View v = inflater.inflate(R.layout.fragment_register_user, container, false);
-
+        userRegisterRelativeLayout = (RelativeLayout) v.findViewById(R.id.register_relative_layout);
         nameEditText = (EditText) v.findViewById(R.id.register_edittext_name);
         surnameEditText = (EditText) v.findViewById(R.id.register_edittext_surname);
         emailEditText = (EditText) v.findViewById(R.id.register_edittext_email);
@@ -89,79 +93,75 @@ public class RegisterUserFragment extends Fragment {
         @Override
         public void onClick(View view) {
 
-            boolean isEmailCorrect;
+
             if(emailEditText.getText().toString().isEmpty())
             {
                 emailEditText.setError(getString(R.string.register_error_email));
-                isEmailCorrect = false;
+                isDataCorrect = false;
             }
             else {
                 if (!Utils.isEmailValid(emailEditText.getText())) {
                     emailEditText.setError(getString(R.string.register_error_email_invalid));
-                    isEmailCorrect = false;
+                    isDataCorrect = false;
                 }
-                else
-                    isEmailCorrect = true;
             }
 
             Matcher matcher;
-            boolean isNameCorrect;
             if(nameEditText.getText().toString().isEmpty())
             {
                 nameEditText.setError(getString(R.string.register_error_name));
-                isNameCorrect = false;
+                isDataCorrect = false;
             }
             else {
                 matcher = patternNameSurname.matcher(nameEditText.getText().toString().trim());
-                isNameCorrect = matcher.matches();
-                if(!isNameCorrect)
+                isDataCorrect = matcher.matches();
+                if(!isDataCorrect )
                     nameEditText.setError(getString(R.string.register_error_name));
             }
 
-            boolean isSurnameCorrect;
             if(surnameEditText.getText().toString().isEmpty())
             {
                 surnameEditText.setError(getString(R.string.register_error_surname));
-                isSurnameCorrect = false;
+                isDataCorrect = false;
             }
             else {
                 matcher = patternNameSurname.matcher(surnameEditText.getText().toString().trim());
-                isSurnameCorrect = matcher.matches();
-                if(!isSurnameCorrect)
+                isDataCorrect = matcher.matches();
+                if(!isDataCorrect)
                     surnameEditText.setError(getString(R.string.register_error_surname));
             }
 
             if(passwordEditText.getText().toString().isEmpty())
             {
                 passwordEditText.setError(getString(R.string.register_error_password));
-                isPasswordCorrect = false;
+                isDataCorrect = false;
             }
             else
             {
                 if(passwordEditText.getText().length()<8)
                 {
                     passwordEditText.setError(getString(R.string.register_error_password_short));
-                    isPasswordCorrect = false;
+                    isDataCorrect = false;
                 }
                 else
                 {
-                    isPasswordCorrect = passwordEditText.getText().toString().equals(passwordConfirmEditText.getText().toString());
+                    isDataCorrect = passwordEditText.getText().toString().equals(passwordConfirmEditText.getText().toString());
                 }
             }
 
             if(passwordConfirmEditText.getText().toString().isEmpty())
             {
                 passwordConfirmEditText.setError(getString(R.string.register_error_password_confirm));
-                isPasswordCorrect = false;
+                isDataCorrect = false;
             }
 
             if(!passwordConfirmEditText.getText().toString().equals(passwordEditText.getText().toString()))
             {
-                isPasswordCorrect = false;
+                isDataCorrect = false;
                 passwordConfirmEditText.setError(getString(R.string.register_error_passwords_not_match));
             }
 
-            if(isPasswordCorrect && isEmailCorrect && isNameCorrect && isSurnameCorrect)
+            if(isDataCorrect)
             {
                 if(NetworkUtils.isNetworkAvailable(getActivity())) {
                     URL_REGISTER = getUrlRegister();
@@ -195,9 +195,11 @@ public class RegisterUserFragment extends Fragment {
                     dialog.show();
                 }
             }
-            else
-                Toast.makeText(getActivity().getApplicationContext(),getString(R.string.register_error_data_user),
-                        Toast.LENGTH_LONG).show();
+            else {
+                Snackbar.make(userRegisterRelativeLayout, getString(R.string.register_error_data_user),
+                        Snackbar.LENGTH_LONG)
+                        .show();
+            }
 
 
         }
@@ -216,14 +218,19 @@ public class RegisterUserFragment extends Fragment {
 
         @Override
         public void afterTextChanged(Editable editable) {
-            if(editable.length()>=passwordEditText.getText().length()) {
-                if (!editable.toString().equals(passwordEditText.getText().toString())) {
-                    passwordConfirmEditText.setError(getString(R.string.register_error_passwords_not_match));
-                    isPasswordCorrect = false;
-                } else {
-                    passwordConfirmEditText.setError(null);
-                    isPasswordCorrect = true;
-                }
+            String password = passwordEditText.getText().toString();
+            if(editable.length()>password.length())
+            {
+                passwordConfirmEditText.setError(getString(R.string.register_error_passwords_not_match));
+                isDataCorrect = false;
+            }
+            else {
+               if(editable.toString().equals(password.substring(0,editable.length()))){
+                   isDataCorrect = true;
+               }else{
+                   passwordConfirmEditText.setError(getString(R.string.register_error_passwords_not_match));
+                   isDataCorrect = false;
+               }
             }
         }
     };

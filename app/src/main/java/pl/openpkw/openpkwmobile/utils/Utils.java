@@ -76,6 +76,9 @@ public class Utils {
     //public static final int SESSION_TIMER = 10*1000; //test value
     public static final int DIALOG_STYLE = android.R.style.Theme_DeviceDefault_Dialog;
     public static final int MAX_NUMBER_OF_PHOTOS = 6;
+    public static final int PERMISSION_REQUEST_CAMERA = 0;
+    public static final int PERMISSION_WRITE_EXTERNAL_STORAGE = 1;
+
 
     public static boolean isEmailValid(CharSequence target) {
         return !TextUtils.isEmpty(target) && android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
