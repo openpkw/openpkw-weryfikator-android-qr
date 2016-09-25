@@ -5,12 +5,11 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Handler;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -30,14 +29,11 @@ import static pl.openpkw.openpkwmobile.fragments.LoginFragment.timer;
 public class SendDataActivity extends AppCompatActivity implements SendDataFragment.OnFragmentInteractionListener{
 
     private boolean doubleBackToExitPressedOnce = false;
-    private View sendDataLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_send_data);
-
-        sendDataLayout = findViewById(R.id.send_data_fragment_container);
 
         FragmentManager fm = getFragmentManager();
         SendDataFragment sendDataFragment = (SendDataFragment) fm.findFragmentByTag(Utils.SEND_DATA_FRAGMENT_TAG );
@@ -48,13 +44,12 @@ public class SendDataActivity extends AppCompatActivity implements SendDataFragm
             fm.executePendingTransactions();
         }
 
-        showProcessInfo();
-    }
-
-    private void showProcessInfo() {
-        Snackbar.make( sendDataLayout, "Krok 9 - Przesłanie danych na serwer.",
-                Snackbar.LENGTH_SHORT)
-                .show();
+        //set title and subtitle to action bar
+        ActionBar actionBar = getSupportActionBar();
+        if(actionBar!=null) {
+            actionBar.setTitle("Krok 9 z 9");
+            actionBar.setSubtitle("Przesyłanie danych na serwer");
+        }
     }
 
     @Override

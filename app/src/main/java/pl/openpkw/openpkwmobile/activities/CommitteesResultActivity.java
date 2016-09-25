@@ -7,7 +7,6 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -30,14 +29,11 @@ import static pl.openpkw.openpkwmobile.fragments.LoginFragment.timer;
 public class CommitteesResultActivity extends AppCompatActivity implements CommitteesResultFragment.OnFragmentInteractionListener{
 
     private boolean doubleBackToExitPressedOnce = false;
-    private View committeesResultLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_committees_result);
-
-        committeesResultLayout = findViewById(R.id.committees_result_fragment_container);
 
         FragmentManager fm = getFragmentManager();
         CommitteesResultFragment committeesResultFragment = (CommitteesResultFragment) fm.findFragmentByTag(Utils.COMMITTEES_RESULT_FRAGMENT_TAG);
@@ -48,13 +44,12 @@ public class CommitteesResultActivity extends AppCompatActivity implements Commi
             fm.executePendingTransactions();
         }
 
-        showProcessInfo();
-    }
-
-    private void showProcessInfo() {
-        Snackbar.make(committeesResultLayout, "Krok 5 - Liczba głosów uzyskana przez poszczególne KW.",
-                Snackbar.LENGTH_SHORT)
-                .show();
+        //set title and subtitle to action bar
+        ActionBar actionBar = getSupportActionBar();
+        if(actionBar!=null) {
+            actionBar.setTitle("Krok 5 z 9");
+            actionBar.setSubtitle("Liczba głosów oddanych na KW");
+        }
     }
 
     @Override

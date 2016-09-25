@@ -229,7 +229,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:gravity="center_horizontal"
-                        android:layout_marginTop="45dp"
+                        android:layout_marginTop="30dp"
                         android:layout_weight="1"
                         android:textColor="@android:color/black"
                         android:text="@string/send.data.label.send"
@@ -241,8 +241,11 @@
                         android:layout_width="@dimen/width.login.button.login"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin.login.button.login.top"
+                        android:layout_marginBottom="30dp"
                         android:text="@string/scan.qr.buttonlabel.send"
                         style="@style/orange_button"/>
+
+                    <!--
 
                     <Button
                         android:id="@+id/scan.qr.textlink.scan"
@@ -261,6 +264,7 @@
                         android:textColor="@android:color/transparent"
                         style="?android:attr/borderlessButtonStyle"
                         android:textSize="@dimen/fontsize.login.textlink.fpassword" />
+                        -->
 
                 </LinearLayout>
 

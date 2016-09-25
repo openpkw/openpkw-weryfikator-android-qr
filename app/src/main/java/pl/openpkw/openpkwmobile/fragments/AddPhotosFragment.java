@@ -45,6 +45,7 @@ import pl.openpkw.openpkwmobile.utils.Utils;
 
 import static pl.openpkw.openpkwmobile.utils.Utils.PERMISSION_REQUEST_CAMERA;
 import static pl.openpkw.openpkwmobile.utils.Utils.PERMISSION_WRITE_EXTERNAL_STORAGE;
+import static pl.openpkw.openpkwmobile.utils.Utils.STORAGE_PROTOCOL_DIRECTORY;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -253,7 +254,7 @@ public class AddPhotosFragment extends Fragment {
         String imageFileName = "CP_" + timeStamp + "_";
         //File storageDir = Environment.getExternalStoragePublicDirectory(
         //        Environment.DIRECTORY_PICTURES);
-        File storageDir = getCommitteeProtocolStorageDir(Utils.STORAGE_PROTOCOL_DIRECTORY);
+        File storageDir = getCommitteeProtocolStorageDir(STORAGE_PROTOCOL_DIRECTORY);
         File image = File.createTempFile(
                 imageFileName,  /* prefix */
                 ".jpg",         /* suffix */

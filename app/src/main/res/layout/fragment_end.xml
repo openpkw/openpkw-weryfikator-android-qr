@@ -8,30 +8,58 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/fragment.end.layout.buttons">
 
-        <RelativeLayout
+
+        <TableLayout
+            android:id="@+id/scan.qr.protocol.data.tablelayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin.protocol.data"
+            android:layout_marginRight="@dimen/margin.protocol.data"
+            android:layout_marginBottom="@dimen/margin.protocol.data"
+            android:layout_marginTop="@dimen/margin.top.protocol.data"
+            android:background="@drawable/protocol_border"
+            android:stretchColumns="1">
 
-
-            <TextView
-                android:id="@+id/fragment.end.label.data.ok"
+            <TableRow
+                android:gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin.login.left"
-                android:layout_marginEnd="@dimen/margin.login.left"
-                android:layout_marginTop="5dp"
-                android:gravity="center"
-                android:text="Twoje dane zostały poprawnie przesłane na serwer"
-                android:textColor="@android:color/black"
-                android:textSize="@dimen/fontsize.thank.you" />
+                android:background="@color/rules.fragment.background">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/padding.committee.label"
+                    android:layout_weight="1"
+                    android:paddingRight="@dimen/padding.committee.label"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginEnd="0dp"
+                    android:paddingTop="@dimen/padding.committee.label"
+                    android:paddingBottom="@dimen/padding.committee.label"
+                    android:text="Twoje dane zostały poprawnie przesłane na serwer"
+                    android:gravity="center"
+                    android:textColor="@android:color/black"
+                    android:textSize="@dimen/fontsize.thank.you" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/height.login.separator.bottom"
+                    android:layout_weight="1"
+                    android:layout_marginBottom="0dp"
+                    android:layout_marginTop="0dp"
+                    android:background="@android:color/black" />
+            </TableRow>
 
             <LinearLayout
-                android:id="@+id/fragment.end.logo.layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:layout_below="@id/fragment.end.label.data.ok"
                 android:orientation="vertical">
 
                 <ImageView
@@ -43,21 +71,43 @@
                     android:contentDescription="@string/logo" />
             </LinearLayout>
 
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/fragment.end.label.thanks"
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/height.login.separator.bottom"
+                    android:layout_weight="1"
+                    android:layout_marginBottom="0dp"
+                    android:layout_marginTop="0dp"
+                    android:background="@android:color/black" />
+            </TableRow>
+
+            <TableRow
+                android:gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/fragment.end.logo.layout"
-                android:layout_marginStart="@dimen/margin.login.left"
-                android:layout_marginEnd="@dimen/margin.login.left"
-                android:layout_marginTop="5dp"
-                android:gravity="center"
-                android:textColor="@android:color/black"
-                android:text="Dziękujemy za poświęcony czas i dobrze wykonaną misję społeczną"
-                android:textSize="@dimen/fontsize.thank.you" />
+                android:background="@color/rules.fragment.background">
 
-        </RelativeLayout>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:paddingLeft="@dimen/padding.committee.label"
+                    android:paddingRight="@dimen/padding.committee.label"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginEnd="0dp"
+                    android:paddingTop="@dimen/padding.committee.label"
+                    android:paddingBottom="@dimen/padding.committee.label"
+                    android:text="Dziękujemy za poświęcony czas i dobrze wykonaną misję społeczną"
+                    android:gravity="center"
+                    android:textColor="@android:color/black"
+                    android:textSize="@dimen/fontsize.thank.you" />
+            </TableRow>
+
+        </TableLayout>
+
     </ScrollView>
 
     <LinearLayout

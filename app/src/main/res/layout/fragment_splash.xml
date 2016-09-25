@@ -24,7 +24,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/rules.link.margin.top"
-            android:text="@string/rules.text" />
+            android:textColor="@color/green"
+            android:text="Pierwszy otwarty społecznościowy system do głosowania dla PKW"
+            android:textAlignment="center"
+            android:gravity="center_horizontal"
+            android:textStyle="bold"
+            android:textSize="@dimen/fontsize.committee.label"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"/>
 
     </LinearLayout>
 

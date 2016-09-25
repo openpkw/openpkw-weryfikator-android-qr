@@ -4,9 +4,12 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -18,7 +21,10 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
+
 import pl.openpkw.openpkwmobile.R;
+import pl.openpkw.openpkwmobile.camera.CameraActivity;
 import pl.openpkw.openpkwmobile.fragments.AboutFragment;
 import pl.openpkw.openpkwmobile.fragments.NextPhotoFragment;
 import pl.openpkw.openpkwmobile.fragments.SettingsFragment;
@@ -29,15 +35,19 @@ import static pl.openpkw.openpkwmobile.fragments.LoginFragment.timer;
 public class NextPhotoActivity extends AppCompatActivity implements NextPhotoFragment.OnFragmentInteractionListener{
 
     private boolean doubleBackToExitPressedOnce = false;
+    private View nextPhotoLayout;
+    private String mCurrentPhotoPath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_next_photo);
 
+        nextPhotoLayout = findViewById(R.id.next_photo_fragment_container);
+
         //get path to photo
         Bundle extras = getIntent().getExtras();
-        String pathToPhoto = extras.getString(Utils.PATH_TO_PHOTO, null);
+        mCurrentPhotoPath = extras.getString(Utils.PATH_TO_PHOTO, null);
 
         FragmentManager fm = getFragmentManager();
         NextPhotoFragment nextPhotoFragment = (NextPhotoFragment) fm.findFragmentByTag(Utils.NEXT_PHOTO_FRAGMENT_TAG);
@@ -45,7 +55,7 @@ public class NextPhotoActivity extends AppCompatActivity implements NextPhotoFra
 
             nextPhotoFragment = new NextPhotoFragment();
             Bundle bundle = new Bundle();
-            bundle.putString(Utils.PATH_TO_PHOTO, pathToPhoto);
+            bundle.putString(Utils.PATH_TO_PHOTO, mCurrentPhotoPath);
             nextPhotoFragment.setArguments(bundle);
 
             FragmentTransaction ft = fm.beginTransaction();
@@ -53,6 +63,42 @@ public class NextPhotoActivity extends AppCompatActivity implements NextPhotoFra
             ft.commit();
             fm.executePendingTransactions();
         }
+
+        //set title and subtitle to action bar
+        ActionBar actionBar = getSupportActionBar();
+        if(actionBar!=null) {
+            actionBar.setTitle("Krok 8 z 9");
+            actionBar.setSubtitle("Wykonaj zdjęcia protokołu wyborczego");
+        }
+
+        showInfo();
+    }
+
+    private void showInfo(){
+        Snackbar snackbar = Snackbar.make(nextPhotoLayout,"Czy zdjęcie jest wyraźne i dobrze wykadrowane?",
+                Snackbar.LENGTH_LONG).
+                setAction("PONÓW",new View.OnClickListener(){
+
+            @Override
+            public void onClick(View view) {
+                //delete incorrect photo
+                if(mCurrentPhotoPath!=null){
+                    File file  = new File(mCurrentPhotoPath);
+                    boolean isDeleted = file.delete();
+                }
+
+                Intent cameraIntent = new Intent(NextPhotoActivity.this, CameraActivity.class);
+                startActivity(cameraIntent);
+                finish();
+            }
+        });
+        // Changing message text color
+        snackbar.setActionTextColor(Color.RED);
+        // Changing action button text color
+        TextView snackBarTextView = (TextView)snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+        snackBarTextView.setMaxLines(5);
+        snackBarTextView.setTextColor(Color.YELLOW);
+        snackbar.show();
     }
 
     @Override

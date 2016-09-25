@@ -105,15 +105,6 @@
             android:background="@drawable/photo_border"
             >
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:layout_marginTop="0dp"
-                android:textColor="@android:color/black"
-                android:text="Czy zdjęcie jest wyraźne i dobrze wykadrowane?"
-                android:textSize="@dimen/fontsize.committee.name"/>
-
             <ImageView
                 android:id="@+id/next.photo.image.view.photo"
                 android:src="@mipmap/ic_camera_orange"
@@ -135,14 +126,14 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/next.photo.retry.button"
+            android:id="@+id/next.photo.next.button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
             android:layout_marginStart="5dp"
             android:layout_marginEnd="5dp"
             android:layout_marginTop="5dp"
-            android:text="Ponów"
+            android:text="NASTĘPNE"
             style="@style/green_button"/>
 
         <Button
@@ -158,17 +149,5 @@
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/next.photo.take.photo.button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:drawablePadding="0dp"
-        android:background="@android:color/transparent"
-        android:drawableTop="@mipmap/ic_camera_green"
-        android:textColor="@color/light_green"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:text="NASTĘPNE"/>
 
 </RelativeLayout>

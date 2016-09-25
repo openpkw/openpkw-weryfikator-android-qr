@@ -1,19 +1,28 @@
 package pl.openpkw.openpkwmobile.fragments;
 
+import android.app.Activity;
+import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
-import android.app.Fragment;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import pl.openpkw.openpkwmobile.R;
-import pl.openpkw.openpkwmobile.activities.AddPhotosActivity;
 import pl.openpkw.openpkwmobile.activities.CommitteesResultActivity;
 import pl.openpkw.openpkwmobile.activities.SendDataActivity;
+import pl.openpkw.openpkwmobile.camera.CameraActivity;
+import pl.openpkw.openpkwmobile.utils.Utils;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -24,16 +33,10 @@ import pl.openpkw.openpkwmobile.activities.SendDataActivity;
  * create an instance of this fragment.
  */
 public class QueryAddPhotosFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+    private TextView territorialCodeTextView;
+    private TextView peripheryNumberTextView;
 
     public QueryAddPhotosFragment() {
         // Required empty public constructor
@@ -42,28 +45,16 @@ public class QueryAddPhotosFragment extends Fragment {
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment QueryAddPhotosFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static QueryAddPhotosFragment newInstance(String param1, String param2) {
-        QueryAddPhotosFragment fragment = new QueryAddPhotosFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    public static QueryAddPhotosFragment newInstance() {
+        return new QueryAddPhotosFragment();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -81,7 +72,22 @@ public class QueryAddPhotosFragment extends Fragment {
         Button noButton = (Button) queryAddPhotosView.findViewById(R.id.query_add_photos_no_button);
         noButton.setOnClickListener(noButtonClickListener);
 
+        territorialCodeTextView = (TextView) queryAddPhotosView.findViewById(R.id.query_add_territorial_code);
+        peripheryNumberTextView = (TextView) queryAddPhotosView.findViewById(R.id.query_add_periphery_number);
+
+        loadData();
+
         return queryAddPhotosView;
+    }
+
+    private void loadData() {
+        SharedPreferences sharedPref = getActivity().getSharedPreferences(Utils.DATA, Context.MODE_PRIVATE);
+        String territorial_code = "  "+sharedPref.getString(Utils.TERRITORIAL_CODE, "Kod terytorialny")+"  ";
+        String periphery_number = "Nr "+sharedPref.getString(Utils.PERIPHERY_NUMBER, "obwodu");
+        Spannable spannable = new SpannableString(territorial_code);
+        spannable.setSpan(new ForegroundColorSpan(Color.GREEN),0, territorial_code.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        territorialCodeTextView.setText(spannable);
+        peripheryNumberTextView.setText(periphery_number);
     }
 
     View.OnClickListener forwardButtonClickListener = new View.OnClickListener() {
@@ -96,9 +102,14 @@ public class QueryAddPhotosFragment extends Fragment {
     View.OnClickListener yesButtonClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Intent addPhotosIntent = new Intent(getActivity(), AddPhotosActivity.class);
-            startActivity(addPhotosIntent);
-            getActivity().finish();
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+                onButtonPressed(null);
+            else{
+                Activity activity = getActivity();
+                Intent cameraIntent = new Intent(activity , CameraActivity.class);
+                startActivity(cameraIntent);
+                activity.finish();
+            }
         }
     };
 

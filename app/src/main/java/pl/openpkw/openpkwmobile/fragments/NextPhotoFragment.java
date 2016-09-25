@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -14,10 +13,9 @@ import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.text.Spannable;
 import android.text.SpannableString;
-import android.text.style.BackgroundColorSpan;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
@@ -32,13 +30,12 @@ import android.widget.TextView;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import pl.openpkw.openpkwmobile.R;
 import pl.openpkw.openpkwmobile.activities.ThumbnailsActivity;
+import pl.openpkw.openpkwmobile.camera.CameraActivity;
 import pl.openpkw.openpkwmobile.utils.Utils;
 
 /**
@@ -50,18 +47,11 @@ import pl.openpkw.openpkwmobile.utils.Utils;
  * create an instance of this fragment.
  */
 public class NextPhotoFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
-    private static final int REQUEST_TAKE_PHOTO = 1;
 
     private ImageView photoImageView;
-
-    private Button endButton;
-    private Button nextButton;
 
     private String mCurrentPhotoPath;
 
@@ -72,41 +62,19 @@ public class NextPhotoFragment extends Fragment {
 
     private ContextThemeWrapper contextThemeWrapper;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
     private OnFragmentInteractionListener mListener;
 
     public NextPhotoFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment NextPhotoFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static NextPhotoFragment newInstance(String param1, String param2) {
-        NextPhotoFragment fragment = new NextPhotoFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    public static NextPhotoFragment newInstance() {
+        return new NextPhotoFragment();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -116,14 +84,11 @@ public class NextPhotoFragment extends Fragment {
         View nextPhotoView = inflater.inflate(R.layout.fragment_next_photo, container, false);
         photoImageView = (ImageView) nextPhotoView.findViewById(R.id.next_photo_image_view_photo);
 
-        Button retryButton = (Button) nextPhotoView.findViewById(R.id.next_photo_retry_button);
-        retryButton.setOnClickListener(retryButtonClickListener);
+        Button nextPhotoButton = (Button) nextPhotoView.findViewById(R.id.next_photo_next_button);
+        nextPhotoButton.setOnClickListener(nextButtonClickListener);
 
-        endButton = (Button) nextPhotoView.findViewById(R.id.next_photo_end_button);
+        Button endButton = (Button) nextPhotoView.findViewById(R.id.next_photo_end_button);
         endButton.setOnClickListener(endButtonClickListener);
-
-        nextButton = (Button) nextPhotoView.findViewById(R.id.next_photo_take_photo_button);
-        nextButton.setOnClickListener(nextButtonClickListener);
 
         territorialCodeTextView = (TextView) nextPhotoView.findViewById(R.id.next_photo_territorial_code);
         peripheryNumberTextView = (TextView) nextPhotoView.findViewById(R.id.next_photo_periphery_number);
@@ -163,7 +128,7 @@ public class NextPhotoFragment extends Fragment {
         String periphery_address = sharedPref.getString(Utils.PERIPHERY_ADDRESS, "Adres");
         String districtNumber = sharedPref.getString(Utils.DISTRICT_NUMBER, "Okręg Wyborczy Nr");
         Spannable spannable = new SpannableString(territorial_code);
-        spannable.setSpan(new BackgroundColorSpan(Color.GREEN),0, territorial_code.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannable.setSpan(new ForegroundColorSpan(Color.GREEN),0, territorial_code.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         territorialCodeTextView.setText(spannable);
         peripheryNumberTextView.setText(periphery_number);
         spinnerData.add(getString(R.string.committee_label));
@@ -171,10 +136,13 @@ public class NextPhotoFragment extends Fragment {
         spinnerData.add(periphery_address);
         spinnerData.add(districtNumber);
     }
-    View.OnClickListener retryButtonClickListener = new View.OnClickListener() {
+
+    View.OnClickListener nextButtonClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            dispatchTakePictureIntent();
+            Intent nextPhotoIntent = new Intent(getActivity(), CameraActivity.class);
+            startActivity(nextPhotoIntent);
+            getActivity().finish();
         }
     };
 
@@ -198,73 +166,11 @@ public class NextPhotoFragment extends Fragment {
         }
     };
 
-    View.OnClickListener nextButtonClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            if(getCommitteeProtocolStorageDir(Utils.STORAGE_PROTOCOL_DIRECTORY).listFiles().length>=Utils.MAX_NUMBER_OF_PHOTOS){
-                final AlertDialog.Builder builder = new AlertDialog.Builder(contextThemeWrapper);
-                builder.setMessage("Została wykonana maksymalna liczba zdjęć przewidziana dla protokołu wyborczego.")
-                        .setTitle(R.string.dialog_warning_title)
-                        .setCancelable(false)
-                        .setPositiveButton(R.string.zxing_button_ok, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                Intent thumbnailsIntent = new Intent(getActivity(), ThumbnailsActivity.class);
-                                startActivity(thumbnailsIntent);
-                                getActivity().finish();
-                            }
-                        });
-                final AlertDialog dialog = builder.create();
-                dialog.show();
-            }else {
-                dispatchTakePictureIntent();
-            }
-        }
-    };
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
             loadImage(mCurrentPhotoPath);
         }
-    }
-
-    private void dispatchTakePictureIntent() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        // Ensure that there's a camera activity to handle the intent
-        if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
-            // Create the File where the photo should go
-            File photoFile = null;
-            try {
-                photoFile = createImageFile();
-            } catch (IOException ex) {
-                Log.e(Utils.TAG,"ERROR CREATING PHOTO FILE");
-            }
-            // Continue only if the File was successfully created
-            if (photoFile != null) {
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
-                        Uri.fromFile(photoFile));
-                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
-            }
-        }
-    }
-
-    private File createImageFile() throws IOException {
-        // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss").format(new Date());
-        String imageFileName = "CP_" + timeStamp;
-        //File storageDir = Environment.getExternalStoragePublicDirectory(
-        //        Environment.DIRECTORY_PICTURES);
-        File storageDir = getCommitteeProtocolStorageDir(Utils.STORAGE_PROTOCOL_DIRECTORY);
-        File image = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */
-        );
-
-        // Save a file: path for use with ACTION_VIEW intents
-        mCurrentPhotoPath = image.getAbsolutePath();
-        return image;
     }
 
     public File getCommitteeProtocolStorageDir(String albumName) {
@@ -329,7 +235,7 @@ public class NextPhotoFragment extends Fragment {
         try {
             exif = new ExifInterface(mCurrentPhotoPath);
             int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
-
+            Log.e(Utils.TAG,"PHOTO ORIENTATION: "+orientation);
             switch (orientation) {
                 case ExifInterface.ORIENTATION_ROTATE_270:
                     rotate = 270;
@@ -338,6 +244,9 @@ public class NextPhotoFragment extends Fragment {
                     rotate = 180;
                     break;
                 case ExifInterface.ORIENTATION_ROTATE_90:
+                    rotate = 90;
+                    break;
+                case 0:
                     rotate = 90;
                     break;
             }

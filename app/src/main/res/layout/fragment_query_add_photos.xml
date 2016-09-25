@@ -1,56 +1,196 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/add.photos.layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/add.photos.take.photo.labell"
+    <TableLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/query.add.photos.separator"
-        android:layout_marginStart="@dimen/margin.login.left"
-        android:text="Czy chcesz dodać dokumentację fotograficzną protokołu wyborczego?"
-        android:textSize="@dimen/fontsize.query" />
+        android:layout_marginLeft="@dimen/margin.protocol.data"
+        android:layout_marginRight="@dimen/margin.protocol.data"
+        android:layout_marginBottom="0dp"
+        android:layout_marginTop="@dimen/margin.top.protocol.data"
+        android:background="@drawable/protocol_border"
+        android:stretchColumns="1">
 
-    <View
-        android:id="@+id/query.add.photos.separator"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/height.login.separator.top"
-        android:layout_above="@+id/add.photos.camera.ic"
-        android:layout_marginBottom="@dimen/margin.login.separator.bottom"
-        android:layout_marginTop="@dimen/margin.login.separator.top"
-        android:background="@color/green" />
-
-    <LinearLayout
-        android:id="@+id/add.photos.camera.ic"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/query.add.photos.no.button"
-            android:layout_width="0dp"
+        <TableRow
+            android:gravity="center"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:layout_marginStart="5dp"
-            android:layout_marginEnd="5dp"
-            android:layout_marginTop="@dimen/margin.login.button.login.top"
-            android:text="NIE"
-            style="@style/green_button"/>
+            android:background="@color/rules.fragment.background">
 
-        <Button
-            android:id="@+id/query.add.photos.yes.button"
-            android:layout_width="0dp"
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/padding.committee.label"
+                android:paddingRight="@dimen/padding.committee.label"
+                android:layout_marginStart="0dp"
+                android:layout_marginEnd="0dp"
+                android:paddingTop="@dimen/padding.committee.label"
+                android:paddingBottom="@dimen/padding.committee.label"
+                android:text="@string/scan_qr_label_enter_data"
+                android:gravity="center"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/fontsize.committee.label" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/height.login.separator.bottom"
+                android:layout_weight="1"
+                android:layout_marginBottom="0dp"
+                android:layout_marginTop="0dp"
+                android:background="@android:color/black" />
+        </TableRow>
+
+        <TableRow
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/padding.committee.label"
+                android:paddingRight="@dimen/padding.committee.label"
+                android:layout_marginStart="0dp"
+                android:layout_marginEnd="0dp"
+                android:paddingTop="@dimen/padding.committee.label"
+                android:paddingBottom="@dimen/padding.committee.label"
+                android:text="@string/committee_label"
+                android:gravity="center"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/fontsize.committee.label" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/height.login.separator.bottom"
+                android:layout_weight="1"
+                android:layout_marginBottom="0dp"
+                android:layout_marginTop="0dp"
+                android:background="@android:color/black" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/query.add.periphery.number"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingBottom="@dimen/padding.committee.label"
+                android:paddingTop="@dimen/padding.committee.label"
+                android:gravity="center"
+                android:background="@android:color/darker_gray"
+                android:textColor="@android:color/black"
+                android:text="Nr obwodu"
+                android:textSize="@dimen/fontsize.committee.label"/>
+
+            <TextView
+                android:id="@+id/query.add.territorial.code"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingBottom="@dimen/padding.committee.label"
+                android:paddingTop="@dimen/padding.committee.label"
+                android:gravity="center"
+                android:background="@android:color/darker_gray"
+                android:textColor="@android:color/black"
+                android:text="Kod terytorialny"
+                android:textSize="@dimen/fontsize.committee.label"/>
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/height.login.separator.bottom"
+                android:layout_weight="1"
+                android:layout_marginBottom="0dp"
+                android:layout_marginTop="0dp"
+                android:background="@android:color/black" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:layout_marginStart="5dp"
-            android:layout_marginEnd="5dp"
-            android:layout_marginTop="@dimen/margin.login.button.login.top"
-            android:text="TAK"
-            style="@style/orange_button"/>
+            >
 
-    </LinearLayout>
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginLeft="@dimen/margin.protocol.data"
+                android:layout_marginRight="@dimen/margin.protocol.data"
+                android:layout_marginBottom="@dimen/margin.protocol.data"
+                android:layout_marginTop="@dimen/margin.protocol.data"
+                android:background="@drawable/row_button_border"
+                >
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:gravity="center_horizontal"
+                    android:layout_marginTop="30dp"
+                    android:layout_weight="1"
+                    android:textColor="@android:color/black"
+                    android:text="Czy chcesz dodać dokumentację fotograficzną protokołu wyborczego?"
+                    android:textSize="@dimen/fontsize.committee.label"/>
+
+                <LinearLayout
+                    android:id="@+id/query.add.buttons.layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/query.add.photos.no.button"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginTop="@dimen/margin.login.button.login.top"
+                        android:layout_marginBottom="30dp"
+                        android:text="NIE"
+                        style="@style/green_button"/>
+
+                    <Button
+                        android:id="@+id/query.add.photos.yes.button"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginTop="@dimen/margin.login.button.login.top"
+                        android:text="TAK"
+                        android:layout_marginBottom="30dp"
+                        style="@style/orange_button"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </TableRow>
+
+    </TableLayout>
 
     <Button
         android:id="@+id/query.add.photos.forward.button"

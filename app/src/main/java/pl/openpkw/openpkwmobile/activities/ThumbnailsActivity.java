@@ -7,7 +7,6 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -30,14 +29,11 @@ import static pl.openpkw.openpkwmobile.fragments.LoginFragment.timer;
 public class ThumbnailsActivity extends AppCompatActivity implements ThumbnailsFragment.OnFragmentInteractionListener{
 
     private boolean doubleBackToExitPressedOnce = false;
-    private View thumbnailsLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_thumbnails);
-
-        thumbnailsLayout = findViewById(R.id.thumbnails_fragment_container);
 
         FragmentManager fm = getFragmentManager();
         ThumbnailsFragment thumbnailsFragment = (ThumbnailsFragment) fm.findFragmentByTag(Utils.THUMBNAILS_FRAGMENT_TAG);
@@ -48,13 +44,12 @@ public class ThumbnailsActivity extends AppCompatActivity implements ThumbnailsF
             fm.executePendingTransactions();
         }
 
-        showProcessInfo();
-    }
-
-    private void showProcessInfo() {
-        Snackbar.make(thumbnailsLayout, "Krok 9 - Przesłanie zdjęć protokołu wyborczego na serwer",
-                Snackbar.LENGTH_LONG)
-                .show();
+        //set title and subtitle to action bar
+        ActionBar actionBar = getSupportActionBar();
+        if(actionBar!=null) {
+            actionBar.setTitle("Krok 9 z 9");
+            actionBar.setSubtitle("Przesyłanie zdjęc na serwer");
+        }
     }
 
     @Override

@@ -21,6 +21,7 @@ public class SplashFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_splash, container, false);
 
+
         rulesTv = (TextView) rootView.findViewById(R.id.rulesTV);
 
         rulesTv.setOnClickListener(new View.OnClickListener() {
@@ -32,6 +33,7 @@ public class SplashFragment extends Fragment {
                 startActivity(rulesIntent);
             }
         });
+
 
         return rootView;
     }

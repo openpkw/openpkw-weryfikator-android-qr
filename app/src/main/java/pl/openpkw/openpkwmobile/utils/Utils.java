@@ -32,12 +32,14 @@ public class Utils {
     public static final String LOGIN_FRAGMENT_TAG = "LOGIN_FRAGMENT_TAG";
     public static final String NEXT_PHOTO_FRAGMENT_TAG = "NEXT_PHOTO_FRAGMENT_TAG";
     public static final String ADD_PHOTOS_FRAGMENT_TAG = "ADD_PHOTOS_FRAGMENT_TAG";
+    public static final String CAMERA_FRAGMENT_TAG = "CAMERA_FRAGMENT_TAG";
     public static final String QUERY_ADD_PHOTOS_FRAGMENT_TAG = "QUERY_ADD_PHOTOS_FRAGMENT_TAG";
     public static final String SETTINGS_FRAGMENT_TAG = "SETTINGS_FRAGMENT_TAG";
     public static final String ABOUT_FRAGMENT_TAG = "ABOUT_FRAGMENT_TAG";
     public static final String PRESTORE_FRAGMENT_TAG = "PRESTORE_FRAGMENT_TAG";
     public static final String REGISTER_USER_FRAGMENT_TAG = "REGISTER_USER_FRAGMENT_TAG";
     public static final String SCAN_QR_FRAGMENT_TAG = "SCAN_QR_FRAGMENT_TAG";
+    public static final String INSTRUCTION_SCAN_QR_FRAGMENT_TAG = "INSTRUCTION_SCAN_QR_FRAGMENT_TAG";
     public static final String COMMITTEES_RESULT_FRAGMENT_TAG = "COMMITTEES_RESULT_FRAGMENT_TAG";
     public static final String ELECTION_COMMITTEE_VOTES_FRAGMENT_TAG = " ELECTION_COMMITTEE_VOTES_FRAGMENT_TAG";
     public static final String VOTING_FORM_FRAGMENT_TAG = "ELECTION_RESULT_FRAGMENT_TAG";
@@ -70,7 +72,14 @@ public class Utils {
     public static final String ECIES = "ECIES";
     public static final String AES = "AES";
     public static final String PATH_TO_PHOTO = "PATH_TO_PHOTO";
-
+    /**
+     * Id of the camera to access. 0 is the first camera.
+     */
+    public static final int CAMERA_ID = 0;
+    /**
+     * Scan QR code timeout
+     */
+    public static final int TIMEOUT_SCAN_QR = 30*1000;//30 sec
     public static final int RSA_KEY_SIZE = 4096;
     public static final int SESSION_TIMER = 60*1000*15-1000;//14 min 59 sec
     //public static final int SESSION_TIMER = 10*1000; //test value
@@ -78,7 +87,7 @@ public class Utils {
     public static final int MAX_NUMBER_OF_PHOTOS = 6;
     public static final int PERMISSION_REQUEST_CAMERA = 0;
     public static final int PERMISSION_WRITE_EXTERNAL_STORAGE = 1;
-
+    public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 1;
 
     public static boolean isEmailValid(CharSequence target) {
         return !TextUtils.isEmpty(target) && android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();

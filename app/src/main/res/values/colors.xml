@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="rules.fragment.background">#fff</color>
-    <item name="territorial.code.green" type="color">#FF00FF00</item>
-    <item name="light_green" type="color">#59FF18</item>
-    <item name="green" type="color">#86B404</item>
-    <item name="dark_green" type="color">#4B610B</item>
-    <item name="dark_gray" type="color">#666666</item>
-    <item name="light_gray" type="color">#808080</item>
-    <item name="light_gray_protocol" type="color">#dbdbdb</item>
+    <color name="territorial.code.green">#FF00FF00</color>
+    <color name="light_green">#59FF18</color>
+    <color name="green">#86B404</color>
+    <color name="dark_green">#4B610B</color>
+    <color name="dark_gray">#666666</color>
+    <color name="light_gray">#808080</color>
+    <color name="light_gray_protocol">#dbdbdb</color>
+    <color name="green.camera">#cc86B404</color>
 </resources>

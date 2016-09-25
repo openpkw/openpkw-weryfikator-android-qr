@@ -9,7 +9,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
-import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -167,7 +166,7 @@ public class CommitteesResultFragment extends Fragment {
         String periphery_address = sharedPref.getString(Utils.PERIPHERY_ADDRESS, "Adres");
         String districtNumber = sharedPref.getString(Utils.DISTRICT_NUMBER, "Okręg Wyborczy Nr");
         Spannable spannableGreen = new SpannableString(territorial_code);
-        spannableGreen.setSpan(new BackgroundColorSpan(Color.GREEN),0, territorial_code.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannableGreen.setSpan(new ForegroundColorSpan(Color.GREEN),0, territorial_code.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         territorialCodeTextView.setText(spannableGreen);
         peripheryNumberTextView.setText(periphery_number);
         spinnerData.add(getString(R.string.committee_label));

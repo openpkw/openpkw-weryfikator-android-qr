@@ -20,6 +20,7 @@ import android.preference.PreferenceManager;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.BackgroundColorSpan;
+import android.text.style.ForegroundColorSpan;
 import android.util.Base64;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
@@ -186,7 +187,7 @@ public class ThumbnailsFragment extends Fragment {
         String periphery_address = sharedPref.getString(Utils.PERIPHERY_ADDRESS, "Adres");
         String districtNumber = sharedPref.getString(Utils.DISTRICT_NUMBER, "Okręg Wyborczy Nr");
         Spannable spannable = new SpannableString(territorial_code);
-        spannable.setSpan(new BackgroundColorSpan(Color.GREEN),0, territorial_code.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannable.setSpan(new ForegroundColorSpan(Color.GREEN),0, territorial_code.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         territorialCodeTextView.setText(spannable);
         peripheryNumberTextView.setText(periphery_number);
         spinnerData.add(getString(R.string.committee_label));
@@ -372,6 +373,7 @@ public class ThumbnailsFragment extends Fragment {
     class ThumbnailsLoader extends AsyncTask<File, Void, Bitmap> {
         private final WeakReference<ImageView> imageViewReference;
         private String absoluteFilePath;
+        private Bitmap imageBitmap;
 
         public ThumbnailsLoader(ImageView imageView) {
             // Use a WeakReference to ensure the ImageView can be garbage collected
@@ -380,12 +382,20 @@ public class ThumbnailsFragment extends Fragment {
 
         @Override
         protected Bitmap doInBackground(File... files) {
+            final int THUMBNAIL_SIZE = 512;
             absoluteFilePath = files[0].getAbsolutePath();
-            return ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(absoluteFilePath), 512, 384);
+            imageBitmap = BitmapFactory.decodeFile(absoluteFilePath);
+            Float width = (float) imageBitmap.getWidth();
+            Float height = (float) imageBitmap.getHeight();
+            Float ratio = width/height;
+            return ThumbnailUtils.extractThumbnail(imageBitmap,Math.round(THUMBNAIL_SIZE*ratio), THUMBNAIL_SIZE);
         }
 
         @Override
         protected void onPostExecute(Bitmap thumbnails) {
+            if(!imageBitmap.isRecycled())
+                imageBitmap.recycle();
+
             if (imageViewReference != null && thumbnails != null) {
                 final ImageView imageView = imageViewReference.get();
                 if (imageView != null) {
@@ -405,6 +415,8 @@ public class ThumbnailsFragment extends Fragment {
                             case ExifInterface.ORIENTATION_ROTATE_90:
                                 rotate = 90;
                                 break;
+                            case 0:
+                                rotate = 90;
                         }
                     } catch (IOException e) {
                         e.printStackTrace();

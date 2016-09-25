@@ -48,7 +48,7 @@
     <string name="login.buttonlabel.newaccount">Utwórz</string>
     <string name="login.label.newaccount">Nowy użytkownik</string>
     <string name="login.label.fpassword">Nie pamiętasz hasła?</string>
-    <string name="fragment.login.twotaptoexit">Tapnij ponownie przycisk BACK, aby wyjść z aplikacji</string>
+    <string name="fragment.login.twotaptoexit">Naciśnij ponownie przycisk BACK, aby wyjść z aplikacji</string>
     <string name="prestore.label.top">Przypomnij hasło</string>
     <string name="toast.prestore.emailnotvalid">Wprowadzony adres e-mail jest niepoprawny</string>
     <string name="toast.prestore.emailvalid">Na podany adres e-mail został wysłany link do zresetowania hasła. Sprawdź swoją skrzynkę pocztową.</string>
@@ -113,4 +113,17 @@
     <string name="url.user.register.default">http://rumcajs.openpkw.pl:9080/openpkw/users/</string>
     <string name="url.login.default">http://rumcajs.openpkw.pl:9080/openpkw/api/login</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="instruction.scan.qr.description">Aby przystąpić do skanowania należy nacisnąć przycisk SKANUJ.
+        Obiektyw kamery naszego urządzenia kierujemy na kod QR tak, by znalazł się on w całości w zaznaczonym
+        na ekranie prostokątnym obszarze. Następnie należy przez chwilę utrzymać urządzenie mobilne nieruchomo (kod cały
+        czas ma być widoczny na ekranie), tak aby kamera mogła złapać ostrość. Po poprawnym zeskanowaniu
+        kodu ujrzymy na ekranie komunikat  - Kod QR został zeskanowany. Przejdź dalej.
+        </string>
+    <string name="instruction.label.note">Uwaga!</string>
+    <string name="instruction.label.note.description">W zależności od typu aparatu odległość pomiędzy obiektywem kamery
+        a kodem QR umożliwiająca prawidłowe zeskanowanie może wynosić od 0,1 do 0,5 metra.
+        Jeżeli skanowanie kodu QR nie powiodło się należy powtórzyć proces przy róznych odległościach obiektywu
+        kamery od kodu QR.</string>
 </resources>

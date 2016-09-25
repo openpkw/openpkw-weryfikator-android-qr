@@ -7,6 +7,7 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -15,7 +16,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -28,9 +28,9 @@ import pl.openpkw.openpkwmobile.R;
 import pl.openpkw.openpkwmobile.fragments.AboutFragment;
 import pl.openpkw.openpkwmobile.fragments.AddPhotosFragment;
 import pl.openpkw.openpkwmobile.fragments.SettingsFragment;
-import pl.openpkw.openpkwmobile.utils.Utils;
 
 import static pl.openpkw.openpkwmobile.fragments.LoginFragment.timer;
+import static pl.openpkw.openpkwmobile.utils.Utils.ADD_PHOTOS_FRAGMENT_TAG;
 import static pl.openpkw.openpkwmobile.utils.Utils.PERMISSION_REQUEST_CAMERA;
 import static pl.openpkw.openpkwmobile.utils.Utils.PERMISSION_WRITE_EXTERNAL_STORAGE;
 
@@ -47,10 +47,10 @@ public class AddPhotosActivity extends AppCompatActivity implements AddPhotosFra
         addPhotosLayout = findViewById(R.id.add_photos_fragment_container);
 
         FragmentManager fm = getFragmentManager();
-        AddPhotosFragment addPhotosFragment = (AddPhotosFragment) fm.findFragmentByTag(Utils.ADD_PHOTOS_FRAGMENT_TAG);
+        AddPhotosFragment addPhotosFragment = (AddPhotosFragment) fm.findFragmentByTag(ADD_PHOTOS_FRAGMENT_TAG);
         if (addPhotosFragment == null) {
             FragmentTransaction ft = fm.beginTransaction();
-            ft.replace(R.id.add_photos_fragment_container, new  AddPhotosFragment(), Utils.ADD_PHOTOS_FRAGMENT_TAG);
+            ft.replace(R.id.add_photos_fragment_container, new  AddPhotosFragment(), ADD_PHOTOS_FRAGMENT_TAG);
             ft.commit();
             fm.executePendingTransactions();
         }
