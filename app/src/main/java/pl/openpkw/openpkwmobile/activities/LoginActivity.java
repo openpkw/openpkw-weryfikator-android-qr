@@ -2,10 +2,10 @@ package pl.openpkw.openpkwmobile.activities;
 
 import android.Manifest;
 import android.app.Fragment;
-import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -46,7 +46,9 @@ import pl.openpkw.openpkwmobile.utils.Utils;
 import static pl.openpkw.openpkwmobile.fragments.LoginFragment.timer;
 import static pl.openpkw.openpkwmobile.utils.Utils.REQUEST_ID_MULTIPLE_PERMISSIONS;
 
-public class LoginActivity extends AppCompatActivity implements OnRequestPermissionsResultCallback{
+public class LoginActivity extends AppCompatActivity implements OnRequestPermissionsResultCallback,
+        LoginFragment.OnFragmentInteractionListener
+     {
 
     private boolean doubleBackToExitPressedOnce = false;
 
@@ -55,14 +57,11 @@ public class LoginActivity extends AppCompatActivity implements OnRequestPermiss
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        FragmentManager fm = getFragmentManager();
-        LoginFragment loginFragment = (LoginFragment) fm.findFragmentByTag(Utils.LOGIN_FRAGMENT_TAG);
-        if (loginFragment == null) {
-            FragmentTransaction ft = fm.beginTransaction();
-            ft.replace(R.id.login_fragment_container, new LoginFragment(), Utils.LOGIN_FRAGMENT_TAG);
-            ft.commit();
-            fm.executePendingTransactions();
-        }
+        if(savedInstanceState == null)
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.login_fragment_container,new LoginFragment(),Utils.LOGIN_FRAGMENT_TAG)
+                    .commit();
 
         //set title and subtitle to action bar
         ActionBar actionBar = getSupportActionBar();
@@ -114,9 +113,8 @@ public class LoginActivity extends AppCompatActivity implements OnRequestPermiss
                     // Check for both permissions
                     if (perms.get(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
                             || perms.get(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-
                                 //permission is denied (this is the first time, when "never ask again" is not checked) so ask again explaining the usage of permission
-        //                        // shouldShowRequestPermissionRationale will return true
+                                // shouldShowRequestPermissionRationale will return true
                                 //show the dialog saying its necessary and try again otherwise finish app
                                 if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA) || ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                                     showDialogOK("Dostęp do aparatu fotograficznego i pamięci urządzenia jest wymagany przez tą aplikację do prawidłowego działania. ",
@@ -241,4 +239,11 @@ public class LoginActivity extends AppCompatActivity implements OnRequestPermiss
             e.printStackTrace();
         }
     }
-}
+
+     @Override
+     public void onFragmentInteraction() {
+         Intent scanIntent = new Intent(this, ScanQrCodeActivity.class);
+         startActivity(scanIntent);
+         finish();
+     }
+ }

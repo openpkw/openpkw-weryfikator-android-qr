@@ -3,7 +3,6 @@ package pl.openpkw.openpkwmobile.activities;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Fragment;
-import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -27,7 +26,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -84,16 +82,11 @@ public class ScanQrCodeActivity extends AppCompatActivity implements ScanQrCodeF
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan_qrcode);
 
-        FragmentManager fm = getFragmentManager();
-        ScanQrCodeFragment scanQRFragment = (ScanQrCodeFragment)
-                fm.findFragmentByTag(SCAN_QR_FRAGMENT_TAG );
-        if (scanQRFragment == null) {
-            FragmentTransaction ft = fm.beginTransaction();
-            ft.replace(R.id.scan_qr_fragment_container, new ScanQrCodeFragment(),
-                    SCAN_QR_FRAGMENT_TAG );
-            ft.commit();
-            fm.executePendingTransactions();
-        }
+        if(savedInstanceState == null)
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.scan_qr_fragment_container,new ScanQrCodeFragment(),SCAN_QR_FRAGMENT_TAG )
+                    .commit();
 
         //set title and subtitle to action bar
         ActionBar actionBar = getSupportActionBar();
@@ -235,16 +228,15 @@ public class ScanQrCodeActivity extends AppCompatActivity implements ScanQrCodeF
                         writeDataToSharedPreferences(scannedQR, periphery.getTerritorialCode(), periphery.getPeripheryNumber(),
                                 periphery.getPeripheryName(), periphery.getPeripheryAddress(),district_number);
 
-                        FragmentManager fm = getFragmentManager();
-                        ScanQrCodeFragment scanQRFragment = (ScanQrCodeFragment)
-                                fm.findFragmentByTag(SCAN_QR_FRAGMENT_TAG);
+                        android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+                        ScanQrCodeFragment scanQRFragment = (ScanQrCodeFragment)fm.findFragmentByTag(SCAN_QR_FRAGMENT_TAG);
 
                         if (scanQRFragment != null) {
                             scanQRFragment.loadData();
                         }
 
                         //show info QR scanned
-                        Toast.makeText(this, "Kod QR został zeskanowany. Przejdź dalej.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, R.string.toast_scanned_qr_ok, Toast.LENGTH_SHORT).show();
 
                     }else{
                         showDialogIncorrectQr();
@@ -259,7 +251,7 @@ public class ScanQrCodeActivity extends AppCompatActivity implements ScanQrCodeF
     private void showDialogRetryScan() {
         ContextThemeWrapper contextThemeWrapper = new ContextThemeWrapper(ScanQrCodeActivity.this, DIALOG_STYLE);
         final AlertDialog.Builder builder = new AlertDialog.Builder(contextThemeWrapper);
-        builder.setMessage("Skanowanie kodu QR zakończyło się niepowodzeniem. ")
+        builder.setMessage(R.string.dialog_scan_qr_failed)
                 .setTitle(R.string.dialog_warning_title)
                 .setCancelable(false)
                 .setNeutralButton("Instrukcja", new DialogInterface.OnClickListener() {
@@ -306,7 +298,6 @@ public class ScanQrCodeActivity extends AppCompatActivity implements ScanQrCodeF
                     }
                 });
         final AlertDialog dialog = builder.create();
-        dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
         dialog.show();
     }
 

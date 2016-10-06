@@ -1,16 +1,17 @@
 package pl.openpkw.openpkwmobile.activities;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.widget.Toast;
 
 import pl.openpkw.openpkwmobile.R;
 import pl.openpkw.openpkwmobile.fragments.EndFragment;
-import pl.openpkw.openpkwmobile.utils.Utils;
+
+import static pl.openpkw.openpkwmobile.utils.Utils.END_FRAGMENT_TAG;
+import static pl.openpkw.openpkwmobile.utils.Utils.SERVER_RESPONSE;
 
 public class EndActivity extends AppCompatActivity implements EndFragment.OnFragmentInteractionListener{
 
@@ -21,14 +22,27 @@ public class EndActivity extends AppCompatActivity implements EndFragment.OnFrag
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_end);
 
+        if(savedInstanceState==null)
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.end_fragment_container, new EndFragment(), END_FRAGMENT_TAG)
+                    .commit();
+
+        /*
         FragmentManager fm = getFragmentManager();
-        EndFragment endFragment = (EndFragment) fm.findFragmentByTag(Utils.END_FRAGMENT_TAG);
+        EndFragment endFragment = (EndFragment) fm.findFragmentByTag(END_FRAGMENT_TAG);
         if (endFragment == null) {
             FragmentTransaction ft = fm.beginTransaction();
-            ft.replace(R.id.end_fragment_container, new EndFragment(), Utils.END_FRAGMENT_TAG);
+            ft.replace(R.id.end_fragment_container, new EndFragment(), END_FRAGMENT_TAG);
             ft.commit();
             fm.executePendingTransactions();
         }
+        */
+
+        Intent intent = getIntent();
+        String response =intent.getExtras().getString(SERVER_RESPONSE,null);
+        if(response!=null)
+            Toast.makeText(this,response,Toast.LENGTH_LONG).show();
     }
 
     @Override

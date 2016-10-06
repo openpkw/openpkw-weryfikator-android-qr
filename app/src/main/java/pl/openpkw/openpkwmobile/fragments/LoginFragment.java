@@ -1,7 +1,7 @@
 package pl.openpkw.openpkwmobile.fragments;
 
 import android.app.AlertDialog;
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -33,7 +33,6 @@ import java.security.PrivateKey;
 import pl.openpkw.openpkwmobile.R;
 import pl.openpkw.openpkwmobile.activities.PasswordRestoreActivity;
 import pl.openpkw.openpkwmobile.activities.RegisterUserActivity;
-import pl.openpkw.openpkwmobile.activities.ScanQrCodeActivity;
 import pl.openpkw.openpkwmobile.models.OAuthParam;
 import pl.openpkw.openpkwmobile.models.UserCredentialsDTO;
 import pl.openpkw.openpkwmobile.network.GetRefreshToken;
@@ -50,6 +49,8 @@ public class LoginFragment extends Fragment {
     private ContextThemeWrapper contextThemeWrapper;
     private LoginAsyncTask loginAsyncTask;
     public static TimerSingleton timer;
+
+    private OnFragmentInteractionListener mListener;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -153,7 +154,6 @@ public class LoginFragment extends Fragment {
                         Toast.LENGTH_LONG).show();
             }
         }
-
     };
 
     @Override
@@ -256,9 +256,10 @@ public class LoginFragment extends Fragment {
                                 //start session timer
                                 timer.start();
 
-                                Intent scanIntent = new Intent(getActivity(), ScanQrCodeActivity.class);
-                                startActivity(scanIntent);
-                                getActivity().finish();
+                                onLoginSuccessfully();
+                               // Intent scanIntent = new Intent(getActivity(), ScanQrCodeActivity.class);
+                                //startActivity(scanIntent);
+                                //getActivity().finish();
                             }
                         }
                     } catch (JSONException e1) {
@@ -334,5 +335,33 @@ public class LoginFragment extends Fragment {
             Log.e(Utils.TAG, "DIRECTORY NOT CREATED");
         }
         return file;
+    }
+
+    public interface OnFragmentInteractionListener {
+        // TODO: Update argument type and name
+        void onFragmentInteraction();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnFragmentInteractionListener) {
+            mListener = (OnFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+    public void onLoginSuccessfully() {
+        if (mListener != null) {
+            mListener.onFragmentInteraction();
+        }
     }
 }

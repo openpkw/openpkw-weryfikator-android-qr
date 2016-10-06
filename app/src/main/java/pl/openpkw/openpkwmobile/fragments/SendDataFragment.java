@@ -1,14 +1,13 @@
 package pl.openpkw.openpkwmobile.fragments;
 
 import android.app.AlertDialog;
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -36,7 +35,6 @@ import java.security.GeneralSecurityException;
 import java.security.PrivateKey;
 
 import pl.openpkw.openpkwmobile.R;
-import pl.openpkw.openpkwmobile.activities.EndActivity;
 import pl.openpkw.openpkwmobile.activities.QueryAddPhotosActivity;
 import pl.openpkw.openpkwmobile.activities.ScanQrCodeActivity;
 import pl.openpkw.openpkwmobile.models.OAuthParam;
@@ -240,9 +238,9 @@ public class SendDataFragment extends Fragment {
     }
 
     // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
+    public void onSendDataSuccessfully(String serverResponse) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+            mListener.onFragmentInteraction(serverResponse);
         }
     }
 
@@ -275,7 +273,7 @@ public class SendDataFragment extends Fragment {
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        void onFragmentInteraction(String response);
     }
 
     private class GetAccessTokenAsyncTask extends AsyncTask<OAuthParam, String, JSONObject> {
@@ -364,26 +362,19 @@ public class SendDataFragment extends Fragment {
                         QrSendResponse qrSendResponse = gson.fromJson(json.toString(),QrSendResponse.class);
                         Log.e(Utils.TAG,"ERROR MESSAGE: "+ qrSendResponse.getErrorMessage());
                         Log.e(Utils.TAG,"PROTOCOL: "+ qrSendResponse.getProtocol());
-
-                        Toast.makeText(getActivity().getApplicationContext(),
-                                Utils.SERVER_RESPONSE + json.toString(), Toast.LENGTH_LONG).show();
-
                         //clear QR data
                         clearQRSharedPreferences(Utils.QR, getActivity().getSharedPreferences(Utils.DATA, Context.MODE_PRIVATE));
                         //cancel timer
                         timer.cancel();
                         //start end activity
-                        Intent endIntent = new Intent(getActivity(), EndActivity.class);
-                        startActivity(endIntent);
-                        getActivity().finish();
+                        onSendDataSuccessfully(Utils.SERVER_RESPONSE + json.toString());
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
 
             }else{
-                Toast.makeText(getActivity().getApplicationContext(),
-                        getString(R.string.login_toast_no_connection), Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity().getApplicationContext(), R.string.toast_send_data_incorrect, Toast.LENGTH_LONG).show();
             }
         }
     }

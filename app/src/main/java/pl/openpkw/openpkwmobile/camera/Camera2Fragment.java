@@ -28,6 +28,7 @@ import android.hardware.camera2.TotalCaptureResult;
 import android.hardware.camera2.params.StreamConfigurationMap;
 import android.media.Image;
 import android.media.ImageReader;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -64,6 +65,14 @@ import pl.openpkw.openpkwmobile.utils.Utils;
 
 import static pl.openpkw.openpkwmobile.utils.Utils.STORAGE_PROTOCOL_DIRECTORY;
 
+/**
+ * A simple {@link Fragment} subclass.
+ * Activities that contain this fragment must implement the
+ * {@link Camera2Fragment.OnFragmentInteractionListener} interface
+ * to handle interaction events.
+
+ */
+
 public class Camera2Fragment extends Fragment
         implements View.OnClickListener{
 
@@ -81,6 +90,7 @@ public class Camera2Fragment extends Fragment
     }
 
     private String mCurrentPhotoPath;
+    private OnFragmentInteractionListener mListener;
 
     /**
      * Tag for the {@link Log}.
@@ -419,8 +429,8 @@ public class Camera2Fragment extends Fragment
 
     @Override
     public void onViewCreated(final View view, Bundle savedInstanceState) {
-        view.findViewById(R.id.picture).setOnClickListener(this);
-        view.findViewById(R.id.info).setOnClickListener(this);
+        view.findViewById(R.id.take_picture_button).setOnClickListener(this);
+        view.findViewById(R.id.info_take_picture_button).setOnClickListener(this);
         mTextureView = (AutoFitTextureView) view.findViewById(R.id.texture);
     }
 
@@ -855,22 +865,26 @@ public class Camera2Fragment extends Fragment
         } catch (CameraAccessException e) {
             e.printStackTrace();
         }finally {
+
+            /*
             Intent nextPhotoIntent = new Intent(getActivity(), NextPhotoActivity.class);
             Log.e(Utils.TAG,"PATH TO PICTURE "+mCurrentPhotoPath);
             nextPhotoIntent.putExtra(Utils.PATH_TO_PHOTO, mCurrentPhotoPath);
             startActivity(nextPhotoIntent);
             getActivity().finish();
+            */
+            onPictureTaken(mCurrentPhotoPath);
         }
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.picture: {
+            case R.id.take_picture_button: {
                     takePicture();
                 break;
             }
-            case R.id.info: {
+            case R.id.info_take_picture_button: {
                 Activity activity = getActivity();
                 if (null != activity) {
                     // Hide the status bar.
@@ -1017,6 +1031,35 @@ public class Camera2Fragment extends Fragment
                     .create();
         }
 
+    }
+
+    // TODO: Rename method, update argument and hook method into UI event
+    public void onPictureTaken(String mCurrentPhotoPath) {
+        if (mListener != null) {
+            mListener.onFragmentInteraction(mCurrentPhotoPath);
+        }
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnFragmentInteractionListener) {
+            mListener = (OnFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+    public interface OnFragmentInteractionListener {
+        // TODO: Update argument type and name
+        void onFragmentInteraction(String mCurrentPhotoPath);
     }
 
 }

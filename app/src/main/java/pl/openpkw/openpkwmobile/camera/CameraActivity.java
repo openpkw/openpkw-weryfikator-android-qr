@@ -1,10 +1,13 @@
 package pl.openpkw.openpkwmobile.camera;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -13,10 +16,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import pl.openpkw.openpkwmobile.R;
+import pl.openpkw.openpkwmobile.activities.NextPhotoActivity;
+import pl.openpkw.openpkwmobile.utils.Utils;
 
 import static pl.openpkw.openpkwmobile.fragments.LoginFragment.timer;
 
-public class CameraActivity extends AppCompatActivity {
+public class CameraActivity extends AppCompatActivity implements Camera2Fragment.OnFragmentInteractionListener{
 
     private boolean doubleBackToExitPressedOnce = false;
 
@@ -97,4 +102,12 @@ public class CameraActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onFragmentInteraction(String mCurrentPhotoPath) {
+        Intent nextPhotoIntent = new Intent(this, NextPhotoActivity.class);
+        Log.e(Utils.TAG,"PATH TO PICTURE "+mCurrentPhotoPath);
+        nextPhotoIntent.putExtra(Utils.PATH_TO_PHOTO, mCurrentPhotoPath);
+        startActivity(nextPhotoIntent);
+        finish();
+    }
 }

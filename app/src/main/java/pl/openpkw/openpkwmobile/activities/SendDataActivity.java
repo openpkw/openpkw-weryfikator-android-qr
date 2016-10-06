@@ -1,10 +1,9 @@
 package pl.openpkw.openpkwmobile.activities;
 
 import android.app.Fragment;
-import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
-import android.net.Uri;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.view.MenuItemCompat;
@@ -35,14 +34,11 @@ public class SendDataActivity extends AppCompatActivity implements SendDataFragm
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_send_data);
 
-        FragmentManager fm = getFragmentManager();
-        SendDataFragment sendDataFragment = (SendDataFragment) fm.findFragmentByTag(Utils.SEND_DATA_FRAGMENT_TAG );
-        if (sendDataFragment == null) {
-            FragmentTransaction ft = fm.beginTransaction();
-            ft.replace(R.id.send_data_fragment_container, new SendDataFragment(), Utils.SEND_DATA_FRAGMENT_TAG );
-            ft.commit();
-            fm.executePendingTransactions();
-        }
+        if(savedInstanceState==null)
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.send_data_fragment_container,new SendDataFragment(),Utils.SEND_DATA_FRAGMENT_TAG)
+                    .commit();
 
         //set title and subtitle to action bar
         ActionBar actionBar = getSupportActionBar();
@@ -129,7 +125,10 @@ public class SendDataActivity extends AppCompatActivity implements SendDataFragm
     }
 
     @Override
-    public void onFragmentInteraction(Uri uri) {
-
+    public void onFragmentInteraction(String response) {
+        Intent endIntent = new Intent(this, EndActivity.class);
+        endIntent.putExtra(Utils.SERVER_RESPONSE,response);
+        startActivity(endIntent);
+        finish();
     }
 }

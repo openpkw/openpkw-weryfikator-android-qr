@@ -92,8 +92,6 @@ public class RegisterUserFragment extends Fragment {
     View.OnClickListener registerUserButtonClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-
-
             if(emailEditText.getText().toString().isEmpty())
             {
                 emailEditText.setError(getString(R.string.register_error_email));
