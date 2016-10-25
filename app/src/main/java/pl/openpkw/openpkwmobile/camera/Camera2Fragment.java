@@ -8,9 +8,10 @@ import android.app.DialogFragment;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.ImageFormat;
 import android.graphics.Matrix;
 import android.graphics.Point;
@@ -28,7 +29,6 @@ import android.hardware.camera2.TotalCaptureResult;
 import android.hardware.camera2.params.StreamConfigurationMap;
 import android.media.Image;
 import android.media.ImageReader;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -45,6 +45,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -60,7 +61,6 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
 import pl.openpkw.openpkwmobile.R;
-import pl.openpkw.openpkwmobile.activities.NextPhotoActivity;
 import pl.openpkw.openpkwmobile.utils.Utils;
 
 import static pl.openpkw.openpkwmobile.utils.Utils.STORAGE_PROTOCOL_DIRECTORY;
@@ -866,13 +866,6 @@ public class Camera2Fragment extends Fragment
             e.printStackTrace();
         }finally {
 
-            /*
-            Intent nextPhotoIntent = new Intent(getActivity(), NextPhotoActivity.class);
-            Log.e(Utils.TAG,"PATH TO PICTURE "+mCurrentPhotoPath);
-            nextPhotoIntent.putExtra(Utils.PATH_TO_PHOTO, mCurrentPhotoPath);
-            startActivity(nextPhotoIntent);
-            getActivity().finish();
-            */
             onPictureTaken(mCurrentPhotoPath);
         }
     }
@@ -971,7 +964,7 @@ public class Camera2Fragment extends Fragment
             FileOutputStream output = null;
             try {
                 output = new FileOutputStream(mFile);
-                output.write(bytes);
+                output.write(compressImage(bytes));
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {
@@ -986,6 +979,14 @@ public class Camera2Fragment extends Fragment
             }
         }
 
+    }
+
+    public static byte[] compressImage(byte[] input) {
+        Bitmap originalBitmap = BitmapFactory.decodeByteArray(input , 0, input.length);
+        ByteArrayOutputStream blob = new ByteArrayOutputStream();
+        originalBitmap.compress(Bitmap.CompressFormat.JPEG, 50, blob);
+        originalBitmap.recycle();
+        return blob.toByteArray();
     }
 
     /**

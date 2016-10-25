@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <com.journeyapps.barcodescanner.DecoratedBarcodeView
+        android:id="@+id/capture.qrcode.barcode.scanner"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_above="@+id/capture.qrcode.layout.buttons"
+        android:layout_alignParentTop="true">
+
+    </com.journeyapps.barcodescanner.DecoratedBarcodeView>
+
+    <LinearLayout
+        android:id="@+id/capture.qrcode.layout.buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/margin.bottom.buttons"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/capture.qrcode.back.button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginTop="5dp"
+            android:text="@string/forward.label.button"
+            style="@style/green_button"/>
+
+        <Button
+            android:id="@+id/capture.qrcode.instruction.button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginTop="5dp"
+            android:text="@string/instruction.label.button"
+            style="@style/orange_button"/>
+    </LinearLayout>
+
+</RelativeLayout>

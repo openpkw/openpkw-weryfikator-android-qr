@@ -14,27 +14,30 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 
 import pl.openpkw.openpkwmobile.R;
 import pl.openpkw.openpkwmobile.activities.ElectionCommitteeVotesActivity;
+import pl.openpkw.openpkwmobile.activities.QrCodeCaptureActivity;
 import pl.openpkw.openpkwmobile.activities.QueryAddPhotosActivity;
-import pl.openpkw.openpkwmobile.activities.ScanQrCodeActivity;
 import pl.openpkw.openpkwmobile.activities.VotingFormActivity;
 import pl.openpkw.openpkwmobile.models.CandidateVoteDTO;
 import pl.openpkw.openpkwmobile.models.ElectionCommitteeDTO;
 import pl.openpkw.openpkwmobile.utils.Utils;
+
+import static pl.openpkw.openpkwmobile.activities.QrCodeCaptureActivity.candidatesHashMap;
+import static pl.openpkw.openpkwmobile.fragments.ScanQrCodeFragment.createIndentedText;
+import static pl.openpkw.openpkwmobile.utils.Utils.DATA;
+import static pl.openpkw.openpkwmobile.utils.Utils.PERIPHERY_ADDRESS;
+import static pl.openpkw.openpkwmobile.utils.Utils.PERIPHERY_NAME;
+import static pl.openpkw.openpkwmobile.utils.Utils.PERIPHERY_NUMBER;
+import static pl.openpkw.openpkwmobile.utils.Utils.TERRITORIAL_CODE;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -49,18 +52,8 @@ public class CommitteesResultFragment extends Fragment {
     TableLayout committeesResultLayout;
     private TextView territorialCodeTextView;
     private TextView peripheryNumberTextView;
-
-    private List<String> spinnerData = new ArrayList<>();
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-   // private HashMap<String,Integer> electionCommitteesMap;
+    private TextView peripheryNameTextView;
+    private TextView peripheryAddressTextView;
 
     public static HashMap<String,CandidateVoteDTO> candidatesMap;
 
@@ -72,31 +65,13 @@ public class CommitteesResultFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment CommitteesResultFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static CommitteesResultFragment newInstance(String param1, String param2) {
-        CommitteesResultFragment fragment = new CommitteesResultFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    public static CommitteesResultFragment newInstance() {
+        return new CommitteesResultFragment();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -108,6 +83,8 @@ public class CommitteesResultFragment extends Fragment {
 
         peripheryNumberTextView = (TextView) committeesResultView.findViewById(R.id.committees_result_periphery_number);
         territorialCodeTextView= (TextView) committeesResultView.findViewById(R.id.committees_result_territorial_code);
+        peripheryNameTextView = (TextView) committeesResultView.findViewById(R.id.committees_result_periphery_name);
+        peripheryAddressTextView = (TextView) committeesResultView.findViewById(R.id.committees_result_periphery_address);
 
         Button nextButton = (Button) committeesResultView.findViewById(R.id.committees_result_next_button);
         nextButton.setOnClickListener(nextButtonClickListener);
@@ -116,28 +93,8 @@ public class CommitteesResultFragment extends Fragment {
         forwardButton.setOnClickListener(forwardButtonClickListener);
 
         loadData();
-
-        Spinner protocolDataSpinner = (Spinner) committeesResultView.findViewById(R.id.committees_result_data_spinner);
-        //set data adapter
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),
-                R.layout.view_spinner_item, spinnerData);
-        adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
-        protocolDataSpinner.setAdapter(adapter);
-        protocolDataSpinner.setOnItemSelectedListener(spinnerItemListener);
         return committeesResultView;
     }
-
-    AdapterView.OnItemSelectedListener spinnerItemListener = new AdapterView.OnItemSelectedListener() {
-        @Override
-        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-            adapterView.setSelection(0);
-        }
-
-        @Override
-        public void onNothingSelected(AdapterView<?> adapterView) {
-
-        }
-    };
 
     View.OnClickListener nextButtonClickListener = new View.OnClickListener() {
         @Override
@@ -158,26 +115,37 @@ public class CommitteesResultFragment extends Fragment {
     };
 
     private void loadData(){
-        SharedPreferences sharedPref = getActivity().getSharedPreferences(Utils.DATA, Context.MODE_PRIVATE);
+        peripheryAddressTextView.setText("Adres: ");
+        peripheryAddressTextView.measure(0,0);
+        int addressLabelTextWidth = peripheryAddressTextView.getMeasuredWidth();
+        peripheryNameTextView.setText("Nazwa: ");
+        peripheryNameTextView.measure(0,0);
+        int peripheryNameLabelTextWidth = peripheryNameTextView.getMeasuredWidth();
+        SharedPreferences sharedPref = getActivity().getSharedPreferences(DATA, Context.MODE_PRIVATE);
         String scannedQR = sharedPref.getString(Utils.QR,null);
-        String territorial_code = "  "+sharedPref.getString(Utils.TERRITORIAL_CODE, "Kod terytorialny")+"  ";
-        String periphery_number = "Nr "+sharedPref.getString(Utils.PERIPHERY_NUMBER, "obwodu");
-        String periphery_name = sharedPref.getString(Utils.PERIPHERY_NAME, "Nazwa");
-        String periphery_address = sharedPref.getString(Utils.PERIPHERY_ADDRESS, "Adres");
-        String districtNumber = sharedPref.getString(Utils.DISTRICT_NUMBER, "Okręg Wyborczy Nr");
+        String territorial_code = sharedPref.getString(TERRITORIAL_CODE, "Kod terytorialny: _ _ _ _");
+        if(!territorial_code.equalsIgnoreCase("Kod terytorialny: _ _ _ _"))
+            territorial_code = "Kod terytorialny: "+territorial_code;
+        String periphery_number = sharedPref.getString(PERIPHERY_NUMBER, "Nr obwodu: _ _ _ _");
+        if(!periphery_number.equalsIgnoreCase("Nr obwodu: _ _ _ _"))
+            periphery_number = "Nr obwodu: "+periphery_number;
+        String periphery_name = sharedPref.getString(PERIPHERY_NAME, "Nazwa: _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _");
+        if(!periphery_name.equalsIgnoreCase("Nazwa: _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _"))
+            periphery_name = "Nazwa: " + periphery_name;
+        String periphery_address = sharedPref.getString(PERIPHERY_ADDRESS, "Adres: _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _");
+        if(!periphery_address.equalsIgnoreCase("Adres: _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _"))
+            periphery_address = "Adres: "+periphery_address;
         Spannable spannableGreen = new SpannableString(territorial_code);
-        spannableGreen.setSpan(new ForegroundColorSpan(Color.GREEN),0, territorial_code.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannableGreen.setSpan(new ForegroundColorSpan(Color.GREEN),"Kod terytorialny: ".length(), territorial_code.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         territorialCodeTextView.setText(spannableGreen);
         peripheryNumberTextView.setText(periphery_number);
-        spinnerData.add(getString(R.string.committee_label));
-        spinnerData.add(periphery_name);
-        spinnerData.add(periphery_address);
-        spinnerData.add(districtNumber);
+        peripheryNameTextView.setText(createIndentedText(periphery_name,0,peripheryNameLabelTextWidth ));
+        peripheryAddressTextView.setText(createIndentedText(periphery_address,0,addressLabelTextWidth));
 
         if(scannedQR!=null) {
-            candidatesMap = ScanQrCodeActivity.candidatesHashMap;
-            HashSet<String> electionCommitteeDistrictList = ScanQrCodeActivity.electionCommitteeDistrictList;
-            electionCommitteeMap = ScanQrCodeActivity.electionCommitteeMap;
+            candidatesMap = candidatesHashMap;
+            HashSet<String> electionCommitteeDistrictList = QrCodeCaptureActivity.electionCommitteeDistrictList;
+            electionCommitteeMap = QrCodeCaptureActivity.electionCommitteeMap;
 
             LayoutInflater layoutInflater = (LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 

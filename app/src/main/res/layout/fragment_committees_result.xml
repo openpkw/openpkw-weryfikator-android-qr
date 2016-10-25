@@ -20,22 +20,77 @@
         android:stretchColumns="1">
 
         <TableRow
+            android:gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="match_parent">
 
-            <Spinner
-                android:id="@+id/committees.result.data.spinner"
-                android:layout_weight="1"
-                android:layout_width="wrap_content"
+            <TextView
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="0dp"
+                android:paddingLeft="@dimen/padding.committee.label"
+                android:paddingRight="@dimen/padding.committee.label"
                 android:layout_marginStart="0dp"
                 android:layout_marginEnd="0dp"
-                android:spinnerMode="dropdown"
-                android:gravity="center_horizontal"
-                android:background="@android:color/darker_gray"
+                android:paddingTop="@dimen/padding.committee.label"
+                android:paddingBottom="@dimen/padding.committee.label"
+                android:text="@string/committee_label"
+                android:gravity="center"
                 android:textColor="@android:color/black"
-                android:textSize="20sp"/>
+                android:textSize="@dimen/fontsize.committee.label" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/height.login.separator.bottom"
+                android:layout_weight="1"
+                android:layout_marginBottom="0dp"
+                android:layout_marginTop="0dp"
+                android:background="@android:color/black" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/committees.result.periphery.number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="@dimen/padding.committee.label"
+                    android:paddingTop="@dimen/padding.committee.label"
+                    android:paddingStart="2dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_toLeftOf="@+id/scan.qr.territorial.code"
+                    android:textColor="@android:color/black"
+                    android:text="Nr obwodu"
+                    android:maxLines="1"
+                    android:textSize="@dimen/fontsize.committee.label"/>
+
+                <TextView
+                    android:id="@+id/committees.result.territorial.code"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:paddingEnd="2dp"
+                    android:paddingBottom="@dimen/padding.committee.label"
+                    android:paddingTop="@dimen/padding.committee.label"
+                    android:textColor="@android:color/black"
+                    android:text="Kod terytorialny"
+                    android:maxLines="1"
+                    android:textSize="@dimen/fontsize.committee.label"/>
+            </RelativeLayout>
+
         </TableRow>
 
         <TableRow
@@ -57,30 +112,56 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/committees.result.periphery.number"
+                android:id="@+id/committees.result.periphery.name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_gravity="start"
                 android:paddingBottom="@dimen/padding.committee.label"
                 android:paddingTop="@dimen/padding.committee.label"
-                android:gravity="center"
-                android:background="@android:color/darker_gray"
+                android:paddingLeft="@dimen/padding.committee.label"
+                android:paddingRight="@dimen/padding.committee.label"
+                android:layout_weight="1"
+                android:layout_marginStart="0dp"
+                android:layout_marginEnd="0dp"
+                android:layout_marginTop="0dp"
                 android:textColor="@android:color/black"
-                android:text="Nr obwodu"
+                android:text="Nazwa"
                 android:textSize="@dimen/fontsize.committee.label"/>
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/height.login.separator.bottom"
+                android:layout_weight="1"
+                android:layout_marginBottom="0dp"
+                android:layout_marginTop="0dp"
+                android:background="@android:color/black" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/committees.result.territorial.code"
+                android:id="@+id/committees.result.periphery.address"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_gravity="start"
                 android:paddingBottom="@dimen/padding.committee.label"
                 android:paddingTop="@dimen/padding.committee.label"
-                android:gravity="center"
-                android:background="@android:color/darker_gray"
+                android:paddingLeft="@dimen/padding.committee.label"
+                android:paddingRight="@dimen/padding.committee.label"
+                android:layout_weight="1"
+                android:layout_marginStart="0dp"
+                android:layout_marginEnd="0dp"
+                android:layout_marginTop="0dp"
                 android:textColor="@android:color/black"
-                android:text="Kod terytorialny"
-                android:textSize="@dimen/fontsize.committee.label"/>
+                android:text="Adres"
+                android:textSize="@dimen/fontsize.committee.address"/>
         </TableRow>
 
         <TableRow
@@ -96,7 +177,6 @@
                 android:background="@android:color/black" />
 
         </TableRow>
-
 
         <TableRow
             android:id="@+id/committees.result.label.tablerow"

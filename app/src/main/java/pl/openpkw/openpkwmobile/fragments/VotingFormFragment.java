@@ -13,14 +13,8 @@ import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.Spinner;
 import android.widget.TextView;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import pl.openpkw.openpkwmobile.R;
 import pl.openpkw.openpkwmobile.activities.CommitteesResultActivity;
@@ -28,17 +22,24 @@ import pl.openpkw.openpkwmobile.activities.ScanQrCodeActivity;
 import pl.openpkw.openpkwmobile.qr.QrWrapper;
 import pl.openpkw.openpkwmobile.utils.Utils;
 
+import static pl.openpkw.openpkwmobile.fragments.ScanQrCodeFragment.createIndentedText;
+import static pl.openpkw.openpkwmobile.utils.Utils.DATA;
+import static pl.openpkw.openpkwmobile.utils.Utils.PERIPHERY_ADDRESS;
+import static pl.openpkw.openpkwmobile.utils.Utils.PERIPHERY_NAME;
+import static pl.openpkw.openpkwmobile.utils.Utils.PERIPHERY_NUMBER;
+import static pl.openpkw.openpkwmobile.utils.Utils.TERRITORIAL_CODE;
+
 public class VotingFormFragment extends Fragment {
 
     private TextView territorialCodeTextView;
     private TextView peripheryNumberTextView;
+    private TextView peripheryNameTextView;
+    private TextView peripheryAddressTextView;
     private TextView totalEntitledToVoteTextView;
     private TextView totalVotingCardsTextView;
     private TextView validCardsTextView;
     private TextView invalidVotesTextView;
     private TextView validVotesTextView;
-
-    private List<String> spinnerData = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -46,6 +47,8 @@ public class VotingFormFragment extends Fragment {
 
         peripheryNumberTextView = (TextView) v.findViewById(R.id.fvoting_periphery_number);
         territorialCodeTextView= (TextView) v.findViewById(R.id.fvoting_territorial_code);
+        peripheryNameTextView = (TextView)v.findViewById(R.id.fvoting_periphery_name);
+        peripheryAddressTextView = (TextView) v.findViewById(R.id.fvoting_periphery_address);
         totalEntitledToVoteTextView = (TextView) v.findViewById(R.id.fvoting_total_entitled_to_vote);
         totalVotingCardsTextView = (TextView) v.findViewById(R.id.fvoting_total_voting_cards);
         validCardsTextView = (TextView) v.findViewById(R.id.fvoting_valid_cards);
@@ -60,28 +63,8 @@ public class VotingFormFragment extends Fragment {
 
         loadData();
 
-        Spinner protocolDataSpinner = (Spinner) v.findViewById(R.id.fvoting_committee_data_spinner);
-        //set data adapter
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),
-                R.layout.view_spinner_item, spinnerData);
-        adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
-        protocolDataSpinner.setAdapter(adapter);
-        protocolDataSpinner.setOnItemSelectedListener(spinnerItemListener);
-
         return v;
     }
-
-    AdapterView.OnItemSelectedListener spinnerItemListener = new AdapterView.OnItemSelectedListener() {
-        @Override
-        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-            adapterView.setSelection(0);
-        }
-
-        @Override
-        public void onNothingSelected(AdapterView<?> adapterView) {
-
-        }
-    };
 
     View.OnClickListener nextButtonClickListener = new View.OnClickListener() {
         @Override
@@ -108,21 +91,32 @@ public class VotingFormFragment extends Fragment {
     }
 
     private void loadData() {
-        SharedPreferences sharedPref = getActivity().getSharedPreferences(Utils.DATA, Context.MODE_PRIVATE);
+        peripheryAddressTextView.setText("Adres: ");
+        peripheryAddressTextView.measure(0,0);
+        int addressLabelTextWidth = peripheryAddressTextView.getMeasuredWidth();
+        peripheryNameTextView.setText("Nazwa: ");
+        peripheryNameTextView.measure(0,0);
+        int peripheryNameLabelTextWidth = peripheryNameTextView.getMeasuredWidth();
+        SharedPreferences sharedPref = getActivity().getSharedPreferences(DATA, Context.MODE_PRIVATE);
         String scannedQR = sharedPref.getString(Utils.QR,null);
-        String territorial_code = "  "+sharedPref.getString(Utils.TERRITORIAL_CODE, "Kod terytorialny")+"  ";
-        String periphery_number = "Nr "+sharedPref.getString(Utils.PERIPHERY_NUMBER, "obwodu");
-        String periphery_name = sharedPref.getString(Utils.PERIPHERY_NAME, "Nazwa");
-        String periphery_address = sharedPref.getString(Utils.PERIPHERY_ADDRESS, "Adres");
-        String districtNumber = sharedPref.getString(Utils.DISTRICT_NUMBER, "Okręg Wyborczy Nr");
+        String territorial_code = sharedPref.getString(TERRITORIAL_CODE, "Kod terytorialny: _ _ _ _");
+        if(!territorial_code.equalsIgnoreCase("Kod terytorialny: _ _ _ _"))
+            territorial_code = "Kod terytorialny: "+territorial_code;
+        String periphery_number = sharedPref.getString(PERIPHERY_NUMBER, "Nr obwodu: _ _ _ _");
+        if(!periphery_number.equalsIgnoreCase("Nr obwodu: _ _ _ _"))
+            periphery_number = "Nr obwodu: "+periphery_number;
+        String periphery_name = sharedPref.getString(PERIPHERY_NAME, "Nazwa: _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _");
+        if(!periphery_name.equalsIgnoreCase("Nazwa: _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _"))
+            periphery_name = "Nazwa: " + periphery_name;
+        String periphery_address = sharedPref.getString(PERIPHERY_ADDRESS, "Adres: _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _");
+        if(!periphery_address.equalsIgnoreCase("Adres: _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _"))
+            periphery_address = "Adres: "+periphery_address;
         Spannable spannable = new SpannableString(territorial_code);
-        spannable.setSpan(new ForegroundColorSpan(Color.GREEN),0, territorial_code.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannable.setSpan(new ForegroundColorSpan(Color.GREEN),"Kod terytorialny: ".length(), territorial_code.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         territorialCodeTextView.setText(spannable);
         peripheryNumberTextView.setText(periphery_number);
-        spinnerData.add(getString(R.string.committee_label));
-        spinnerData.add(periphery_name);
-        spinnerData.add(periphery_address);
-        spinnerData.add(districtNumber);
+        peripheryNameTextView.setText(createIndentedText(periphery_name,0,peripheryNameLabelTextWidth ));
+        peripheryAddressTextView.setText(createIndentedText(periphery_address,0,addressLabelTextWidth));
 
         if(scannedQR!=null) {
             QrWrapper qrWrapper = new QrWrapper(scannedQR);
@@ -147,7 +141,5 @@ public class VotingFormFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        if( spinnerData!=null)
-            spinnerData.clear();
     }
 }

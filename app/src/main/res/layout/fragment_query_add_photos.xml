@@ -85,31 +85,40 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/query.add.periphery.number"
-                android:layout_width="0dp"
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:paddingBottom="@dimen/padding.committee.label"
-                android:paddingTop="@dimen/padding.committee.label"
-                android:gravity="center"
-                android:background="@android:color/darker_gray"
-                android:textColor="@android:color/black"
-                android:text="Nr obwodu"
-                android:textSize="@dimen/fontsize.committee.label"/>
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/query.add.territorial.code"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:paddingBottom="@dimen/padding.committee.label"
-                android:paddingTop="@dimen/padding.committee.label"
-                android:gravity="center"
-                android:background="@android:color/darker_gray"
-                android:textColor="@android:color/black"
-                android:text="Kod terytorialny"
-                android:textSize="@dimen/fontsize.committee.label"/>
+                <TextView
+                    android:id="@+id/query.add.periphery.number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="@dimen/padding.committee.label"
+                    android:paddingTop="@dimen/padding.committee.label"
+                    android:paddingStart="2dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_toLeftOf="@+id/scan.qr.territorial.code"
+                    android:textColor="@android:color/black"
+                    android:text="Nr obwodu"
+                    android:maxLines="1"
+                    android:textSize="@dimen/fontsize.committee.label"/>
+
+                <TextView
+                    android:id="@+id/query.add.territorial.code"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:paddingEnd="2dp"
+                    android:paddingBottom="@dimen/padding.committee.label"
+                    android:paddingTop="@dimen/padding.committee.label"
+                    android:textColor="@android:color/black"
+                    android:text="Kod terytorialny"
+                    android:maxLines="1"
+                    android:textSize="@dimen/fontsize.committee.label"/>
+            </RelativeLayout>
+
         </TableRow>
 
         <TableRow
@@ -125,6 +134,77 @@
                 android:background="@android:color/black" />
 
         </TableRow>
+
+        <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/query.add.periphery.name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:paddingBottom="@dimen/padding.committee.label"
+            android:paddingTop="@dimen/padding.committee.label"
+            android:paddingLeft="@dimen/padding.committee.label"
+            android:paddingRight="@dimen/padding.committee.label"
+            android:layout_weight="1"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginTop="0dp"
+            android:textColor="@android:color/black"
+            android:text="Nazwa"
+            android:textSize="@dimen/fontsize.committee.label"/>
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/height.login.separator.bottom"
+            android:layout_weight="1"
+            android:layout_marginBottom="0dp"
+            android:layout_marginTop="0dp"
+            android:background="@android:color/black" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/query.add.periphery.address"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:paddingBottom="@dimen/padding.committee.label"
+            android:paddingTop="@dimen/padding.committee.label"
+            android:paddingLeft="@dimen/padding.committee.label"
+            android:paddingRight="@dimen/padding.committee.label"
+            android:layout_weight="1"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginTop="0dp"
+            android:textColor="@android:color/black"
+            android:text="Adres"
+            android:textSize="@dimen/fontsize.committee.address"/>
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/height.login.separator.bottom"
+            android:layout_weight="1"
+            android:layout_marginBottom="0dp"
+            android:layout_marginTop="0dp"
+            android:background="@android:color/black" />
+
+    </TableRow>
 
         <TableRow
             android:layout_width="match_parent"
@@ -148,6 +228,8 @@
                     android:layout_height="0dp"
                     android:gravity="center_horizontal"
                     android:layout_marginTop="30dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="10dp"
                     android:layout_weight="1"
                     android:textColor="@android:color/black"
                     android:text="Czy chcesz dodać dokumentację fotograficzną protokołu wyborczego?"

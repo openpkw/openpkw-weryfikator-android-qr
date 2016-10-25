@@ -1,7 +1,6 @@
 package pl.openpkw.openpkwmobile.fragments;
 
 import android.app.AlertDialog;
-import android.support.v4.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -9,9 +8,9 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
 import android.util.Base64;
@@ -27,7 +26,6 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
 import java.security.PrivateKey;
 
 import pl.openpkw.openpkwmobile.R;
@@ -42,7 +40,7 @@ import pl.openpkw.openpkwmobile.utils.TimerSingleton;
 import pl.openpkw.openpkwmobile.utils.Utils;
 
 
-public class LoginFragment extends Fragment {
+public class LoginFragment extends Fragment implements View.OnClickListener{
 
     private EditText emailEditText;
     private EditText passwordEditText;
@@ -58,16 +56,16 @@ public class LoginFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_login, container, false);
 
         Button loginButton = (Button) v.findViewById(R.id.login_button_login);
-        loginButton.setOnClickListener(loginButtonClickListener);
+        loginButton.setOnClickListener(this);
 
         Button registerUserButton = (Button)v.findViewById(R.id.login_button_register);
-        registerUserButton.setOnClickListener(registerUserButtonClickListener);
+        registerUserButton.setOnClickListener(this);
 
         Button restorePasswordButton = (Button) v.findViewById(R.id.login_textlink_fpassword);
         SpannableString buttonText = new SpannableString(restorePasswordButton.getText());
         buttonText.setSpan(new UnderlineSpan(), 0, buttonText.length(), 0);
         restorePasswordButton.setText(buttonText);
-        restorePasswordButton.setOnClickListener(restorePasswordButtonClickListener);
+        restorePasswordButton.setOnClickListener(this);
 
         emailEditText = (EditText) v.findViewById(R.id.login_edittext_user);
         passwordEditText = (EditText) v.findViewById(R.id.login_edittext_password);
@@ -76,90 +74,82 @@ public class LoginFragment extends Fragment {
 
         timer = new TimerSingleton(Utils.SESSION_TIMER,1000,getActivity().getApplication());
 
-        clearData();
-
         return v;
     }
-
-    public View.OnClickListener restorePasswordButtonClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            Intent prestoreIntent = new Intent(getActivity(), PasswordRestoreActivity.class);
-            startActivity(prestoreIntent);
-        }
-    };
-
-    public View.OnClickListener registerUserButtonClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-
-            Intent registerUserIntent = new Intent(getActivity(), RegisterUserActivity.class);
-            startActivity(registerUserIntent);
-        }
-    };
-
-    public View.OnClickListener loginButtonClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            timer.start();
-
-            boolean isEmailCorrect;
-            if(emailEditText.getText().toString().isEmpty())
-            {
-                emailEditText.setError(getString(R.string.register_error_email));
-                isEmailCorrect = false;
-            }
-            else {
-                if (!Utils.isEmailValid(emailEditText.getText().toString().trim())) {
-                    emailEditText.setError(getString(R.string.register_error_email_invalid));
-                    isEmailCorrect = false;
-                }
-                else
-                    isEmailCorrect = true;
-            }
-
-            boolean isPasswordCorrect;
-            if(passwordEditText.getText().toString().isEmpty())
-            {
-                passwordEditText.setError(getString(R.string.register_error_password));
-                isPasswordCorrect = false;
-            }
-            else
-                isPasswordCorrect = true;
-
-            if(isPasswordCorrect && isEmailCorrect) {
-
-               if(NetworkUtils.isNetworkAvailable(getActivity())) {
-                    //read url login from preference
-                    UserCredentialsDTO credentials = new UserCredentialsDTO();
-                    credentials.setEmail(emailEditText.getText().toString().trim());
-                    credentials.setPassword(passwordEditText.getText().toString().trim());
-                    //run login task
-                    loginAsyncTask = new LoginAsyncTask(getOAuthLoginParam());
-                    loginAsyncTask.execute(credentials);
-               }
-               else {
-                   final AlertDialog.Builder builder = new AlertDialog.Builder(contextThemeWrapper);
-                   builder.setMessage(R.string.login_toast_no_network_connection_message)
-                           .setTitle(R.string.login_toast_no_network_connection_title)
-                           .setCancelable(false)
-                           .setPositiveButton(R.string.zxing_button_ok, null);
-                   final AlertDialog dialog = builder.create();
-                   dialog.show();
-               }
-            }
-            else
-            {
-                Toast.makeText(getActivity().getApplicationContext(),getString(R.string.login_toast_enter_login_password),
-                        Toast.LENGTH_LONG).show();
-            }
-        }
-    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.login_button_login:{
+                boolean isEmailCorrect;
+                if(emailEditText.getText().toString().isEmpty())
+                {
+                    emailEditText.setError(getString(R.string.register_error_email));
+                    isEmailCorrect = false;
+                }
+                else {
+                    if (!Utils.isEmailValid(emailEditText.getText().toString().trim())) {
+                        emailEditText.setError(getString(R.string.register_error_email_invalid));
+                        isEmailCorrect = false;
+                    }
+                    else
+                        isEmailCorrect = true;
+                }
+
+                boolean isPasswordCorrect;
+                if(passwordEditText.getText().toString().isEmpty())
+                {
+                    passwordEditText.setError(getString(R.string.register_error_password));
+                    isPasswordCorrect = false;
+                }
+                else
+                    isPasswordCorrect = true;
+
+                if(isPasswordCorrect && isEmailCorrect) {
+
+                    if(NetworkUtils.isNetworkAvailable(getActivity())) {
+                        //read url login from preference
+                        UserCredentialsDTO credentials = new UserCredentialsDTO();
+                        credentials.setEmail(emailEditText.getText().toString().trim());
+                        credentials.setPassword(passwordEditText.getText().toString().trim());
+                        //run login task
+                        loginAsyncTask = new LoginAsyncTask(getOAuthLoginParam());
+                        loginAsyncTask.execute(credentials);
+                    }
+                    else {
+                        final AlertDialog.Builder builder = new AlertDialog.Builder(contextThemeWrapper);
+                        builder.setMessage(R.string.login_toast_no_network_connection_message)
+                                .setTitle(R.string.login_toast_no_network_connection_title)
+                                .setCancelable(false)
+                                .setPositiveButton(R.string.zxing_button_ok, null);
+                        final AlertDialog dialog = builder.create();
+                        dialog.show();
+                    }
+                }
+                else
+                {
+                    Toast.makeText(getActivity().getApplicationContext(),getString(R.string.login_toast_enter_login_password),
+                            Toast.LENGTH_LONG).show();
+                }
+                break;
+            }
+            case R.id.login_button_register:{
+                Intent registerUserIntent = new Intent(getActivity(), RegisterUserActivity.class);
+                startActivity(registerUserIntent);
+                break;
+            }
+            case R.id.login_textlink_fpassword:{
+                Intent prestoreIntent = new Intent(getActivity(), PasswordRestoreActivity.class);
+                startActivity(prestoreIntent);
+                break;
+            }
+        }
     }
 
     private class LoginAsyncTask extends AsyncTask<UserCredentialsDTO, String, JSONObject>{
@@ -257,9 +247,6 @@ public class LoginFragment extends Fragment {
                                 timer.start();
 
                                 onLoginSuccessfully();
-                               // Intent scanIntent = new Intent(getActivity(), ScanQrCodeActivity.class);
-                                //startActivity(scanIntent);
-                                //getActivity().finish();
                             }
                         }
                     } catch (JSONException e1) {
@@ -306,35 +293,6 @@ public class LoginFragment extends Fragment {
     private String getLoginUrl(){
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity().getBaseContext());
         return sharedPref.getString(Utils.URL_LOGIN_PREFERENCE, Utils.URL_DEFAULT_LOGIN).trim();
-    }
-
-    private void clearData(){
-        SharedPreferences sharedPref = getActivity().getSharedPreferences(Utils.DATA, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString(Utils.QR, null);
-        editor.putString(Utils.TERRITORIAL_CODE, null);
-        editor.putString(Utils.PERIPHERY_ADDRESS, null);
-        editor.putString(Utils.PERIPHERY_NAME, null);
-        editor.putString(Utils.PERIPHERY_NUMBER, null);
-        editor.putString(Utils.DISTRICT_NUMBER, null);
-        editor.apply();
-
-        File[]photoFiles = getCommitteeProtocolStorageDir(Utils.STORAGE_PROTOCOL_DIRECTORY).listFiles();
-        if(photoFiles!=null) {
-            for (File photoFile : photoFiles) {
-                photoFile.delete();
-            }
-        }
-    }
-
-    public File getCommitteeProtocolStorageDir(String albumName) {
-        // Get the directory for the user's public pictures directory.
-        File file = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES), albumName);
-        if (!file.mkdirs()) {
-            Log.e(Utils.TAG, "DIRECTORY NOT CREATED");
-        }
-        return file;
     }
 
     public interface OnFragmentInteractionListener {

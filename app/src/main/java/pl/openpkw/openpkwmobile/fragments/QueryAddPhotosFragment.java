@@ -22,7 +22,13 @@ import pl.openpkw.openpkwmobile.R;
 import pl.openpkw.openpkwmobile.activities.CommitteesResultActivity;
 import pl.openpkw.openpkwmobile.activities.SendDataActivity;
 import pl.openpkw.openpkwmobile.camera.CameraActivity;
-import pl.openpkw.openpkwmobile.utils.Utils;
+
+import static pl.openpkw.openpkwmobile.fragments.ScanQrCodeFragment.createIndentedText;
+import static pl.openpkw.openpkwmobile.utils.Utils.DATA;
+import static pl.openpkw.openpkwmobile.utils.Utils.PERIPHERY_ADDRESS;
+import static pl.openpkw.openpkwmobile.utils.Utils.PERIPHERY_NAME;
+import static pl.openpkw.openpkwmobile.utils.Utils.PERIPHERY_NUMBER;
+import static pl.openpkw.openpkwmobile.utils.Utils.TERRITORIAL_CODE;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -37,6 +43,8 @@ public class QueryAddPhotosFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
     private TextView territorialCodeTextView;
     private TextView peripheryNumberTextView;
+    private TextView peripheryNameTextView;
+    private TextView peripheryAddressTextView;
 
     public QueryAddPhotosFragment() {
         // Required empty public constructor
@@ -74,6 +82,8 @@ public class QueryAddPhotosFragment extends Fragment {
 
         territorialCodeTextView = (TextView) queryAddPhotosView.findViewById(R.id.query_add_territorial_code);
         peripheryNumberTextView = (TextView) queryAddPhotosView.findViewById(R.id.query_add_periphery_number);
+        peripheryNameTextView = (TextView) queryAddPhotosView.findViewById(R.id.query_add_periphery_name);
+        peripheryAddressTextView = (TextView) queryAddPhotosView.findViewById(R.id.query_add_periphery_address);
 
         loadData();
 
@@ -81,13 +91,31 @@ public class QueryAddPhotosFragment extends Fragment {
     }
 
     private void loadData() {
-        SharedPreferences sharedPref = getActivity().getSharedPreferences(Utils.DATA, Context.MODE_PRIVATE);
-        String territorial_code = "  "+sharedPref.getString(Utils.TERRITORIAL_CODE, "Kod terytorialny")+"  ";
-        String periphery_number = "Nr "+sharedPref.getString(Utils.PERIPHERY_NUMBER, "obwodu");
+        peripheryAddressTextView.setText("Adres: ");
+        peripheryAddressTextView.measure(0,0);
+        int addressLabelTextWidth = peripheryAddressTextView.getMeasuredWidth();
+        peripheryNameTextView.setText("Nazwa: ");
+        peripheryNameTextView.measure(0,0);
+        int peripheryNameLabelTextWidth = peripheryNameTextView.getMeasuredWidth();
+        SharedPreferences sharedPref = getActivity().getSharedPreferences(DATA, Context.MODE_PRIVATE);
+        String territorial_code = sharedPref.getString(TERRITORIAL_CODE, "Kod terytorialny: _ _ _ _");
+        if(!territorial_code.equalsIgnoreCase("Kod terytorialny: _ _ _ _"))
+            territorial_code = "Kod terytorialny: "+territorial_code;
+        String periphery_number = sharedPref.getString(PERIPHERY_NUMBER, "Nr obwodu: _ _ _ _");
+        if(!periphery_number.equalsIgnoreCase("Nr obwodu: _ _ _ _"))
+            periphery_number = "Nr obwodu: "+periphery_number;
+        String periphery_name = sharedPref.getString(PERIPHERY_NAME, "Nazwa: _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _");
+        if(!periphery_name.equalsIgnoreCase("Nazwa: _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _"))
+            periphery_name = "Nazwa: " + periphery_name;
+        String periphery_address = sharedPref.getString(PERIPHERY_ADDRESS, "Adres: _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _");
+        if(!periphery_address.equalsIgnoreCase("Adres: _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _"))
+            periphery_address = "Adres: "+periphery_address;
         Spannable spannable = new SpannableString(territorial_code);
-        spannable.setSpan(new ForegroundColorSpan(Color.GREEN),0, territorial_code.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannable.setSpan(new ForegroundColorSpan(Color.GREEN),"Kod terytorialny: ".length(), territorial_code.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         territorialCodeTextView.setText(spannable);
         peripheryNumberTextView.setText(periphery_number);
+        peripheryNameTextView.setText(createIndentedText(periphery_name,0,peripheryNameLabelTextWidth ));
+        peripheryAddressTextView.setText(createIndentedText(periphery_address,0,addressLabelTextWidth));
     }
 
     View.OnClickListener forwardButtonClickListener = new View.OnClickListener() {

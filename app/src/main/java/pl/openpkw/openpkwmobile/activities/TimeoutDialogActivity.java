@@ -43,6 +43,7 @@ public class TimeoutDialogActivity extends Activity implements DialogInterface.O
                     public void onClick(DialogInterface dialogInterface, int i) {
                         Intent loginIntent = new Intent(TimeoutDialogActivity.this, LoginActivity.class);
                         loginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        loginIntent.putExtra(Utils.IS_RE_LOGIN,true);
                         startActivity(loginIntent);
                         finish();
                     }

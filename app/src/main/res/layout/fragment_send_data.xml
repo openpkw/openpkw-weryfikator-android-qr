@@ -91,31 +91,39 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <TextView
-                    android:id="@+id/send.data.periphery.number"
-                    android:layout_width="0dp"
+                <RelativeLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:paddingBottom="@dimen/padding.committee.label"
-                    android:paddingTop="@dimen/padding.committee.label"
-                    android:gravity="center"
-                    android:background="@android:color/darker_gray"
-                    android:textColor="@android:color/black"
-                    android:text="Nr obwodu"
-                    android:textSize="@dimen/fontsize.committee.label"/>
+                    android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/send.data.territorial.code"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:paddingBottom="@dimen/padding.committee.label"
-                    android:paddingTop="@dimen/padding.committee.label"
-                    android:gravity="center"
-                    android:background="@android:color/darker_gray"
-                    android:textColor="@android:color/black"
-                    android:text="Kod terytorialny"
-                    android:textSize="@dimen/fontsize.committee.label"/>
+                    <TextView
+                        android:id="@+id/send.data.periphery.number"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="@dimen/padding.committee.label"
+                        android:paddingTop="@dimen/padding.committee.label"
+                        android:paddingStart="2dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_toLeftOf="@+id/scan.qr.territorial.code"
+                        android:textColor="@android:color/black"
+                        android:text="Nr obwodu"
+                        android:maxLines="1"
+                        android:textSize="@dimen/fontsize.committee.label"/>
+
+                    <TextView
+                        android:id="@+id/send.data.territorial.code"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:paddingEnd="2dp"
+                        android:paddingBottom="@dimen/padding.committee.label"
+                        android:paddingTop="@dimen/padding.committee.label"
+                        android:textColor="@android:color/black"
+                        android:text="Kod terytorialny"
+                        android:maxLines="1"
+                        android:textSize="@dimen/fontsize.committee.label"/>
+                </RelativeLayout>
             </TableRow>
 
             <TableRow
@@ -139,8 +147,9 @@
 
                 <TextView
                     android:id="@+id/send.data.periphery.name"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="start"
                     android:paddingBottom="@dimen/padding.committee.label"
                     android:paddingTop="@dimen/padding.committee.label"
                     android:paddingLeft="@dimen/padding.committee.label"
@@ -149,8 +158,6 @@
                     android:layout_marginStart="0dp"
                     android:layout_marginEnd="0dp"
                     android:layout_marginTop="0dp"
-                    android:gravity="center"
-                    android:background="@color/light_gray_protocol"
                     android:textColor="@android:color/black"
                     android:text="Nazwa"
                     android:textSize="@dimen/fontsize.committee.label"/>
@@ -177,8 +184,9 @@
 
                 <TextView
                     android:id="@+id/send.data.periphery.address"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="start"
                     android:paddingBottom="@dimen/padding.committee.label"
                     android:paddingTop="@dimen/padding.committee.label"
                     android:paddingLeft="@dimen/padding.committee.label"
@@ -187,8 +195,6 @@
                     android:layout_marginStart="0dp"
                     android:layout_marginEnd="0dp"
                     android:layout_marginTop="0dp"
-                    android:gravity="center"
-                    android:background="@color/light_gray_protocol"
                     android:textColor="@android:color/black"
                     android:text="Adres"
                     android:textSize="@dimen/fontsize.committee.address"/>
@@ -211,6 +217,7 @@
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@color/light_gray_protocol"
                 >
 
                 <LinearLayout
@@ -244,28 +251,6 @@
                         android:layout_marginBottom="30dp"
                         android:text="@string/scan.qr.buttonlabel.send"
                         style="@style/orange_button"/>
-
-                    <!--
-
-                    <Button
-                        android:id="@+id/scan.qr.textlink.scan"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="0dp"
-                        android:enabled="false"
-                        android:layout_marginTop="0dp"
-                        android:layout_marginStart="@dimen/margin.login.left"
-                        android:paddingStart="2dp"
-                        android:paddingEnd="2dp"
-                        android:textAllCaps="false"
-                        android:textStyle="normal"
-                        android:background="@android:color/transparent"
-                        android:text="@string/scan.qr.buttonlabel.help"
-                        android:textColor="@android:color/transparent"
-                        style="?android:attr/borderlessButtonStyle"
-                        android:textSize="@dimen/fontsize.login.textlink.fpassword" />
-                        -->
-
                 </LinearLayout>
 
             </TableRow>

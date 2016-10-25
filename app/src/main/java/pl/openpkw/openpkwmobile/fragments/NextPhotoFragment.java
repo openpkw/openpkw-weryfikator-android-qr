@@ -38,6 +38,9 @@ import pl.openpkw.openpkwmobile.activities.ThumbnailsActivity;
 import pl.openpkw.openpkwmobile.camera.CameraActivity;
 import pl.openpkw.openpkwmobile.utils.Utils;
 
+import static pl.openpkw.openpkwmobile.utils.Utils.PERIPHERY_NUMBER;
+import static pl.openpkw.openpkwmobile.utils.Utils.TERRITORIAL_CODE;
+
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
@@ -47,7 +50,6 @@ import pl.openpkw.openpkwmobile.utils.Utils;
  * create an instance of this fragment.
  */
 public class NextPhotoFragment extends Fragment {
-
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
 
@@ -122,13 +124,17 @@ public class NextPhotoFragment extends Fragment {
 
     private void loadData(){
         SharedPreferences sharedPref = getActivity().getSharedPreferences(Utils.DATA, Context.MODE_PRIVATE);
-        String territorial_code = "  "+sharedPref.getString(Utils.TERRITORIAL_CODE, "Kod terytorialny")+"  ";
-        String periphery_number = "Nr "+sharedPref.getString(Utils.PERIPHERY_NUMBER, "obwodu");
+        String territorial_code = sharedPref.getString(TERRITORIAL_CODE, "Kod terytorialny: _ _ _ _");
+        if(!territorial_code.equalsIgnoreCase("Kod terytorialny: _ _ _ _"))
+            territorial_code = "Kod terytorialny: "+territorial_code;
+        String periphery_number = sharedPref.getString(PERIPHERY_NUMBER, "Nr obwodu: _ _ _ _");
+        if(!periphery_number.equalsIgnoreCase("Nr obwodu: _ _ _ _"))
+            periphery_number = "Nr obwodu: "+periphery_number;
         String periphery_name = sharedPref.getString(Utils.PERIPHERY_NAME, "Nazwa");
         String periphery_address = sharedPref.getString(Utils.PERIPHERY_ADDRESS, "Adres");
         String districtNumber = sharedPref.getString(Utils.DISTRICT_NUMBER, "Okręg Wyborczy Nr");
         Spannable spannable = new SpannableString(territorial_code);
-        spannable.setSpan(new ForegroundColorSpan(Color.GREEN),0, territorial_code.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannable.setSpan(new ForegroundColorSpan(Color.GREEN),"Kod terytorialny: ".length(), territorial_code.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         territorialCodeTextView.setText(spannable);
         peripheryNumberTextView.setText(periphery_number);
         spinnerData.add(getString(R.string.committee_label));

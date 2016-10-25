@@ -9,7 +9,7 @@ public class QrValidator {
     public static boolean isCorrectQR(String qr){
         String [] splitQr = qr.split(",");
 
-        if(TERRITORIAL_CODE.getIndex()>splitQr.length)
+        if(TERRITORIAL_CODE.getIndex()>=splitQr.length)
             return false;
         else
         {
@@ -17,7 +17,7 @@ public class QrValidator {
                 return false;
         }
 
-        if(PERIPHERY_NUMBER.getIndex()>splitQr.length)
+        if(PERIPHERY_NUMBER.getIndex()>=splitQr.length)
             return false;
         else
         {
@@ -25,7 +25,7 @@ public class QrValidator {
                 return false;
         }
 
-        if(DISTRICT_NUMBER.getIndex()>splitQr.length)
+        if(DISTRICT_NUMBER.getIndex()>=splitQr.length)
             return false;
         else
         {
@@ -33,7 +33,7 @@ public class QrValidator {
                 return false;
         }
 
-        if(VOTING_CARDS_TOTAL_ENTITLED_TO_VOTE.getIndex()>splitQr.length)
+        if(VOTING_CARDS_TOTAL_ENTITLED_TO_VOTE.getIndex()>=splitQr.length)
             return false;
         else
         {
@@ -41,7 +41,7 @@ public class QrValidator {
                 return false;
         }
 
-        if(VOTING_CARDS_TOTAL_CARDS.getIndex()>splitQr.length)
+        if(VOTING_CARDS_TOTAL_CARDS.getIndex()>=splitQr.length)
             return false;
         else
         {
@@ -49,7 +49,7 @@ public class QrValidator {
                 return false;
         }
 
-        if(VOTING_CARDS_VALID_CARDS.getIndex()>splitQr.length)
+        if(VOTING_CARDS_VALID_CARDS.getIndex()>=splitQr.length)
             return false;
         else
         {
@@ -57,7 +57,7 @@ public class QrValidator {
                 return false;
         }
 
-        if(VOTING_CARDS_INVALID_VOTES.getIndex()>splitQr.length)
+        if(VOTING_CARDS_INVALID_VOTES.getIndex()>=splitQr.length)
             return false;
         else
         {

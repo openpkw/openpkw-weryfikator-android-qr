@@ -2,6 +2,7 @@ package pl.openpkw.openpkwmobile.activities;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,6 +18,7 @@ import pl.openpkw.openpkwmobile.R;
 import pl.openpkw.openpkwmobile.fragments.InstructionScanQrFragment;
 
 import static pl.openpkw.openpkwmobile.fragments.LoginFragment.timer;
+import static pl.openpkw.openpkwmobile.utils.Utils.CLASS_NAME;
 import static pl.openpkw.openpkwmobile.utils.Utils.INSTRUCTION_SCAN_QR_FRAGMENT_TAG;
 
 public class InstructionScanQrActivity extends AppCompatActivity implements InstructionScanQrFragment.OnFragmentInteractionListener{
@@ -28,11 +30,18 @@ public class InstructionScanQrActivity extends AppCompatActivity implements Inst
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_instruction_scan_qr);
 
+        Intent intent = getIntent();
+        Bundle  bundle = intent.getExtras();
+
         FragmentManager fm = getFragmentManager();
         InstructionScanQrFragment instructionScanQrFragment = (InstructionScanQrFragment) fm.findFragmentByTag(INSTRUCTION_SCAN_QR_FRAGMENT_TAG);
         if(instructionScanQrFragment == null){
+            instructionScanQrFragment = new InstructionScanQrFragment();
+            if(bundle!=null){
+                instructionScanQrFragment.setArguments(bundle);
+            }
             FragmentTransaction ft = fm.beginTransaction();
-            ft.replace(R.id.instruction_scan_qr_fragment_container,new InstructionScanQrFragment(),INSTRUCTION_SCAN_QR_FRAGMENT_TAG);
+            ft.replace(R.id.instruction_scan_qr_fragment_container, instructionScanQrFragment,INSTRUCTION_SCAN_QR_FRAGMENT_TAG);
             ft.commit();
             fm.executePendingTransactions();
         }
@@ -74,6 +83,5 @@ public class InstructionScanQrActivity extends AppCompatActivity implements Inst
                 doubleBackToExitPressedOnce = false;
             }
         }, 3000);
-
     }
 }

@@ -1,195 +1,202 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<TableLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/thumbnails.protocol.data.tablelayout"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginLeft="@dimen/margin.protocol.data"
-    android:layout_marginRight="@dimen/margin.protocol.data"
-    android:layout_marginBottom="@dimen/margin.protocol.data"
-    android:layout_marginTop="@dimen/margin.top.protocol.data"
-    android:background="@drawable/protocol_border"
-    android:stretchColumns="1">
+    android:layout_height="match_parent">
 
-    <TableRow
-        android:gravity="center"
+    <TableLayout
+        android:id="@+id/thumbnails.protocol.data.tablelayout"
+        android:layout_above="@+id/thumbnails.layout.buttons"
+        android:layout_alignParentTop="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/rules.fragment.background">
+        android:layout_marginLeft="@dimen/margin.protocol.data"
+        android:layout_marginRight="@dimen/margin.protocol.data"
+        android:layout_marginBottom="@dimen/margin.protocol.data"
+        android:layout_marginTop="@dimen/margin.top.protocol.data"
+        android:background="@drawable/protocol_border"
+        android:stretchColumns="1">
 
-        <TextView
+        <TableRow
+            android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="@dimen/padding.committee.label"
-            android:paddingRight="@dimen/padding.committee.label"
-            android:layout_marginStart="0dp"
-            android:layout_marginEnd="0dp"
-            android:paddingTop="@dimen/padding.committee.label"
-            android:paddingBottom="@dimen/padding.committee.label"
-            android:text="@string/scan_qr_label_enter_data"
-            android:gravity="center"
-            android:textColor="@android:color/black"
-            android:textSize="@dimen/fontsize.committee.label" />
-    </TableRow>
+            android:background="@color/rules.fragment.background">
 
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/padding.committee.label"
+                android:paddingRight="@dimen/padding.committee.label"
+                android:layout_marginStart="0dp"
+                android:layout_marginEnd="0dp"
+                android:paddingTop="@dimen/padding.committee.label"
+                android:paddingBottom="@dimen/padding.committee.label"
+                android:text="@string/scan_qr_label_enter_data"
+                android:gravity="center"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/fontsize.committee.label" />
+        </TableRow>
 
-        <View
+        <TableRow
             android:layout_width="match_parent"
-            android:layout_height="@dimen/height.login.separator.bottom"
-            android:layout_weight="1"
-            android:layout_marginBottom="0dp"
-            android:layout_marginTop="0dp"
-            android:background="@android:color/black" />
-    </TableRow>
+            android:layout_height="match_parent">
 
-    <TableRow
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent">
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/height.login.separator.bottom"
+                android:layout_weight="1"
+                android:layout_marginBottom="0dp"
+                android:layout_marginTop="0dp"
+                android:background="@android:color/black" />
+        </TableRow>
 
-        <Spinner
-            android:id="@+id/thumbnails.data.spinner"
-            android:layout_weight="1"
+        <TableRow
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="0dp"
-            android:layout_marginStart="0dp"
-            android:layout_marginEnd="0dp"
-            android:spinnerMode="dropdown"
-            android:gravity="center_horizontal"
-            android:background="@android:color/darker_gray"
-            android:textColor="@android:color/black"
-            android:textSize="20sp"/>
-    </TableRow>
+            android:layout_height="match_parent">
 
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+            <Spinner
+                android:id="@+id/thumbnails.data.spinner"
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="0dp"
+                android:layout_marginStart="0dp"
+                android:layout_marginEnd="0dp"
+                android:spinnerMode="dropdown"
+                android:gravity="center_horizontal"
+                android:background="@android:color/darker_gray"
+                android:textColor="@android:color/black"
+                android:textSize="20sp"/>
+        </TableRow>
 
-        <View
+        <TableRow
             android:layout_width="match_parent"
-            android:layout_height="@dimen/height.login.separator.bottom"
-            android:layout_weight="1"
-            android:layout_marginBottom="0dp"
-            android:layout_marginTop="0dp"
-            android:background="@android:color/black" />
+            android:layout_height="match_parent">
 
-    </TableRow>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/height.login.separator.bottom"
+                android:layout_weight="1"
+                android:layout_marginBottom="0dp"
+                android:layout_marginTop="0dp"
+                android:background="@android:color/black" />
 
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:id="@+id/thumbnails.periphery.number"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:paddingBottom="@dimen/padding.committee.label"
-            android:paddingTop="@dimen/padding.committee.label"
-            android:gravity="center"
-            android:background="@android:color/darker_gray"
-            android:textColor="@android:color/black"
-            android:text="Nr obwodu"
-            android:textSize="@dimen/fontsize.committee.label"/>
-
-        <TextView
-            android:id="@+id/thumbnails.territorial.code"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:paddingBottom="@dimen/padding.committee.label"
-            android:paddingTop="@dimen/padding.committee.label"
-            android:gravity="center"
-            android:background="@android:color/darker_gray"
-            android:textColor="@android:color/black"
-            android:text="Kod terytorialny"
-            android:textSize="@dimen/fontsize.committee.label"/>
-    </TableRow>
-
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/height.login.separator.bottom"
-            android:layout_weight="1"
-            android:layout_marginBottom="0dp"
-            android:layout_marginTop="0dp"
-            android:background="@android:color/black" />
-
-    </TableRow>
-
-    <ScrollView
-        android:id="@+id/thumbnails.scrollview"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        >
+        </TableRow>
 
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-                <TableLayout
-                    android:id="@+id/thumbnails.photos.layout"
-                    android:layout_width="match_parent"
-                    android:layout_marginStart="0dp"
-                    android:layout_marginTop="0dp"
-                    android:layout_marginEnd="0dp"
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/thumbnails.periphery.number"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@color/light_gray_protocol"
-                    android:stretchColumns="1">
-                </TableLayout>
+                    android:paddingBottom="@dimen/padding.committee.label"
+                    android:paddingTop="@dimen/padding.committee.label"
+                    android:paddingStart="2dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_toLeftOf="@+id/scan.qr.territorial.code"
+                    android:textColor="@android:color/black"
+                    android:text="Nr obwodu"
+                    android:maxLines="1"
+                    android:textSize="@dimen/fontsize.committee.label"/>
+
+                <TextView
+                    android:id="@+id/thumbnails.territorial.code"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:paddingEnd="2dp"
+                    android:paddingBottom="@dimen/padding.committee.label"
+                    android:paddingTop="@dimen/padding.committee.label"
+                    android:textColor="@android:color/black"
+                    android:text="Kod terytorialny"
+                    android:maxLines="1"
+                    android:textSize="@dimen/fontsize.committee.label"/>
+            </RelativeLayout>
 
         </TableRow>
 
-    </ScrollView>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/height.login.separator.bottom"
+                android:layout_weight="1"
+                android:layout_marginBottom="0dp"
+                android:layout_marginTop="0dp"
+                android:background="@android:color/black" />
 
-        <LinearLayout
-            android:orientation="vertical"
+        </TableRow>
+
+        <ScrollView
+            android:id="@+id/thumbnails.scrollview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@color/light_gray_protocol"
             android:layout_weight="1"
-            android:layout_marginLeft="@dimen/margin.protocol.data"
-            android:layout_marginRight="@dimen/margin.protocol.data"
-            android:layout_marginBottom="@dimen/margin.protocol.data"
-            android:layout_marginTop="@dimen/margin.protocol.data"
-            android:background="@drawable/send_photo_button_border"
             >
 
-            <TextView
+            <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:gravity="center_horizontal"
-                android:layout_marginTop="0dp"
-                android:layout_weight="1"
-                android:textColor="@android:color/black"
-                android:text="Wyślij powyższe zdjęcia"
-                android:textSize="@dimen/fontsize.committee.label"/>
+                android:layout_height="wrap_content">
 
-            <Button
-                android:layout_gravity="center_horizontal"
-                android:id="@+id/thumbnails.send.button"
-                android:layout_width="@dimen/width.login.button.login"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:text="@string/scan.qr.buttonlabel.send"
-                style="@style/orange_button"/>
+                    <TableLayout
+                        android:id="@+id/thumbnails.photos.layout"
+                        android:layout_width="match_parent"
+                        android:layout_marginStart="0dp"
+                        android:layout_marginTop="0dp"
+                        android:layout_marginEnd="0dp"
+                        android:layout_height="wrap_content"
+                        android:background="@color/light_gray_protocol"
+                        android:stretchColumns="1">
+                    </TableLayout>
 
-        </LinearLayout>
+            </TableRow>
 
-    </TableRow>
+        </ScrollView>
 
-</TableLayout>
+    </TableLayout>
+
+    <LinearLayout
+        android:id="@+id/thumbnails.layout.buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/margin.bottom.buttons"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/thumbnails.send.button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginTop="5dp"
+            android:text="Wyślij teraz"
+            style="@style/green_button"/>
+
+        <Button
+            android:id="@+id/thumbnails.send.wifi.button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginTop="5dp"
+            android:text="Później po WIFI"
+            style="@style/orange_button"/>
+    </LinearLayout>
+
+</RelativeLayout>
 
 

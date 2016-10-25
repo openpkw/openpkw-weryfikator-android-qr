@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Typeface;
 import android.hardware.Camera;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -22,6 +23,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.util.Pair;
 import android.view.ContextThemeWrapper;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -184,7 +186,6 @@ public class ScanQrCodeActivity extends AppCompatActivity implements ScanQrCodeF
         switch(requestCode) {
             case IntentIntegrator.REQUEST_CODE:
             {
-                Log.e(TAG, "REQUEST CODE: "+requestCode);
                 //release camera
                 boolean cameraAccessible = false;
                 while(!cameraAccessible){
@@ -206,8 +207,6 @@ public class ScanQrCodeActivity extends AppCompatActivity implements ScanQrCodeF
                 {
                     IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
                     String scannedQR = scanResult.getContents();
-                    Log.e(TAG, "SCAN OK");
-                    Log.e(TAG, "QR: "+scannedQR);
                     if(QrValidator.isCorrectQR(scannedQR)) {
                         //decode qr
                         QrWrapper qrWrapper = new QrWrapper(scannedQR);
@@ -235,13 +234,22 @@ public class ScanQrCodeActivity extends AppCompatActivity implements ScanQrCodeF
                             scanQRFragment.loadData();
                         }
 
-                        //show info QR scanned
-                        Toast.makeText(this, R.string.toast_scanned_qr_ok, Toast.LENGTH_SHORT).show();
+                        //show info QR scanned OK
+                        Toast toast = Toast.makeText(this, R.string.toast_scanned_qr_ok, Toast.LENGTH_LONG);
+                        View view = toast.getView();
+                        view.setBackgroundResource(R.drawable.toast_green);
+                        TextView text = (TextView) view.findViewById(android.R.id.message);
+                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP)
+                            text.setTextColor(getResources().getColor(android.R.color.white,getTheme()));
+                        else
+                            text.setTextColor(getResources().getColor(android.R.color.white));
+                        text.setTypeface(Typeface.DEFAULT_BOLD);
+                        text.setGravity(Gravity.CENTER);
+                        toast.show();
 
                     }else{
                         showDialogIncorrectQr();
                     }
-
                 }
                 break;
             }
@@ -273,9 +281,9 @@ public class ScanQrCodeActivity extends AppCompatActivity implements ScanQrCodeF
                     public void onClick(DialogInterface dialogInterface, int i) {
                         IntentIntegrator integrator = new IntentIntegrator(ScanQrCodeActivity.this);
                         integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
-                        integrator.setPrompt("Skanuj kod QR z ostatniej strony protokołu wyborczego");
                         integrator.setCameraId(CAMERA_ID);  // Use a specific camera of the device
                         integrator.setBeepEnabled(true);
+                        integrator.setPrompt("");
                         integrator.setBarcodeImageEnabled(true);
                         integrator.setOrientationLocked(true);
                         integrator.setTimeout(TIMEOUT_SCAN_QR);

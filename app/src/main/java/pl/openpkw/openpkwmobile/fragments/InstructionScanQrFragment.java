@@ -11,7 +11,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import pl.openpkw.openpkwmobile.R;
+import pl.openpkw.openpkwmobile.activities.QrCodeCaptureActivity;
 import pl.openpkw.openpkwmobile.activities.ScanQrCodeActivity;
+
+import static pl.openpkw.openpkwmobile.utils.Utils.CLASS_NAME;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,8 +26,8 @@ import pl.openpkw.openpkwmobile.activities.ScanQrCodeActivity;
  */
 public class InstructionScanQrFragment extends Fragment implements View.OnClickListener{
 
-
     private OnFragmentInteractionListener mListener;
+    private String classNameIntent;
 
     public InstructionScanQrFragment() {
         // Required empty public constructor
@@ -47,6 +50,8 @@ public class InstructionScanQrFragment extends Fragment implements View.OnClickL
         View instructionView = inflater.inflate(R.layout.fragment_instruction_scan_qr, container, false);
         Button forwardButton = (Button) instructionView.findViewById(R.id.instruction_forward_button);
         forwardButton.setOnClickListener(this);
+        if(getArguments()!=null)
+            classNameIntent = getArguments().getString(CLASS_NAME,null);
         return instructionView;
     }
 
@@ -76,8 +81,13 @@ public class InstructionScanQrFragment extends Fragment implements View.OnClickL
 
     @Override
     public void onClick(View view) {
-        Intent scanQrIntent = new Intent(getActivity(), ScanQrCodeActivity.class);
-        startActivity(scanQrIntent);
+        if(classNameIntent==null) {
+            Intent intent = new Intent(getActivity(), ScanQrCodeActivity.class);
+            startActivity(intent);
+        }else{
+            Intent intent = new Intent(getActivity(), QrCodeCaptureActivity.class);
+            startActivity(intent);
+        }
         getActivity().finish();
     }
 

@@ -10,20 +10,20 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.media.ExifInterface;
 import android.media.ThumbnailUtils;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.text.Spannable;
 import android.text.SpannableString;
-import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
 import android.util.Base64;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,9 +63,35 @@ import pl.openpkw.openpkwmobile.network.SendQrData;
 import pl.openpkw.openpkwmobile.security.KeyWrapper;
 import pl.openpkw.openpkwmobile.security.SecurityECC;
 import pl.openpkw.openpkwmobile.security.SecurityRSA;
-import pl.openpkw.openpkwmobile.utils.Utils;
 
 import static pl.openpkw.openpkwmobile.fragments.LoginFragment.timer;
+import static pl.openpkw.openpkwmobile.utils.Utils.ACCESS_TOKEN;
+import static pl.openpkw.openpkwmobile.utils.Utils.DATA;
+import static pl.openpkw.openpkwmobile.utils.Utils.DEFAULT_PARAM_CHANGE;
+import static pl.openpkw.openpkwmobile.utils.Utils.DIALOG_STYLE;
+import static pl.openpkw.openpkwmobile.utils.Utils.DISTRICT_NUMBER;
+import static pl.openpkw.openpkwmobile.utils.Utils.ERROR;
+import static pl.openpkw.openpkwmobile.utils.Utils.ERROR_MESSAGE;
+import static pl.openpkw.openpkwmobile.utils.Utils.ID_DEFAULT;
+import static pl.openpkw.openpkwmobile.utils.Utils.IS_DATA_SEND;
+import static pl.openpkw.openpkwmobile.utils.Utils.KEY_ALIAS;
+import static pl.openpkw.openpkwmobile.utils.Utils.OAUTH2_ID_PREFERENCE;
+import static pl.openpkw.openpkwmobile.utils.Utils.OAUTH2_SECRET_PREFERENCE;
+import static pl.openpkw.openpkwmobile.utils.Utils.PERIPHERY_ADDRESS;
+import static pl.openpkw.openpkwmobile.utils.Utils.PERIPHERY_NAME;
+import static pl.openpkw.openpkwmobile.utils.Utils.PERIPHERY_NUMBER;
+import static pl.openpkw.openpkwmobile.utils.Utils.PRIVATE_KEY;
+import static pl.openpkw.openpkwmobile.utils.Utils.QR;
+import static pl.openpkw.openpkwmobile.utils.Utils.REFRESH_TOKEN;
+import static pl.openpkw.openpkwmobile.utils.Utils.SECRET_DEFAULT;
+import static pl.openpkw.openpkwmobile.utils.Utils.SERVER_RESPONSE;
+import static pl.openpkw.openpkwmobile.utils.Utils.STORAGE_PROTOCOL_DIRECTORY;
+import static pl.openpkw.openpkwmobile.utils.Utils.TAG;
+import static pl.openpkw.openpkwmobile.utils.Utils.TERRITORIAL_CODE;
+import static pl.openpkw.openpkwmobile.utils.Utils.URL_DEFAULT_LOGIN;
+import static pl.openpkw.openpkwmobile.utils.Utils.URL_DEFAULT__VERIFY_QR;
+import static pl.openpkw.openpkwmobile.utils.Utils.URL_LOGIN_PREFERENCE;
+import static pl.openpkw.openpkwmobile.utils.Utils.URL_VERIFY_PREFERENCE;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -75,15 +101,7 @@ import static pl.openpkw.openpkwmobile.fragments.LoginFragment.timer;
  * Use the {@link ThumbnailsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ThumbnailsFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+public class ThumbnailsFragment extends Fragment implements View.OnClickListener{
 
     private TableLayout thumbnailsTableLayout;
 
@@ -106,31 +124,14 @@ public class ThumbnailsFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ThumbnailsFragment.
-     */
     // TODO: Rename and change types and number of parameters
-    public static ThumbnailsFragment newInstance(String param1, String param2) {
-        ThumbnailsFragment fragment = new ThumbnailsFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    public static ThumbnailsFragment newInstance() {
+        return new ThumbnailsFragment();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -139,14 +140,17 @@ public class ThumbnailsFragment extends Fragment {
         // Inflate the layout for this fragment
         View thumbnailsView = inflater.inflate(R.layout.fragment_thumbnails, container, false);
 
-        Button sendPhotos = (Button) thumbnailsView.findViewById(R.id.thumbnails_send_button);
-        sendPhotos.setOnClickListener(sendPhotosClickListener);
+        Button sendPictureButton = (Button) thumbnailsView.findViewById(R.id.thumbnails_send_button);
+        sendPictureButton.setOnClickListener(this);
+
+        Button wifiSendPictureButton = (Button) thumbnailsView.findViewById(R.id.thumbnails_send_wifi_button);
+        wifiSendPictureButton.setOnClickListener(this);
 
         thumbnailsTableLayout = (TableLayout) thumbnailsView.findViewById(R.id.thumbnails_photos_layout);
 
-        photoFiles = getCommitteeProtocolStorageDir(Utils.STORAGE_PROTOCOL_DIRECTORY).listFiles();
+        photoFiles = getCommitteeProtocolStorageDir(STORAGE_PROTOCOL_DIRECTORY).listFiles();
 
-        contextThemeWrapper = new ContextThemeWrapper(getActivity(), Utils.DIALOG_STYLE);
+        contextThemeWrapper = new ContextThemeWrapper(getActivity(), DIALOG_STYLE);
 
         territorialCodeTextView = (TextView) thumbnailsView.findViewById(R.id.thumbnails_territorial_code);
         peripheryNumberTextView = (TextView) thumbnailsView.findViewById(R.id.thumbnails_periphery_number);
@@ -154,7 +158,6 @@ public class ThumbnailsFragment extends Fragment {
         loadData();
 
         loadThumbnails();
-
 
         Spinner protocolDataSpinner = (Spinner) thumbnailsView.findViewById(R.id.thumbnails_data_spinner);
         //set data adapter
@@ -180,14 +183,18 @@ public class ThumbnailsFragment extends Fragment {
     };
 
     private void loadData() {
-        SharedPreferences sharedPref = getActivity().getSharedPreferences(Utils.DATA, Context.MODE_PRIVATE);
-        String territorial_code = "  "+sharedPref.getString(Utils.TERRITORIAL_CODE, "Kod terytorialny")+"  ";
-        String periphery_number = "Nr "+sharedPref.getString(Utils.PERIPHERY_NUMBER, "obwodu");
-        String periphery_name = sharedPref.getString(Utils.PERIPHERY_NAME, "Nazwa");
-        String periphery_address = sharedPref.getString(Utils.PERIPHERY_ADDRESS, "Adres");
-        String districtNumber = sharedPref.getString(Utils.DISTRICT_NUMBER, "Okręg Wyborczy Nr");
+        SharedPreferences sharedPref = getActivity().getSharedPreferences(DATA, Context.MODE_PRIVATE);
+        String territorial_code = sharedPref.getString(TERRITORIAL_CODE, "Kod terytorialny: _ _ _ _");
+        if(!territorial_code.equalsIgnoreCase("Kod terytorialny: _ _ _ _"))
+            territorial_code = "Kod terytorialny: "+territorial_code;
+        String periphery_number = sharedPref.getString(PERIPHERY_NUMBER, "Nr obwodu: _ _ _ _");
+        if(!periphery_number.equalsIgnoreCase("Nr obwodu: _ _ _ _"))
+            periphery_number = "Nr obwodu: "+periphery_number;
+        String periphery_name = sharedPref.getString(PERIPHERY_NAME, "Nazwa");
+        String periphery_address = sharedPref.getString(PERIPHERY_ADDRESS, "Adres");
+        String districtNumber = sharedPref.getString(DISTRICT_NUMBER, "Okręg Wyborczy Nr");
         Spannable spannable = new SpannableString(territorial_code);
-        spannable.setSpan(new ForegroundColorSpan(Color.GREEN),0, territorial_code.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannable.setSpan(new ForegroundColorSpan(Color.GREEN),"Kod terytorialny: ".length(), territorial_code.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         territorialCodeTextView.setText(spannable);
         peripheryNumberTextView.setText(periphery_number);
         spinnerData.add(getString(R.string.committee_label));
@@ -196,96 +203,30 @@ public class ThumbnailsFragment extends Fragment {
         spinnerData.add(districtNumber);
     }
 
-    View.OnClickListener sendPhotosClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            oAuthParam = getOAuthParam();
-            final AlertDialog.Builder builder = new AlertDialog.Builder(contextThemeWrapper);
-
-            if(qrString!=null)
-            {
-                if(NetworkUtils.isNetworkAvailable(getActivity())) {
-                    SharedPreferences sharedPref = getActivity().getSharedPreferences(Utils.DATA, Context.MODE_PRIVATE);
-                    KeyWrapper keyWrapper = new KeyWrapper(getActivity().getApplicationContext(), Utils.KEY_ALIAS);
-                    String privateKeyStr = sharedPref.getString(Utils.PRIVATE_KEY,null);
-                    PrivateKey privateKey  = null;
-                    try {
-                        privateKey = keyWrapper.unwrapPrivateKey(Base64.decode(privateKeyStr,Base64.DEFAULT));
-                    } catch (GeneralSecurityException | IOException e) {
-                        e.printStackTrace();
-                    }
-
-                    scanQrDTO = new QrDTO();
-                    scanQrDTO.setQr(qrString);
-                    scanQrDTO.setToken(Base64.encodeToString(SecurityECC.generateSignature(qrString, privateKey), Base64.NO_WRAP));
-
-                    GetAccessTokenAsyncTask getAccessTokenAsyncTask = new GetAccessTokenAsyncTask();
-                    getAccessTokenAsyncTask.execute(oAuthParam);
-
-                }else
-                {
-                    builder.setMessage(R.string.login_toast_no_network_connection_message)
-                            .setTitle(R.string.login_toast_no_network_connection_title)
-                            .setCancelable(false)
-                            .setPositiveButton(R.string.zxing_button_ok, null);
-                    final AlertDialog dialog = builder.create();
-                    dialog.show();
-                }
-            }
-            else
-            {
-                builder.setMessage("Proszę zeskanować kod QR z ostaniej strony protokołu wyborczego")
-                    .setTitle(R.string.dialog_warning_title)
-                    .setCancelable(false)
-                    .setPositiveButton(R.string.zxing_button_ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            //start scan activity
-                            Intent scanIntent = new Intent(getActivity(), ScanQrCodeActivity.class);
-                            startActivity(scanIntent);
-                            getActivity().finish();
-                            clearData();
-                        }
-                    });
-                final AlertDialog dialog = builder.create();
-                dialog.show();
-            }
-        }
-    };
-
-    private void clearData(){
-        File[]photoFiles = getCommitteeProtocolStorageDir(Utils.STORAGE_PROTOCOL_DIRECTORY).listFiles();
-        if(photoFiles!=null) {
-            for (File photoFile : photoFiles) {
-                photoFile.delete();
-            }
-        }
-    }
-
     private OAuthParam getOAuthParam()
     {
         String [] urls = getUrls();
         OAuthParam oAuthParam = new OAuthParam();
-        SharedPreferences sharedPref = getActivity().getSharedPreferences(Utils.DATA, Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = getActivity().getSharedPreferences(DATA, Context.MODE_PRIVATE);
         oAuthParam.setLoginURL(urls[0]);
         oAuthParam.setSendQrURL(urls[1]);
-        String decryptToken = SecurityRSA.decrypt(Base64.decode(sharedPref.getString(Utils.REFRESH_TOKEN, null)
-                , Base64.DEFAULT), SecurityRSA.loadPrivateKey(Utils.KEY_ALIAS));
+        String decryptToken = SecurityRSA.decrypt(Base64.decode(sharedPref.getString(REFRESH_TOKEN, null)
+                , Base64.DEFAULT), SecurityRSA.loadPrivateKey(KEY_ALIAS));
         oAuthParam.setRefreshToken(decryptToken);
-        qrString = sharedPref.getString(Utils.QR, null);
+        qrString = sharedPref.getString(QR, null);
 
-        if(sharedPref.getBoolean(Utils.DEFAULT_PARAM_CHANGE,false)){
-            PrivateKey privateKey = SecurityRSA.loadPrivateKey(Utils.KEY_ALIAS);
-            String id = sharedPref.getString(Utils.OAUTH2_ID_PREFERENCE, Utils.ID_DEFAULT).trim();
+        if(sharedPref.getBoolean(DEFAULT_PARAM_CHANGE,false)){
+            PrivateKey privateKey = SecurityRSA.loadPrivateKey(KEY_ALIAS);
+            String id = sharedPref.getString(OAUTH2_ID_PREFERENCE, ID_DEFAULT).trim();
             String decryptID = SecurityRSA.decrypt(Base64.decode(id, Base64.DEFAULT), privateKey);
             oAuthParam.setId(decryptID);
-            String secret = sharedPref.getString(Utils.OAUTH2_SECRET_PREFERENCE, Utils.SECRET_DEFAULT).trim();
+            String secret = sharedPref.getString(OAUTH2_SECRET_PREFERENCE, SECRET_DEFAULT).trim();
             String decryptSecret = SecurityRSA.decrypt(Base64.decode(secret, Base64.DEFAULT), privateKey);
             oAuthParam.setSecret(decryptSecret);
         }
         else {
-            oAuthParam.setId(sharedPref.getString(Utils.OAUTH2_ID_PREFERENCE, Utils.ID_DEFAULT).trim());
-            oAuthParam.setSecret(sharedPref.getString(Utils.OAUTH2_SECRET_PREFERENCE, Utils.SECRET_DEFAULT).trim());
+            oAuthParam.setId(sharedPref.getString(OAUTH2_ID_PREFERENCE, ID_DEFAULT).trim());
+            oAuthParam.setSecret(sharedPref.getString(OAUTH2_SECRET_PREFERENCE, SECRET_DEFAULT).trim());
         }
         return oAuthParam;
     }
@@ -293,8 +234,8 @@ public class ThumbnailsFragment extends Fragment {
     private String [] getUrls(){
         String [] urls = new String[2];
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity().getBaseContext());
-        urls[0]= sharedPref.getString(Utils.URL_LOGIN_PREFERENCE, Utils.URL_DEFAULT_LOGIN).trim();
-        urls[1]= sharedPref.getString(Utils.URL_VERIFY_PREFERENCE, Utils.URL_DEFAULT__VERIFY_QR).trim();
+        urls[0]= sharedPref.getString(URL_LOGIN_PREFERENCE, URL_DEFAULT_LOGIN).trim();
+        urls[1]= sharedPref.getString(URL_VERIFY_PREFERENCE, URL_DEFAULT__VERIFY_QR).trim();
         return urls;
     }
 
@@ -306,7 +247,7 @@ public class ThumbnailsFragment extends Fragment {
 
     private void loadThumbnails() {
         //load committee protocol photo files
-        photoFiles = getCommitteeProtocolStorageDir(Utils.STORAGE_PROTOCOL_DIRECTORY).listFiles();
+        photoFiles = getCommitteeProtocolStorageDir(STORAGE_PROTOCOL_DIRECTORY).listFiles();
         LayoutInflater layoutInflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         for (File photoFile : photoFiles) {
 
@@ -326,15 +267,15 @@ public class ThumbnailsFragment extends Fragment {
         File file = new File(Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_PICTURES), albumName);
         if (!file.mkdirs()) {
-            Log.e(Utils.TAG, "DIRECTORY NOT CREATED");
+            Log.e(TAG, "DIRECTORY NOT CREATED");
         }
         return file;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
+    public void onButtonSendByWifi() {
         if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+            mListener.onFragmentInteraction();
         }
     }
 
@@ -355,6 +296,96 @@ public class ThumbnailsFragment extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.thumbnails_send_button: {
+                oAuthParam = getOAuthParam();
+                final AlertDialog.Builder builder = new AlertDialog.Builder(contextThemeWrapper);
+                if(qrString!=null)
+                {
+                    if(NetworkUtils.isNetworkAvailable(getActivity())) {
+                        SharedPreferences sharedPref = getActivity().getSharedPreferences(DATA, Context.MODE_PRIVATE);
+                        KeyWrapper keyWrapper = new KeyWrapper(getActivity().getApplicationContext(), KEY_ALIAS);
+                        String privateKeyStr = sharedPref.getString(PRIVATE_KEY,null);
+                        PrivateKey privateKey  = null;
+                        try {
+                            privateKey = keyWrapper.unwrapPrivateKey(Base64.decode(privateKeyStr,Base64.DEFAULT));
+                        } catch (GeneralSecurityException | IOException e) {
+                            e.printStackTrace();
+                        }
+
+                        scanQrDTO = new QrDTO();
+                        scanQrDTO.setQr(qrString);
+                        scanQrDTO.setToken(Base64.encodeToString(SecurityECC.generateSignature(qrString, privateKey), Base64.NO_WRAP));
+
+                        GetAccessTokenAsyncTask getAccessTokenAsyncTask = new GetAccessTokenAsyncTask();
+                        getAccessTokenAsyncTask.execute(oAuthParam);
+
+                    }else
+                    {
+                        builder.setMessage(R.string.login_toast_no_network_connection_message)
+                                .setTitle(R.string.login_toast_no_network_connection_title)
+                                .setCancelable(false)
+                                .setPositiveButton(R.string.zxing_button_ok, null);
+                        final AlertDialog dialog = builder.create();
+                        dialog.show();
+                    }
+                }
+                else
+                {
+                    builder.setMessage("Proszę zeskanować kod QR z ostaniej strony protokołu wyborczego")
+                            .setTitle(R.string.dialog_warning_title)
+                            .setCancelable(false)
+                            .setPositiveButton(R.string.zxing_button_ok, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    //start scan activity
+                                    Intent scanIntent = new Intent(getActivity(), ScanQrCodeActivity.class);
+                                    startActivity(scanIntent);
+                                    getActivity().finish();
+                                }
+                            });
+                    final AlertDialog dialog = builder.create();
+                    dialog.show();
+                }
+                break;
+            }
+
+            case R.id.thumbnails_send_wifi_button:{
+                //
+                SharedPreferences sharedPref = getActivity().getSharedPreferences(DATA, Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.putBoolean(IS_DATA_SEND, false);
+                editor.apply();
+
+                Toast toast = Toast.makeText(getActivity(), R.string.toast_send_picture_by_wifi, Toast.LENGTH_LONG);
+                View viewToast = toast.getView();
+                viewToast.setBackgroundResource(R.drawable.toast_green);
+                TextView text = (TextView) viewToast.findViewById(android.R.id.message);
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP)
+                    text.setTextColor(getResources().getColor(android.R.color.white,getActivity().getTheme()));
+                else
+                    text.setTextColor(getResources().getColor(android.R.color.white));
+                text.setTypeface(Typeface.DEFAULT_BOLD);
+                text.setGravity(Gravity.CENTER);
+                toast.show();
+
+                //cancel timer
+                if(timer!=null)
+                    timer.cancel();
+
+                Intent endIntent = new Intent(getActivity(), EndActivity.class);
+                startActivity(endIntent);
+                getActivity().finish();
+
+                break;
+            }
+
+        }
+    }
+
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -367,7 +398,7 @@ public class ThumbnailsFragment extends Fragment {
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        void onFragmentInteraction();
     }
 
     class ThumbnailsLoader extends AsyncTask<File, Void, Bitmap> {
@@ -442,10 +473,10 @@ public class ThumbnailsFragment extends Fragment {
         protected void onPostExecute(JSONObject json) {
 
             if (json != null){
-                Log.e(Utils.TAG, "SERVER RESPONSE ACCESS TOKEN: "+json.toString());
+                Log.e(TAG, "SERVER RESPONSE ACCESS TOKEN: "+json.toString());
                 try {
 
-                    if(!json.getString(Utils.ERROR).isEmpty())
+                    if(!json.getString(ERROR).isEmpty())
                     {
                         Toast.makeText(getActivity().getApplicationContext(),
                                 "Błąd dostępu do serwera", Toast.LENGTH_LONG).show();
@@ -454,8 +485,8 @@ public class ThumbnailsFragment extends Fragment {
                 } catch (JSONException e) {
                     e.printStackTrace();
                     try {
-                        if(!json.getString(Utils.ACCESS_TOKEN).isEmpty()) {
-                            String access_token = json.getString(Utils.ACCESS_TOKEN);
+                        if(!json.getString(ACCESS_TOKEN).isEmpty()) {
+                            String access_token = json.getString(ACCESS_TOKEN);
 
                             if (!access_token.isEmpty()) {
                                 if(scanQrDTO!=null) {
@@ -508,24 +539,22 @@ public class ThumbnailsFragment extends Fragment {
             progressBar.dismiss();
 
             if (json != null) {
-                Log.e(Utils.TAG,"JSON SERVER RESPONSE QR: "+json.toString());
+                Log.e(TAG,"JSON SERVER RESPONSE QR: "+json.toString());
                 try {
-                    if(!json.getString(Utils.ERROR_MESSAGE).isEmpty()) {
+                    if(!json.getString(ERROR_MESSAGE).isEmpty()) {
                         Gson gson = new GsonBuilder().create();
                         QrSendResponse qrSendResponse = gson.fromJson(json.toString(),QrSendResponse.class);
-                        Log.e(Utils.TAG,"ERROR MESSAGE: "+ qrSendResponse.getErrorMessage());
-                        Log.e(Utils.TAG,"PROTOCOL: "+ qrSendResponse.getProtocol());
+                        Log.e(TAG,"ERROR MESSAGE: "+ qrSendResponse.getErrorMessage());
+                        Log.e(TAG,"PROTOCOL: "+ qrSendResponse.getProtocol());
 
                         Toast.makeText(getActivity().getApplicationContext(),
-                                Utils.SERVER_RESPONSE + json.toString(), Toast.LENGTH_LONG).show();
-
-                        //delete photo files
-                        for(File photo : photoFiles) {photo.delete();}
+                                SERVER_RESPONSE + json.toString(), Toast.LENGTH_LONG).show();
 
                         //clear QR data
-                        clearQRSharedPreferences(Utils.QR, getActivity().getSharedPreferences(Utils.DATA, Context.MODE_PRIVATE));
+                        clearQRSharedPreferences(QR, getActivity().getSharedPreferences(DATA, Context.MODE_PRIVATE));
                         //cancel timer
-                        timer.cancel();
+                        if(timer!=null)
+                            timer.cancel();
                         //start end activity
                         Intent endIntent = new Intent(getActivity(), EndActivity.class);
                         startActivity(endIntent);

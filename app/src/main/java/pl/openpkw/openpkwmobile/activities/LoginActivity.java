@@ -41,10 +41,22 @@ import pl.openpkw.openpkwmobile.fragments.LoginFragment;
 import pl.openpkw.openpkwmobile.fragments.SettingsFragment;
 import pl.openpkw.openpkwmobile.security.KeyWrapper;
 import pl.openpkw.openpkwmobile.security.SecurityECC;
-import pl.openpkw.openpkwmobile.utils.Utils;
 
 import static pl.openpkw.openpkwmobile.fragments.LoginFragment.timer;
+import static pl.openpkw.openpkwmobile.utils.Utils.DATA;
+import static pl.openpkw.openpkwmobile.utils.Utils.DISTRICT_NUMBER;
+import static pl.openpkw.openpkwmobile.utils.Utils.IS_RE_LOGIN;
+import static pl.openpkw.openpkwmobile.utils.Utils.KEY_ALIAS;
+import static pl.openpkw.openpkwmobile.utils.Utils.LOGIN_FRAGMENT_TAG;
+import static pl.openpkw.openpkwmobile.utils.Utils.PERIPHERY_ADDRESS;
+import static pl.openpkw.openpkwmobile.utils.Utils.PERIPHERY_NAME;
+import static pl.openpkw.openpkwmobile.utils.Utils.PERIPHERY_NUMBER;
+import static pl.openpkw.openpkwmobile.utils.Utils.PRIVATE_KEY;
+import static pl.openpkw.openpkwmobile.utils.Utils.PUBLIC_KEY;
+import static pl.openpkw.openpkwmobile.utils.Utils.QR;
 import static pl.openpkw.openpkwmobile.utils.Utils.REQUEST_ID_MULTIPLE_PERMISSIONS;
+import static pl.openpkw.openpkwmobile.utils.Utils.TAG;
+import static pl.openpkw.openpkwmobile.utils.Utils.TERRITORIAL_CODE;
 
 public class LoginActivity extends AppCompatActivity implements OnRequestPermissionsResultCallback,
         LoginFragment.OnFragmentInteractionListener
@@ -60,7 +72,7 @@ public class LoginActivity extends AppCompatActivity implements OnRequestPermiss
         if(savedInstanceState == null)
             getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.login_fragment_container,new LoginFragment(),Utils.LOGIN_FRAGMENT_TAG)
+                    .replace(R.id.login_fragment_container,new LoginFragment(), LOGIN_FRAGMENT_TAG)
                     .commit();
 
         //set title and subtitle to action bar
@@ -78,7 +90,29 @@ public class LoginActivity extends AppCompatActivity implements OnRequestPermiss
 
         //check permissions
         checkAndRequestPermissions();
+
+        //check re-login
+        Intent intent = getIntent();
+        Bundle bundle = intent.getExtras();
+        if(bundle!=null) {
+            if (bundle.getBoolean(IS_RE_LOGIN, false)) {
+                intent.removeExtra(IS_RE_LOGIN);
+            }
+        }else
+            clearData();
     }
+
+     private void clearData() {
+         SharedPreferences sharedPref = getSharedPreferences(DATA, Context.MODE_PRIVATE);
+         SharedPreferences.Editor editor = sharedPref.edit();
+         editor.putString(QR, null);
+         editor.putString(TERRITORIAL_CODE, null);
+         editor.putString(PERIPHERY_ADDRESS, null);
+         editor.putString(PERIPHERY_NAME, null);
+         editor.putString(PERIPHERY_NUMBER, null);
+         editor.putString(DISTRICT_NUMBER, null);
+         editor.apply();
+     }
 
     private  void checkAndRequestPermissions() {
         int permissionCamera = ContextCompat.checkSelfPermission(this,
@@ -219,22 +253,22 @@ public class LoginActivity extends AppCompatActivity implements OnRequestPermiss
 
     public void generateKeys(){
         try {
-            SharedPreferences sharedPref = getSharedPreferences(Utils.DATA, Context.MODE_PRIVATE);
-            KeyWrapper keyWrapper = new KeyWrapper(getApplicationContext(), Utils.KEY_ALIAS);
-            if(sharedPref.getString(Utils.PRIVATE_KEY,null)==null)
+            SharedPreferences sharedPref = getSharedPreferences(DATA, Context.MODE_PRIVATE);
+            KeyWrapper keyWrapper = new KeyWrapper(getApplicationContext(), KEY_ALIAS);
+            if(sharedPref.getString(PRIVATE_KEY,null)==null)
             {
                 KeyPair keyPair = SecurityECC.generateKeys();
                 if (keyPair != null) {
                     byte [] privateKeyByteArr = keyWrapper.wrapPrivateKey(keyPair.getPrivate());
                     byte [] publicKeyByteArr = keyWrapper.wrapPublicKey(keyPair.getPublic());
                     SharedPreferences.Editor editor = sharedPref.edit();
-                    editor.putString(Utils.PRIVATE_KEY,Base64.encodeToString(privateKeyByteArr,Base64.DEFAULT));
-                    editor.putString(Utils.PUBLIC_KEY, Base64.encodeToString(publicKeyByteArr, Base64.DEFAULT));
+                    editor.putString(PRIVATE_KEY,Base64.encodeToString(privateKeyByteArr,Base64.DEFAULT));
+                    editor.putString(PUBLIC_KEY, Base64.encodeToString(publicKeyByteArr, Base64.DEFAULT));
                     editor.apply();
                 }
             }
         } catch (GeneralSecurityException e) {
-            Log.e(Utils.TAG, "GeneralSecurityException: " + e.getMessage());
+            Log.e(TAG, "GeneralSecurityException: " + e.getMessage());
         } catch (IOException e) {
             e.printStackTrace();
         }

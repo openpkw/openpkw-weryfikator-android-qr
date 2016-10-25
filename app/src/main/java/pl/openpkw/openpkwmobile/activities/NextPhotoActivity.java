@@ -6,13 +6,18 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.RelativeSizeSpan;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -65,10 +70,14 @@ public class NextPhotoActivity extends AppCompatActivity implements NextPhotoFra
         }
 
         //set title and subtitle to action bar
+        //set title and subtitle to action bar
         ActionBar actionBar = getSupportActionBar();
         if(actionBar!=null) {
-            actionBar.setTitle("Krok 8 z 9");
-            actionBar.setSubtitle("Wykonaj zdjęcia protokołu wyborczego");
+            final SpannableString spannableString = new SpannableString("Krok 8 z 9\nWykonaj zdjęcia każdej strony protokołu wyborczego");
+            spannableString.setSpan(new RelativeSizeSpan(1.2f),0,"Krok 8 z 9".length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            actionBar.setDisplayShowCustomEnabled(true);
+            actionBar.setCustomView(R.layout.action_bar_title_layout);
+            ((TextView) findViewById(R.id.action_bar_title)).setText(spannableString);
         }
 
         showInfo();
@@ -93,11 +102,16 @@ public class NextPhotoActivity extends AppCompatActivity implements NextPhotoFra
             }
         });
         // Changing message text color
-        snackbar.setActionTextColor(Color.RED);
+        snackbar.setActionTextColor(Color.YELLOW);
+        snackbar.setDuration(4000);
+        View snackBarView = snackbar.getView();
+        snackBarView.setBackgroundColor(ContextCompat.getColor(this, R.color.green));
         // Changing action button text color
         TextView snackBarTextView = (TextView)snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
         snackBarTextView.setMaxLines(5);
-        snackBarTextView.setTextColor(Color.YELLOW);
+        snackBarTextView.setTypeface(Typeface.DEFAULT_BOLD);
+        snackBarTextView.setTextColor(Color.WHITE);
+        snackBarTextView.setTextSize(16);
         snackbar.show();
     }
 

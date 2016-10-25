@@ -99,11 +99,24 @@
             android:label="Krok 8 z 9"
             android:screenOrientation="portrait"
             android:theme="@style/SemiTransparentActionBarTheme" />
+
+        <activity android:name=".activities.QrCodeCaptureActivity"/>
+
         <activity
             android:name="com.journeyapps.barcodescanner.CaptureActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="sensorLandscape"
             android:windowSoftInputMode="stateAlwaysHidden" />
+
+        <receiver android:name=".network.WifiConnectionReceiver">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+            </intent-filter>
+        </receiver>
+
+        <service android:name=".network.SendPictureService"
+            android:enabled="true"/>
+
     </application>
 
 </manifest>

@@ -28,8 +28,10 @@
     <dimen name="fontsize.settings.dialog.label">20sp</dimen>
     <dimen name="fontsize.settings.dialog.edittext">18sp</dimen>
     <dimen name="fontsize.settings.item">18sp</dimen>
+    <dimen name="fontsize.about.description">16sp</dimen>
+    <dimen name="fontsize.scan.qr.instruction">16sp</dimen>
     <dimen name="fontsize.login.label.register">24sp</dimen>
-    <dimen name="fontsize.committee.label">18sp</dimen>
+    <dimen name="fontsize.committee.label">16sp</dimen>
     <dimen name="fontsize.committee.name">16sp</dimen>
     <dimen name="fontsize.committee.address">16sp</dimen>
     <dimen name="fontsize.fvoting.general.data">16sp</dimen>

@@ -4,7 +4,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
-import android.net.Uri;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.view.MenuItemCompat;
@@ -50,6 +50,7 @@ public class ThumbnailsActivity extends AppCompatActivity implements ThumbnailsF
             actionBar.setTitle("Krok 9 z 9");
             actionBar.setSubtitle("Przesyłanie zdjęc na serwer");
         }
+
     }
 
     @Override
@@ -84,18 +85,15 @@ public class ThumbnailsActivity extends AppCompatActivity implements ThumbnailsF
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.action_settings:
-                // Create new fragment and transaction
                 Fragment settingsFragment = new SettingsFragment();
                 transaction.replace(android.R.id.content, settingsFragment);
                 transaction.addToBackStack(null);
-                // Commit the transaction
                 transaction.commit();
                 return true;
             case R.id.about_project:
                 Fragment aboutFragment = new AboutFragment();
                 transaction.replace(android.R.id.content, aboutFragment);
                 transaction.addToBackStack(null);
-                // Commit the transaction
                 transaction.commit();
                 return true;
             default:
@@ -131,7 +129,14 @@ public class ThumbnailsActivity extends AppCompatActivity implements ThumbnailsF
     }
 
     @Override
-    public void onFragmentInteraction(Uri uri) {
+    public void onFragmentInteraction() {
+        Intent endIntent = new Intent(this, EndActivity.class);
+        startActivity(endIntent);
+        finish();
+    }
 
+    @Override
+    public void onPause() {
+        super.onPause();
     }
 }

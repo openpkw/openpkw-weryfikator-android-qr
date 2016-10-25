@@ -97,13 +97,14 @@
     <string name="session_timeout_quit">Zamknij</string>
     <string name="scan.qr.label.committee.id">Obwodowa Komisja Wyborcza nr</string>
 
-    <string name="scan_qr_label_enter_data">Wprowadzasz dane dla</string>
+    <string name="scan_qr_label_enter_data">Wprowadzasz dane dla:</string>
     <string name="scan.qr.progress.send.data">Przesyłanie danych w toku...</string>
     <string name="logo">LOGO</string>
     <string name="scan.qr.buttonlabel.enter.manually">Wprowadź dane ręcznie</string>
 
     <string name="next.label.button">Dalej</string>
     <string name="forward.label.button">Wstecz</string>
+    <string name="instruction.label.button">Instrukcja</string>
 
     <string name="election.committee.name.label">Skrót nazwy \nkomitetu wyborczego</string>
     <string name="number.of.votes.label">Liczba \ngłosów</string>
@@ -123,10 +124,11 @@
         </string>
     <string name="instruction.label.note">Uwaga!</string>
     <string name="instruction.label.note.description">W zależności od typu aparatu odległość pomiędzy obiektywem kamery
-        a kodem QR umożliwiająca prawidłowe zeskanowanie może wynosić od 0,1 do 0,5 metra.
+        a kodem QR umożliwiająca prawidłowe zeskanowanie może wynosić od 0,3 do 1 metra.
         Jeżeli skanowanie kodu QR nie powiodło się należy powtórzyć proces przy róznych odległościach obiektywu
         kamery od kodu QR.</string>
     <string name="toast.scanned.qr.ok">Kod QR został zeskanowany. Przejdź dalej.</string>
+    <string name="toast.send.picture.by.wifi">Zdjęcia zostaną przesłane na serwer jak tylko będzie dostępne połączenia z siecią Wifi</string>
     <string name="dialog_scan_qr_failed">"Skanowanie kodu QR zakończyło się niepowodzeniem. "</string>
     <string name="toast_send_data_incorrect">Przesłane na serwer dane są niepoprawne</string>
 </resources>

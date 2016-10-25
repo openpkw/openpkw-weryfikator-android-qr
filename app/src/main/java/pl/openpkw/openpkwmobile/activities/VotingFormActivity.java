@@ -9,6 +9,9 @@ import android.os.Handler;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.RelativeSizeSpan;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -45,11 +48,15 @@ public class VotingFormActivity extends AppCompatActivity {
             ft.commit();
             fm.executePendingTransactions();
         }
+
         //set title and subtitle to action bar
         ActionBar actionBar = getSupportActionBar();
         if(actionBar!=null) {
-            actionBar.setTitle("Krok 4 z 9");
-            actionBar.setSubtitle("Przegląd danych z protokołu wyborczego");
+            final SpannableString spannableString = new SpannableString("Krok 4 z 9\nPorównaj dane z protokołu wyborczego z danymi z zeskanowanego QR");
+            spannableString.setSpan(new RelativeSizeSpan(1.2f),0,"Krok 4 z 9".length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            actionBar.setDisplayShowCustomEnabled(true);
+            actionBar.setCustomView(R.layout.action_bar_title_layout);
+            ((TextView) findViewById(R.id.action_bar_title)).setText(spannableString);
         }
     }
 
@@ -63,6 +70,7 @@ public class VotingFormActivity extends AppCompatActivity {
         sessionTimerTextView.setPadding(10, 0, 10, 0);
         sessionTimerTextView.setText(timer.getTimer());
         timer.setTimeTextView(sessionTimerTextView);
+
         return true;
     }
 

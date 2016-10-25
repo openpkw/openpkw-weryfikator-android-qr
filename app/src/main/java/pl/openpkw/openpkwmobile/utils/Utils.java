@@ -72,6 +72,9 @@ public class Utils {
     public static final String ECIES = "ECIES";
     public static final String AES = "AES";
     public static final String PATH_TO_PHOTO = "PATH_TO_PHOTO";
+    public static final String IS_RE_LOGIN = "IS_RE_LOGIN";
+    public static final String IS_DATA_SEND = "IS_DATA_SEND";
+    public static final String CLASS_NAME  = "CLASS_NAME";
     /**
      * Id of the camera to access. 0 is the first camera.
      */
@@ -82,7 +85,7 @@ public class Utils {
     public static final int TIMEOUT_SCAN_QR = 30*1000;//30 sec
     public static final int RSA_KEY_SIZE = 4096;
     public static final int SESSION_TIMER = 60*1000*15-1000;//14 min 59 sec
-    //public static final int SESSION_TIMER = 10*1000; //test value
+    //public static final int SESSION_TIMER = 30*1000; //test value
     public static final int DIALOG_STYLE = android.R.style.Theme_DeviceDefault_Dialog;
     public static final int MAX_NUMBER_OF_PHOTOS = 6;
     public static final int PERMISSION_REQUEST_CAMERA = 0;

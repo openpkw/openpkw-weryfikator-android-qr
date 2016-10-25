@@ -28,21 +28,12 @@ public class EndActivity extends AppCompatActivity implements EndFragment.OnFrag
                     .replace(R.id.end_fragment_container, new EndFragment(), END_FRAGMENT_TAG)
                     .commit();
 
-        /*
-        FragmentManager fm = getFragmentManager();
-        EndFragment endFragment = (EndFragment) fm.findFragmentByTag(END_FRAGMENT_TAG);
-        if (endFragment == null) {
-            FragmentTransaction ft = fm.beginTransaction();
-            ft.replace(R.id.end_fragment_container, new EndFragment(), END_FRAGMENT_TAG);
-            ft.commit();
-            fm.executePendingTransactions();
-        }
-        */
-
         Intent intent = getIntent();
-        String response =intent.getExtras().getString(SERVER_RESPONSE,null);
-        if(response!=null)
+        Bundle bundle = intent.getExtras();
+        if(bundle!=null){
+            String response =bundle.getString(SERVER_RESPONSE,null);
             Toast.makeText(this,response,Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override

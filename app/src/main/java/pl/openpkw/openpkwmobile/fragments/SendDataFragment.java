@@ -49,6 +49,12 @@ import pl.openpkw.openpkwmobile.security.SecurityRSA;
 import pl.openpkw.openpkwmobile.utils.Utils;
 
 import static pl.openpkw.openpkwmobile.fragments.LoginFragment.timer;
+import static pl.openpkw.openpkwmobile.fragments.ScanQrCodeFragment.createIndentedText;
+import static pl.openpkw.openpkwmobile.utils.Utils.DATA;
+import static pl.openpkw.openpkwmobile.utils.Utils.PERIPHERY_ADDRESS;
+import static pl.openpkw.openpkwmobile.utils.Utils.PERIPHERY_NAME;
+import static pl.openpkw.openpkwmobile.utils.Utils.PERIPHERY_NUMBER;
+import static pl.openpkw.openpkwmobile.utils.Utils.TERRITORIAL_CODE;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -112,17 +118,31 @@ public class SendDataFragment extends Fragment {
     }
 
     public void loadData() {
-        SharedPreferences sharedPref = getActivity().getSharedPreferences(Utils.DATA, Context.MODE_PRIVATE);
-        String territorial_code = "  "+sharedPref.getString(Utils.TERRITORIAL_CODE, "Kod terytorialny")+"  ";
-        String periphery_number = "Nr "+sharedPref.getString(Utils.PERIPHERY_NUMBER, "obwodu");
-        String periphery_name = sharedPref.getString(Utils.PERIPHERY_NAME, "Nazwa");
-        String periphery_address = sharedPref.getString(Utils.PERIPHERY_ADDRESS, "Adres");
+        peripheryAddressTextView.setText("Adres: ");
+        peripheryAddressTextView.measure(0,0);
+        int addressLabelTextWidth = peripheryAddressTextView.getMeasuredWidth();
+        peripheryNameTextView.setText("Nazwa: ");
+        peripheryNameTextView.measure(0,0);
+        int peripheryNameLabelTextWidth = peripheryNameTextView.getMeasuredWidth();
+        SharedPreferences sharedPref = getActivity().getSharedPreferences(DATA, Context.MODE_PRIVATE);
+        String territorial_code = sharedPref.getString(TERRITORIAL_CODE, "Kod terytorialny: _ _ _ _");
+        if(!territorial_code.equalsIgnoreCase("Kod terytorialny: _ _ _ _"))
+            territorial_code = "Kod terytorialny: "+territorial_code;
+        String periphery_number = sharedPref.getString(PERIPHERY_NUMBER, "Nr obwodu: _ _ _ _");
+        if(!periphery_number.equalsIgnoreCase("Nr obwodu: _ _ _ _"))
+            periphery_number = "Nr obwodu: "+periphery_number;
+        String periphery_name = sharedPref.getString(PERIPHERY_NAME, "Nazwa: _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _");
+        if(!periphery_name.equalsIgnoreCase("Nazwa: _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _"))
+            periphery_name = "Nazwa: " + periphery_name;
+        String periphery_address = sharedPref.getString(PERIPHERY_ADDRESS, "Adres: _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _");
+        if(!periphery_address.equalsIgnoreCase("Adres: _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _"))
+            periphery_address = "Adres: "+periphery_address;
         Spannable spannable = new SpannableString(territorial_code);
-        spannable.setSpan(new ForegroundColorSpan(Color.GREEN),0, territorial_code.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        territorialCodeTextView.setText( spannable);
+        spannable.setSpan(new ForegroundColorSpan(Color.GREEN),"Kod terytorialny: ".length(), territorial_code.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        territorialCodeTextView.setText(spannable);
         peripheryNumberTextView.setText(periphery_number);
-        peripheryNameTextView.setText(periphery_name);
-        peripheryAddressTextView.setText(periphery_address);
+        peripheryNameTextView.setText(createIndentedText(periphery_name,0,peripheryNameLabelTextWidth ));
+        peripheryAddressTextView.setText(createIndentedText(periphery_address,0,addressLabelTextWidth));
     }
 
     View.OnClickListener forwardButtonClickListener = new View.OnClickListener() {
@@ -365,7 +385,8 @@ public class SendDataFragment extends Fragment {
                         //clear QR data
                         clearQRSharedPreferences(Utils.QR, getActivity().getSharedPreferences(Utils.DATA, Context.MODE_PRIVATE));
                         //cancel timer
-                        timer.cancel();
+                        if(timer!=null)
+                            timer.cancel();
                         //start end activity
                         onSendDataSuccessfully(Utils.SERVER_RESPONSE + json.toString());
                     }

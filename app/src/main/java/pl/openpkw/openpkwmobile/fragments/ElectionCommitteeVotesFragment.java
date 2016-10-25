@@ -28,9 +28,10 @@ import java.util.Map;
 
 import pl.openpkw.openpkwmobile.R;
 import pl.openpkw.openpkwmobile.activities.CommitteesResultActivity;
-import pl.openpkw.openpkwmobile.activities.ScanQrCodeActivity;
 import pl.openpkw.openpkwmobile.models.CandidateVoteDTO;
 import pl.openpkw.openpkwmobile.utils.Utils;
+
+import static pl.openpkw.openpkwmobile.activities.QrCodeCaptureActivity.candidatesHashMap;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -130,7 +131,7 @@ public class ElectionCommitteeVotesFragment extends Fragment {
         spinnerData.add(wwwAddressElectionCommittee );
         spinnerData.add(totalVotesStr);
 
-        HashMap<String,CandidateVoteDTO> candidatesMap = ScanQrCodeActivity.candidatesHashMap;
+        HashMap<String,CandidateVoteDTO> candidatesMap = candidatesHashMap;
         Iterator it = candidatesMap.entrySet().iterator();
         LayoutInflater layoutInflater = (LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         String numberOfVotes;

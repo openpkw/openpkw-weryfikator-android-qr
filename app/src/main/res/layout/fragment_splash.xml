@@ -29,7 +29,7 @@
             android:textAlignment="center"
             android:gravity="center_horizontal"
             android:textStyle="bold"
-            android:textSize="@dimen/fontsize.committee.label"
+            android:textSize="18sp"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"/>
 

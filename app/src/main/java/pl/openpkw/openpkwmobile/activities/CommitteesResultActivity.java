@@ -10,6 +10,9 @@ import android.os.Handler;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.RelativeSizeSpan;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -47,8 +50,11 @@ public class CommitteesResultActivity extends AppCompatActivity implements Commi
         //set title and subtitle to action bar
         ActionBar actionBar = getSupportActionBar();
         if(actionBar!=null) {
-            actionBar.setTitle("Krok 5 z 9");
-            actionBar.setSubtitle("Liczba głosów oddanych na KW");
+            final SpannableString spannableString = new SpannableString("Krok 5 z 9\nLiczba głosów oddanych na poszczególne komitety wyborcze");
+            spannableString.setSpan(new RelativeSizeSpan(1.2f),0,"Krok 5 z 9".length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            actionBar.setDisplayShowCustomEnabled(true);
+            actionBar.setCustomView(R.layout.action_bar_title_layout);
+            ((TextView) findViewById(R.id.action_bar_title)).setText(spannableString);
         }
     }
 
