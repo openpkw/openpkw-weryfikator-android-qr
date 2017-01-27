@@ -201,8 +201,8 @@ public class NextPhotoFragment extends Fragment {
 
     public void onResume(){
         super.onResume();
-
         String pathToPhoto = getArguments().getString(Utils.PATH_TO_PHOTO, null);
+
         if(pathToPhoto!=null)
         {
             loadImage(pathToPhoto);
