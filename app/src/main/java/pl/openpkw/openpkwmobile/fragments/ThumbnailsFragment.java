@@ -2,6 +2,7 @@ package pl.openpkw.openpkwmobile.fragments;
 
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -16,7 +17,9 @@ import android.media.ThumbnailUtils;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.support.v4.app.NotificationCompat;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
@@ -46,7 +49,6 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
-import java.security.GeneralSecurityException;
 import java.security.PrivateKey;
 import java.util.ArrayList;
 import java.util.List;
@@ -60,9 +62,8 @@ import pl.openpkw.openpkwmobile.network.GetAccessToken;
 import pl.openpkw.openpkwmobile.network.NetworkUtils;
 import pl.openpkw.openpkwmobile.network.QrSendResponse;
 import pl.openpkw.openpkwmobile.network.SendQrData;
-import pl.openpkw.openpkwmobile.security.KeyWrapper;
-import pl.openpkw.openpkwmobile.security.SecurityECC;
 import pl.openpkw.openpkwmobile.security.SecurityRSA;
+import pl.openpkw.openpkwmobile.utils.Utils;
 
 import static pl.openpkw.openpkwmobile.fragments.LoginFragment.timer;
 import static pl.openpkw.openpkwmobile.utils.Utils.ACCESS_TOKEN;
@@ -80,7 +81,6 @@ import static pl.openpkw.openpkwmobile.utils.Utils.OAUTH2_SECRET_PREFERENCE;
 import static pl.openpkw.openpkwmobile.utils.Utils.PERIPHERY_ADDRESS;
 import static pl.openpkw.openpkwmobile.utils.Utils.PERIPHERY_NAME;
 import static pl.openpkw.openpkwmobile.utils.Utils.PERIPHERY_NUMBER;
-import static pl.openpkw.openpkwmobile.utils.Utils.PRIVATE_KEY;
 import static pl.openpkw.openpkwmobile.utils.Utils.QR;
 import static pl.openpkw.openpkwmobile.utils.Utils.REFRESH_TOKEN;
 import static pl.openpkw.openpkwmobile.utils.Utils.SECRET_DEFAULT;
@@ -104,9 +104,7 @@ import static pl.openpkw.openpkwmobile.utils.Utils.URL_VERIFY_PREFERENCE;
 public class ThumbnailsFragment extends Fragment implements View.OnClickListener{
 
     private TableLayout thumbnailsTableLayout;
-
     private File[] photoFiles;
-
     private String qrString;
     private OAuthParam oAuthParam;
     private QrDTO scanQrDTO = null;
@@ -119,6 +117,11 @@ public class ThumbnailsFragment extends Fragment implements View.OnClickListener
     private ContextThemeWrapper contextThemeWrapper;
 
     private OnFragmentInteractionListener mListener;
+
+    private Handler mHandler;
+    private NotificationManager mNotifyManager;
+    private NotificationCompat.Builder mBuilder;
+    final int id = 1;
 
     public ThumbnailsFragment() {
         // Required empty public constructor
@@ -166,6 +169,14 @@ public class ThumbnailsFragment extends Fragment implements View.OnClickListener
         adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
         protocolDataSpinner.setAdapter(adapter);
         protocolDataSpinner.setOnItemSelectedListener(spinnerItemListener);
+
+        mHandler = new Handler();
+        mNotifyManager =
+                (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
+        mBuilder = new NotificationCompat.Builder(getActivity());
+        mBuilder.setContentTitle("OpenPKW")
+                .setContentText("Przesyłanie zdjęć w toku")
+                .setSmallIcon(android.R.drawable.stat_sys_upload);
 
         return thumbnailsView;
     }
@@ -262,7 +273,7 @@ public class ThumbnailsFragment extends Fragment implements View.OnClickListener
         }
     }
 
-    public File getCommitteeProtocolStorageDir(String albumName) {
+    public static File getCommitteeProtocolStorageDir(String albumName) {
         // Get the directory for the user's public pictures directory.
         File file = new File(Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_PICTURES), albumName);
@@ -305,6 +316,41 @@ public class ThumbnailsFragment extends Fragment implements View.OnClickListener
                 if(qrString!=null)
                 {
                     if(NetworkUtils.isNetworkAvailable(getActivity())) {
+                        mHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                int incr;
+                                for (incr = 0; incr <= 100; incr+=5) {
+                                    // Sets the progress indicator to a max value, the
+                                    // current completion percentage, and "determinate"
+                                    // state
+                                    mBuilder.setProgress(100, incr, false);
+                                    // Displays the progress bar for the first time.
+                                    mNotifyManager.notify(id, mBuilder.build());
+                                    // Sleeps the thread, simulating an operation
+                                    // that takes time
+                                    try {
+                                        // Sleep for 2.5 seconds
+                                        Thread.sleep(5*50);
+                                    } catch (InterruptedException e) {
+                                        Log.d(Utils.TAG, "sleep failure");
+                                    }
+                                }
+                                // When the loop is finished, updates the notification
+                                mBuilder.setContentText("Zdjęcia zostały przesłane na serwer")
+                                        // Removes the progress bar
+                                        .setProgress(0,0,false);
+                                mBuilder.setSmallIcon(android.R.drawable.stat_sys_upload_done);
+                                mNotifyManager.notify(id, mBuilder.build());
+                                //delete picture
+                                deletePictures();
+                                //start end activity
+                                Intent endIntent = new Intent(getActivity(), EndActivity.class);
+                                startActivity(endIntent);
+                                getActivity().finish();
+                            }
+                        });
+                        /*
                         SharedPreferences sharedPref = getActivity().getSharedPreferences(DATA, Context.MODE_PRIVATE);
                         KeyWrapper keyWrapper = new KeyWrapper(getActivity().getApplicationContext(), KEY_ALIAS);
                         String privateKeyStr = sharedPref.getString(PRIVATE_KEY,null);
@@ -321,6 +367,7 @@ public class ThumbnailsFragment extends Fragment implements View.OnClickListener
 
                         GetAccessTokenAsyncTask getAccessTokenAsyncTask = new GetAccessTokenAsyncTask();
                         getAccessTokenAsyncTask.execute(oAuthParam);
+                        */
 
                     }else
                     {
@@ -363,7 +410,7 @@ public class ThumbnailsFragment extends Fragment implements View.OnClickListener
                 View viewToast = toast.getView();
                 viewToast.setBackgroundResource(R.drawable.toast_green);
                 TextView text = (TextView) viewToast.findViewById(android.R.id.message);
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP)
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M)
                     text.setTextColor(getResources().getColor(android.R.color.white,getActivity().getTheme()));
                 else
                     text.setTextColor(getResources().getColor(android.R.color.white));
@@ -382,6 +429,15 @@ public class ThumbnailsFragment extends Fragment implements View.OnClickListener
                 break;
             }
 
+        }
+    }
+
+    private void deletePictures() {
+        if(photoFiles == null || photoFiles.length==0){
+            photoFiles = getCommitteeProtocolStorageDir(STORAGE_PROTOCOL_DIRECTORY).listFiles();
+        }
+        for (File photoFile : photoFiles) {
+            photoFile.delete();
         }
     }
 
@@ -427,7 +483,7 @@ public class ThumbnailsFragment extends Fragment implements View.OnClickListener
             if(!imageBitmap.isRecycled())
                 imageBitmap.recycle();
 
-            if (imageViewReference != null && thumbnails != null) {
+            if (thumbnails != null) {
                 final ImageView imageView = imageViewReference.get();
                 if (imageView != null) {
                     int rotate = 0 ;
