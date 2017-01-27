@@ -1,7 +1,7 @@
 package pl.openpkw.openpkwmobile.fragments;
 
 import android.app.AlertDialog;
-import android.support.v4.app.Fragment;
+import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -10,7 +10,10 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.NotificationCompat;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
@@ -30,8 +33,6 @@ import com.google.gson.GsonBuilder;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.security.GeneralSecurityException;
 import java.security.PrivateKey;
 
 import pl.openpkw.openpkwmobile.R;
@@ -43,8 +44,6 @@ import pl.openpkw.openpkwmobile.network.GetAccessToken;
 import pl.openpkw.openpkwmobile.network.NetworkUtils;
 import pl.openpkw.openpkwmobile.network.QrSendResponse;
 import pl.openpkw.openpkwmobile.network.SendQrData;
-import pl.openpkw.openpkwmobile.security.KeyWrapper;
-import pl.openpkw.openpkwmobile.security.SecurityECC;
 import pl.openpkw.openpkwmobile.security.SecurityRSA;
 import pl.openpkw.openpkwmobile.utils.Utils;
 
@@ -78,6 +77,11 @@ public class SendDataFragment extends Fragment {
     private QrDTO scanQrDTO = null;
 
     private OnFragmentInteractionListener mListener;
+
+    private Handler mHandler;
+    private NotificationManager mNotifyManager;
+    private NotificationCompat.Builder mBuilder;
+    final int id = 1;
 
     public SendDataFragment() {
         // Required empty public constructor
@@ -113,6 +117,14 @@ public class SendDataFragment extends Fragment {
         contextThemeWrapper = new ContextThemeWrapper(getActivity(), Utils.DIALOG_STYLE);
 
         loadData();
+
+        mHandler = new Handler();
+        mNotifyManager =
+                (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
+        mBuilder = new NotificationCompat.Builder(getActivity());
+        mBuilder.setContentTitle("OpenPKW")
+                .setContentText("Przesyłanie danych w toku")
+                .setSmallIcon(android.R.drawable.stat_sys_upload);
 
         return sendDataView;
     }
@@ -164,6 +176,38 @@ public class SendDataFragment extends Fragment {
             if(qrString!=null)
             {
                 if(NetworkUtils.isNetworkAvailable(getActivity())) {
+
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            int incr;
+                            for (incr = 0; incr <= 100; incr+=5) {
+                                // Sets the progress indicator to a max value, the
+                                // current completion percentage, and "determinate"
+                                // state
+                                mBuilder.setProgress(100, incr, false);
+                                // Displays the progress bar for the first time.
+                                mNotifyManager.notify(id, mBuilder.build());
+                                // Sleeps the thread, simulating an operation
+                                // that takes time
+                                try {
+                                    // Sleep for 2.5 seconds
+                                    Thread.sleep(5*50);
+                                } catch (InterruptedException e) {
+                                    Log.d(Utils.TAG, "sleep failure");
+                                }
+                            }
+                            // When the loop is finished, updates the notification
+                            mBuilder.setContentText("Dane zostały przesłane na serwer")
+                                    // Removes the progress bar
+                                    .setProgress(0,0,false);
+                            mBuilder.setSmallIcon(android.R.drawable.stat_sys_upload_done);
+                            mNotifyManager.notify(id, mBuilder.build());
+                            //removes line below in when server available !!!!!!!!!!!!!!!!!!!!
+                            onSendDataSuccessfully("Dane zostały przesłane");
+                        }
+                    });
+                    /*
                     SharedPreferences sharedPref = getActivity().getSharedPreferences(Utils.DATA, Context.MODE_PRIVATE);
                     KeyWrapper keyWrapper = new KeyWrapper(getActivity().getApplicationContext(), Utils.KEY_ALIAS);
                     String privateKeyStr = sharedPref.getString(Utils.PRIVATE_KEY,null);
@@ -184,6 +228,7 @@ public class SendDataFragment extends Fragment {
 
                     GetAccessTokenAsyncTask getAccessTokenAsyncTask = new GetAccessTokenAsyncTask();
                     getAccessTokenAsyncTask.execute(oAuthParam);
+                    */
 
                 }else
                 {
