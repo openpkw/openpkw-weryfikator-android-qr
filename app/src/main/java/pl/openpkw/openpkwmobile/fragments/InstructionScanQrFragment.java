@@ -3,17 +3,21 @@ package pl.openpkw.openpkwmobile.fragments;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.google.zxing.integration.android.IntentIntegrator;
+
 import pl.openpkw.openpkwmobile.R;
-import pl.openpkw.openpkwmobile.activities.QrCodeCaptureActivity;
 import pl.openpkw.openpkwmobile.activities.ScanQrCodeActivity;
 
+import static pl.openpkw.openpkwmobile.utils.Utils.CAMERA_ID;
 import static pl.openpkw.openpkwmobile.utils.Utils.CLASS_NAME;
 
 /**
@@ -84,11 +88,27 @@ public class InstructionScanQrFragment extends Fragment implements View.OnClickL
         if(classNameIntent==null) {
             Intent intent = new Intent(getActivity(), ScanQrCodeActivity.class);
             startActivity(intent);
+            getActivity().finish();
         }else{
-            Intent intent = new Intent(getActivity(), QrCodeCaptureActivity.class);
-            startActivity(intent);
+            //get screen dimensions
+            int [] screenDimen = getScreenDimen();
+            IntentIntegrator integrator = new IntentIntegrator(getActivity());
+            integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
+            integrator.setCameraId(CAMERA_ID);  // Use a specific camera of the device
+            integrator.setScanningRectangle(screenDimen[1]-200,screenDimen[0]-200);
+            integrator.setPrompt("");
+            integrator.initiateScan();
         }
-        getActivity().finish();
+    }
+
+    private int[] getScreenDimen() {
+        int [] screenDimen = new int[2];
+        Display display = getActivity().getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        screenDimen[0] = size.x;
+        screenDimen[1] = size.y;
+        return screenDimen;
     }
 
     /**

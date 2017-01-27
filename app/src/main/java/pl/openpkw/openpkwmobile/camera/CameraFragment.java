@@ -33,7 +33,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import pl.openpkw.openpkwmobile.R;
-import pl.openpkw.openpkwmobile.activities.NextPhotoActivity;
+import pl.openpkw.openpkwmobile.activities.RetryPhotoActivity;
 import pl.openpkw.openpkwmobile.utils.Utils;
 
 import static pl.openpkw.openpkwmobile.utils.Utils.STORAGE_PROTOCOL_DIRECTORY;
@@ -321,9 +321,9 @@ public class CameraFragment extends Fragment
                 @Override
                 public void onPictureTaken(byte[] data, Camera camera) {
                     mBackgroundHandler.post(new ImageSaver(data, mFile));
-                    Intent nextPhotoIntent = new Intent(getActivity(), NextPhotoActivity.class);
-                    nextPhotoIntent.putExtra(Utils.PATH_TO_PHOTO, mCurrentPhotoPath);
-                    startActivity(nextPhotoIntent);
+                    Intent retryPhotoIntent = new Intent(getActivity(), RetryPhotoActivity.class);
+                    retryPhotoIntent .putExtra(Utils.PATH_TO_PHOTO, mCurrentPhotoPath);
+                    startActivity(retryPhotoIntent);
                     getActivity().finish();
                 }
             });
@@ -373,7 +373,7 @@ public class CameraFragment extends Fragment
          */
         private final File mFile;
 
-        public ImageSaver(byte [] imageData, File file) {
+        ImageSaver(byte[] imageData, File file) {
             mImageData = imageData;
             mFile = file;
         }

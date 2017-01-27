@@ -1,7 +1,6 @@
 package pl.openpkw.openpkwmobile.camera;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.view.MenuItemCompat;
@@ -16,7 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import pl.openpkw.openpkwmobile.R;
-import pl.openpkw.openpkwmobile.activities.NextPhotoActivity;
+import pl.openpkw.openpkwmobile.activities.RetryPhotoActivity;
 import pl.openpkw.openpkwmobile.utils.Utils;
 
 import static pl.openpkw.openpkwmobile.fragments.LoginFragment.timer;
@@ -104,10 +103,10 @@ public class CameraActivity extends AppCompatActivity implements Camera2Fragment
 
     @Override
     public void onFragmentInteraction(String mCurrentPhotoPath) {
-        Intent nextPhotoIntent = new Intent(this, NextPhotoActivity.class);
+        Intent retryPhotoIntent = new Intent(this, RetryPhotoActivity.class);
         Log.e(Utils.TAG,"PATH TO PICTURE "+mCurrentPhotoPath);
-        nextPhotoIntent.putExtra(Utils.PATH_TO_PHOTO, mCurrentPhotoPath);
-        startActivity(nextPhotoIntent);
+        retryPhotoIntent.putExtra(Utils.PATH_TO_PHOTO, mCurrentPhotoPath);
+        startActivity(retryPhotoIntent);
         finish();
     }
 }

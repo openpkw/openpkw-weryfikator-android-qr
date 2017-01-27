@@ -4,14 +4,9 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.design.widget.Snackbar;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -26,10 +21,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.File;
-
 import pl.openpkw.openpkwmobile.R;
-import pl.openpkw.openpkwmobile.camera.CameraActivity;
 import pl.openpkw.openpkwmobile.fragments.AboutFragment;
 import pl.openpkw.openpkwmobile.fragments.NextPhotoFragment;
 import pl.openpkw.openpkwmobile.fragments.SettingsFragment;
@@ -40,19 +32,15 @@ import static pl.openpkw.openpkwmobile.fragments.LoginFragment.timer;
 public class NextPhotoActivity extends AppCompatActivity implements NextPhotoFragment.OnFragmentInteractionListener{
 
     private boolean doubleBackToExitPressedOnce = false;
-    private View nextPhotoLayout;
-    private String mCurrentPhotoPath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_next_photo);
 
-        nextPhotoLayout = findViewById(R.id.next_photo_fragment_container);
-
         //get path to photo
         Bundle extras = getIntent().getExtras();
-        mCurrentPhotoPath = extras.getString(Utils.PATH_TO_PHOTO, null);
+        String mCurrentPhotoPath = extras.getString(Utils.PATH_TO_PHOTO, null);
 
         FragmentManager fm = getFragmentManager();
         NextPhotoFragment nextPhotoFragment = (NextPhotoFragment) fm.findFragmentByTag(Utils.NEXT_PHOTO_FRAGMENT_TAG);
@@ -70,7 +58,6 @@ public class NextPhotoActivity extends AppCompatActivity implements NextPhotoFra
         }
 
         //set title and subtitle to action bar
-        //set title and subtitle to action bar
         ActionBar actionBar = getSupportActionBar();
         if(actionBar!=null) {
             final SpannableString spannableString = new SpannableString("Krok 8 z 9\nWykonaj zdjęcia każdej strony protokołu wyborczego");
@@ -79,40 +66,6 @@ public class NextPhotoActivity extends AppCompatActivity implements NextPhotoFra
             actionBar.setCustomView(R.layout.action_bar_title_layout);
             ((TextView) findViewById(R.id.action_bar_title)).setText(spannableString);
         }
-
-        showInfo();
-    }
-
-    private void showInfo(){
-        Snackbar snackbar = Snackbar.make(nextPhotoLayout,"Czy zdjęcie jest wyraźne i dobrze wykadrowane?",
-                Snackbar.LENGTH_LONG).
-                setAction("PONÓW",new View.OnClickListener(){
-
-            @Override
-            public void onClick(View view) {
-                //delete incorrect photo
-                if(mCurrentPhotoPath!=null){
-                    File file  = new File(mCurrentPhotoPath);
-                    boolean isDeleted = file.delete();
-                }
-
-                Intent cameraIntent = new Intent(NextPhotoActivity.this, CameraActivity.class);
-                startActivity(cameraIntent);
-                finish();
-            }
-        });
-        // Changing message text color
-        snackbar.setActionTextColor(Color.YELLOW);
-        snackbar.setDuration(4000);
-        View snackBarView = snackbar.getView();
-        snackBarView.setBackgroundColor(ContextCompat.getColor(this, R.color.green));
-        // Changing action button text color
-        TextView snackBarTextView = (TextView)snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
-        snackBarTextView.setMaxLines(5);
-        snackBarTextView.setTypeface(Typeface.DEFAULT_BOLD);
-        snackBarTextView.setTextColor(Color.WHITE);
-        snackBarTextView.setTextSize(16);
-        snackbar.show();
     }
 
     @Override

@@ -28,7 +28,7 @@ import pl.openpkw.openpkwmobile.utils.Utils;
 import static pl.openpkw.openpkwmobile.utils.Utils.ENCRYPTION_MODE_RSA;
 
 public class KeyWrapper {
-    private  Cipher cipher;
+    private Cipher cipher;
     private PrivateKey privateKey;
     private PublicKey publicKey;
     /**

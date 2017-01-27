@@ -145,22 +145,34 @@
             android:layout_weight="1"
             >
 
-            <TableRow
+            <TableLayout
+                android:id="@+id/thumbnails.photos.layout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginEnd="0dp"
+                android:layout_height="wrap_content"
+                android:background="@color/light_gray_protocol"
+                android:stretchColumns="1">
 
-                    <TableLayout
-                        android:id="@+id/thumbnails.photos.layout"
-                        android:layout_width="match_parent"
-                        android:layout_marginStart="0dp"
-                        android:layout_marginTop="0dp"
-                        android:layout_marginEnd="0dp"
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center">
+                    <TextView
+                        android:id="@+id/retry.photo.is.photo.correct"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@color/light_gray_protocol"
-                        android:stretchColumns="1">
-                    </TableLayout>
-
-            </TableRow>
+                        android:gravity="center_horizontal"
+                        android:paddingEnd="2dp"
+                        android:paddingStart="2dp"
+                        android:paddingBottom="@dimen/padding.committee.label"
+                        android:paddingTop="@dimen/padding.committee.label"
+                        android:textColor="@android:color/black"
+                        android:text="Przesyłasz następujące zdjęcia:"
+                        android:textSize="@dimen/fontsize.committee.label"/>
+                </TableRow>
+            </TableLayout>
 
         </ScrollView>
 

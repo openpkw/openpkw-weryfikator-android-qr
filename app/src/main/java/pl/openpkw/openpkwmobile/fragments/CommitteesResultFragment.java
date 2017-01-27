@@ -24,20 +24,23 @@ import java.util.HashSet;
 
 import pl.openpkw.openpkwmobile.R;
 import pl.openpkw.openpkwmobile.activities.ElectionCommitteeVotesActivity;
-import pl.openpkw.openpkwmobile.activities.QrCodeCaptureActivity;
 import pl.openpkw.openpkwmobile.activities.QueryAddPhotosActivity;
+import pl.openpkw.openpkwmobile.activities.ScanQrCodeActivity;
 import pl.openpkw.openpkwmobile.activities.VotingFormActivity;
 import pl.openpkw.openpkwmobile.models.CandidateVoteDTO;
 import pl.openpkw.openpkwmobile.models.ElectionCommitteeDTO;
 import pl.openpkw.openpkwmobile.utils.Utils;
 
-import static pl.openpkw.openpkwmobile.activities.QrCodeCaptureActivity.candidatesHashMap;
+import static pl.openpkw.openpkwmobile.activities.ScanQrCodeActivity.candidatesHashMap;
 import static pl.openpkw.openpkwmobile.fragments.ScanQrCodeFragment.createIndentedText;
 import static pl.openpkw.openpkwmobile.utils.Utils.DATA;
 import static pl.openpkw.openpkwmobile.utils.Utils.PERIPHERY_ADDRESS;
 import static pl.openpkw.openpkwmobile.utils.Utils.PERIPHERY_NAME;
 import static pl.openpkw.openpkwmobile.utils.Utils.PERIPHERY_NUMBER;
 import static pl.openpkw.openpkwmobile.utils.Utils.TERRITORIAL_CODE;
+
+//import pl.openpkw.openpkwmobile.activities.QrCodeCaptureActivity;
+//import static pl.openpkw.openpkwmobile.activities.QrCodeCaptureActivity.candidatesHashMap;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -144,8 +147,8 @@ public class CommitteesResultFragment extends Fragment {
 
         if(scannedQR!=null) {
             candidatesMap = candidatesHashMap;
-            HashSet<String> electionCommitteeDistrictList = QrCodeCaptureActivity.electionCommitteeDistrictList;
-            electionCommitteeMap = QrCodeCaptureActivity.electionCommitteeMap;
+            HashSet<String> electionCommitteeDistrictList = ScanQrCodeActivity.electionCommitteeDistrictList;
+            electionCommitteeMap = ScanQrCodeActivity.electionCommitteeMap;
 
             LayoutInflater layoutInflater = (LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 

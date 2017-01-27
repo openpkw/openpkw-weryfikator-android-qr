@@ -9,10 +9,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Point;
 import android.graphics.Typeface;
 import android.hardware.Camera;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -23,6 +25,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.util.Pair;
 import android.view.ContextThemeWrapper;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -59,6 +62,7 @@ import pl.openpkw.openpkwmobile.qr.QrWrapper;
 import static pl.openpkw.openpkwmobile.fragments.LoginFragment.timer;
 import static pl.openpkw.openpkwmobile.fragments.ScanQrCodeFragment.mCamera;
 import static pl.openpkw.openpkwmobile.utils.Utils.CAMERA_ID;
+import static pl.openpkw.openpkwmobile.utils.Utils.CLASS_NAME;
 import static pl.openpkw.openpkwmobile.utils.Utils.DATA;
 import static pl.openpkw.openpkwmobile.utils.Utils.DIALOG_STYLE;
 import static pl.openpkw.openpkwmobile.utils.Utils.DISTRICT_NUMBER;
@@ -70,7 +74,6 @@ import static pl.openpkw.openpkwmobile.utils.Utils.REQUEST_ID_MULTIPLE_PERMISSIO
 import static pl.openpkw.openpkwmobile.utils.Utils.SCAN_QR_FRAGMENT_TAG;
 import static pl.openpkw.openpkwmobile.utils.Utils.TAG;
 import static pl.openpkw.openpkwmobile.utils.Utils.TERRITORIAL_CODE;
-import static pl.openpkw.openpkwmobile.utils.Utils.TIMEOUT_SCAN_QR;
 
 public class ScanQrCodeActivity extends AppCompatActivity implements ScanQrCodeFragment.OnFragmentInteractionListener{
 
@@ -239,7 +242,7 @@ public class ScanQrCodeActivity extends AppCompatActivity implements ScanQrCodeF
                         View view = toast.getView();
                         view.setBackgroundResource(R.drawable.toast_green);
                         TextView text = (TextView) view.findViewById(android.R.id.message);
-                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP)
+                        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
                             text.setTextColor(getResources().getColor(android.R.color.white,getTheme()));
                         else
                             text.setTextColor(getResources().getColor(android.R.color.white));
@@ -266,6 +269,7 @@ public class ScanQrCodeActivity extends AppCompatActivity implements ScanQrCodeF
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         Intent instructionScanQrIntent = new Intent(ScanQrCodeActivity.this, InstructionScanQrActivity.class);
+                        instructionScanQrIntent.putExtra(CLASS_NAME,"INTEGRATOR");
                         startActivity(instructionScanQrIntent);
                         finish();
                     }
@@ -279,14 +283,17 @@ public class ScanQrCodeActivity extends AppCompatActivity implements ScanQrCodeF
                 .setPositiveButton("Ponów", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+                        //get screen dimensions
+                        int [] screenDimen = getScreenDimen();
                         IntentIntegrator integrator = new IntentIntegrator(ScanQrCodeActivity.this);
                         integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
                         integrator.setCameraId(CAMERA_ID);  // Use a specific camera of the device
-                        integrator.setBeepEnabled(true);
+                       // integrator.setBeepEnabled(true);
+                        integrator.setScanningRectangle(screenDimen[1]-200,screenDimen[0]-200);
                         integrator.setPrompt("");
-                        integrator.setBarcodeImageEnabled(true);
-                        integrator.setOrientationLocked(true);
-                        integrator.setTimeout(TIMEOUT_SCAN_QR);
+                        //integrator.setBarcodeImageEnabled(true);
+                        //integrator.setOrientationLocked(true);
+                        //integrator.setTimeout(TIMEOUT_SCAN_QR);
                         integrator.initiateScan();
                     }
                 });
@@ -321,6 +328,16 @@ public class ScanQrCodeActivity extends AppCompatActivity implements ScanQrCodeF
         editor.putString(PERIPHERY_ADDRESS,periphery_address);
         editor.putString(DISTRICT_NUMBER,district_number);
         editor.apply();
+    }
+
+    private int[] getScreenDimen() {
+        int [] screenDimen = new int[2];
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        screenDimen[0] = size.x;
+        screenDimen[1] = size.y;
+        return screenDimen;
     }
 
     @Override

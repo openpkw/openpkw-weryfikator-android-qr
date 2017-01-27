@@ -32,6 +32,14 @@ android {
     lintOptions {
         abortOnError false
     }
+
+    sourceSets {
+        main {
+            java {
+                exclude '**/QrCodeCaptureActivity.java'
+            }
+        }
+    }
 }
 
 dependencies {
@@ -43,9 +51,15 @@ dependencies {
     compile 'com.android.support:appcompat-v7:24.0.0'
     compile 'com.android.support:support-v13:24.0.0'
     compile 'com.android.support:design:24.0.0'
-    compile 'com.journeyapps:zxing-android-embedded:3.3.0@aar'
+    //scan qr code library
+    //compile 'com.journeyapps:zxing-android-embedded:3.3.0@aar'
     compile 'com.google.zxing:core:3.2.1'
+    compile 'com.journeyapps:zxing-android-embedded:2.3.0@aar'
+    compile 'com.journeyapps:zxing-android-legacy:2.3.0@aar'
+    compile 'com.journeyapps:zxing-android-integration:2.3.0@aar'
+    //json library
     compile 'com.google.code.gson:gson:2.5'
+    //crypto library
     compile 'com.madgag.spongycastle:pg:1.54.0.0'
     compile 'com.android.support:support-v4:24.0.0'
 

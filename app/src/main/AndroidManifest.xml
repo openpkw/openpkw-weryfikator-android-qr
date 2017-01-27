@@ -71,8 +71,8 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activities.QueryAddPhotosActivity"
-            android:screenOrientation="portrait"
-            android:label="Krok 7 z 9" />
+            android:label="Krok 7 z 9"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activities.AddPhotosActivity"
             android:label="Krok 8 z 9"
@@ -99,24 +99,25 @@
             android:label="Krok 8 z 9"
             android:screenOrientation="portrait"
             android:theme="@style/SemiTransparentActionBarTheme" />
-
-        <activity android:name=".activities.QrCodeCaptureActivity"/>
-
+        <activity android:name=".activities.QrCodeCaptureActivity" />
         <activity
-            android:name="com.journeyapps.barcodescanner.CaptureActivity"
+            android:label="SKANOWANIE"
+            android:name="com.google.zxing.client.android.CaptureActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="sensorLandscape"
             android:windowSoftInputMode="stateAlwaysHidden" />
 
+        <activity android:name=".activities.RetryPhotoActivity"/>
+
         <receiver android:name=".network.WifiConnectionReceiver">
             <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
 
-        <service android:name=".network.SendPictureService"
-            android:enabled="true"/>
-
+        <service
+            android:name=".network.SendPictureService"
+            android:enabled="true" />
     </application>
 
 </manifest>

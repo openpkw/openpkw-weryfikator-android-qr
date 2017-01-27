@@ -26,14 +26,13 @@ public class WifiConnectionReceiver extends BroadcastReceiver {
                         //check is wifi connection
                         String networkTypeName = info.getTypeName();
                         Log.e(TAG, "NETWORK TYPE NAME: " + networkTypeName);
+                        //start service send picture to server
+                        Intent intentService = new Intent(context, SendPictureService.class);
+                        context.startService(intentService);
 
                         SharedPreferences.Editor editor = sharedPref.edit();
                         editor.putBoolean(IS_DATA_SEND, true);
                         editor.apply();
-
-                        Log.e(TAG, "START SERVICE TO SEND PICTURE: ");
-                        Intent intentService = new Intent(context, SendPictureService.class);
-                        context.startService(intentService);
                     }
                 }
             }

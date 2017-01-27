@@ -31,7 +31,7 @@ import pl.openpkw.openpkwmobile.activities.CommitteesResultActivity;
 import pl.openpkw.openpkwmobile.models.CandidateVoteDTO;
 import pl.openpkw.openpkwmobile.utils.Utils;
 
-import static pl.openpkw.openpkwmobile.activities.QrCodeCaptureActivity.candidatesHashMap;
+import static pl.openpkw.openpkwmobile.activities.ScanQrCodeActivity.candidatesHashMap;
 
 /**
  * A simple {@link Fragment} subclass.

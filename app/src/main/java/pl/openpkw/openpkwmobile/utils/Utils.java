@@ -6,10 +6,10 @@ import android.text.TextUtils;
 public class Utils {
 
     public static final String TAG = "OPENPKW";
-    public static final String URL_DEFAULT__VERIFY_QR = "http://rumcajs.openpkw.pl:9080/openpkw/api/qr";
-    public static final String URL_DEFAULT_LOGIN = "http://rumcajs.openpkw.pl:9080/openpkw/api/login";
-    public static final String URL_DEFAULT_REGISTER = "http://rumcajs.openpkw.pl:9080/openpkw/users/";
-    public static final String URL_DEFAULT_ELECTION_RESULT = "http://rumcajs.openpkw.pl:81/";
+    public static final String URL_DEFAULT__VERIFY_QR = "http://rumcajs.open-pkw.pl:9080/openpkw/api/qr";
+    public static final String URL_DEFAULT_LOGIN = "http://rumcajs.open-pkw.pl:9080/openpkw/api/login";
+    public static final String URL_DEFAULT_REGISTER = "http://rumcajs.open-pkw.pl:9080/openpkw/users/";
+    public static final String URL_DEFAULT_ELECTION_RESULT = "http://rumcajs.open-pkw.pl:81/";
     public static final String ERROR_MESSAGE = "errorMessage";
     public static final String ERROR = "error";
     public static final String URL_LOGIN_PREFERENCE = "url_login_preference";
@@ -41,7 +41,8 @@ public class Utils {
     public static final String SCAN_QR_FRAGMENT_TAG = "SCAN_QR_FRAGMENT_TAG";
     public static final String INSTRUCTION_SCAN_QR_FRAGMENT_TAG = "INSTRUCTION_SCAN_QR_FRAGMENT_TAG";
     public static final String COMMITTEES_RESULT_FRAGMENT_TAG = "COMMITTEES_RESULT_FRAGMENT_TAG";
-    public static final String ELECTION_COMMITTEE_VOTES_FRAGMENT_TAG = " ELECTION_COMMITTEE_VOTES_FRAGMENT_TAG";
+    public static final String ELECTION_COMMITTEE_VOTES_FRAGMENT_TAG = "ELECTION_COMMITTEE_VOTES_FRAGMENT_TAG";
+    public static final String RETRY_PHOTO_FRAGMENT_TAG= "RETRY_PHOTO_FRAGMENT_TAG";
     public static final String VOTING_FORM_FRAGMENT_TAG = "ELECTION_RESULT_FRAGMENT_TAG";
     public static final String END_FRAGMENT_TAG = "END_FRAGMENT_TAG";
     public static final String THUMBNAILS_FRAGMENT_TAG = "THUMBNAILS_FRAGMENT_TAG ";
