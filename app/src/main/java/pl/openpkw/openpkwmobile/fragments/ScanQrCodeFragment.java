@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.hardware.Camera;
 import android.net.Uri;
 import android.os.Bundle;
@@ -20,19 +21,22 @@ import android.text.style.ForegroundColorSpan;
 import android.text.style.LeadingMarginSpan;
 import android.text.style.UnderlineSpan;
 import android.view.ContextThemeWrapper;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.zxing.integration.android.IntentIntegrator;
+
 import java.security.Security;
 
 import pl.openpkw.openpkwmobile.R;
 import pl.openpkw.openpkwmobile.activities.InstructionScanQrActivity;
-import pl.openpkw.openpkwmobile.activities.QrCodeCaptureActivity;
 import pl.openpkw.openpkwmobile.activities.VotingFormActivity;
 
+import static pl.openpkw.openpkwmobile.utils.Utils.CAMERA_ID;
 import static pl.openpkw.openpkwmobile.utils.Utils.DATA;
 import static pl.openpkw.openpkwmobile.utils.Utils.DIALOG_STYLE;
 import static pl.openpkw.openpkwmobile.utils.Utils.PERIPHERY_ADDRESS;
@@ -123,8 +127,8 @@ public class ScanQrCodeFragment extends Fragment implements View.OnClickListener
             periphery_name = "Nazwa: " + periphery_name;
             peripheryNameTextView.setMaxLines(2);
         }
-        String periphery_address = sharedPref.getString(PERIPHERY_ADDRESS, "Adres: _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _");
-        if(!periphery_address.equalsIgnoreCase("Adres: _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _")) {
+        String periphery_address = sharedPref.getString(PERIPHERY_ADDRESS, "Adres:   _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _");
+        if(!periphery_address.equalsIgnoreCase("Adres:   _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _")) {
             periphery_address = "Adres: " + periphery_address;
             peripheryAddressTextView.setMaxLines(2);
         }
@@ -200,23 +204,21 @@ public class ScanQrCodeFragment extends Fragment implements View.OnClickListener
                         Manifest.permission.CAMERA);
 
                 if(permissionCamera == PackageManager.PERMISSION_GRANTED ) {
-
-                    Intent captureQrCodeIntent = new Intent(getActivity(), QrCodeCaptureActivity.class);
-                    startActivity( captureQrCodeIntent);
-                    getActivity().finish();
-                    break;
-
-                    /*
+                    //get screen dimensions
+                    int [] screenDimen = getScreenDimen();
+                    //create xzing scanning integrator
                     IntentIntegrator integrator = new IntentIntegrator(getActivity());
                     integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
                     integrator.setPrompt("");
                     integrator.setCameraId(CAMERA_ID);  // Use a specific camera of the device
-                    integrator.setBeepEnabled(true);
-                    integrator.setBarcodeImageEnabled(true);
-                    integrator.setOrientationLocked(true);
-                    integrator.setTimeout(TIMEOUT_SCAN_QR);
+                    //integrator.setCaptureLayout(R.layout.activity_capture_qrcode);
+                    integrator.setScanningRectangle(screenDimen[1]-200,screenDimen[0]-200);
+                    //integrator.setScanningRectangle()
+                    //integrator.setBeepEnabled(true);
+                    //integrator.setBarcodeImageEnabled(true);
+                    //integrator.setOrientationLocked(true);
+                    //integrator.setTimeout(TIMEOUT_SCAN_QR);
                     integrator.initiateScan();
-                    */
 
                 }else{
                     final AlertDialog.Builder builder = new AlertDialog.Builder(contextThemeWrapper);
@@ -237,6 +239,16 @@ public class ScanQrCodeFragment extends Fragment implements View.OnClickListener
                 }
             }
         }
+    }
+
+    private int[] getScreenDimen() {
+        int [] screenDimen = new int[2];
+        Display display = getActivity().getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        screenDimen[0] = size.x;
+        screenDimen[1] = size.y;
+        return screenDimen;
     }
 
     /**
