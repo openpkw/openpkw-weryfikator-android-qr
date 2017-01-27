@@ -1,6 +1,5 @@
 package pl.openpkw.openpkwmobile.fragments;
 
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -34,7 +33,6 @@ import pl.openpkw.openpkwmobile.activities.RegisterUserActivity;
 import pl.openpkw.openpkwmobile.models.OAuthParam;
 import pl.openpkw.openpkwmobile.models.UserCredentialsDTO;
 import pl.openpkw.openpkwmobile.network.GetRefreshToken;
-import pl.openpkw.openpkwmobile.network.NetworkUtils;
 import pl.openpkw.openpkwmobile.security.SecurityRSA;
 import pl.openpkw.openpkwmobile.utils.TimerSingleton;
 import pl.openpkw.openpkwmobile.utils.Utils;
@@ -87,31 +85,28 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.login_button_login:{
-                boolean isEmailCorrect;
+                onLoginSuccessfully();
+                /*
+                boolean isLoginDataCorrect = true;
                 if(emailEditText.getText().toString().isEmpty())
                 {
                     emailEditText.setError(getString(R.string.register_error_email));
-                    isEmailCorrect = false;
+                    isLoginDataCorrect = false;
                 }
                 else {
                     if (!Utils.isEmailValid(emailEditText.getText().toString().trim())) {
                         emailEditText.setError(getString(R.string.register_error_email_invalid));
-                        isEmailCorrect = false;
+                        isLoginDataCorrect = false;
                     }
-                    else
-                        isEmailCorrect = true;
                 }
 
-                boolean isPasswordCorrect;
                 if(passwordEditText.getText().toString().isEmpty())
                 {
                     passwordEditText.setError(getString(R.string.register_error_password));
-                    isPasswordCorrect = false;
+                    isLoginDataCorrect = false;
                 }
-                else
-                    isPasswordCorrect = true;
 
-                if(isPasswordCorrect && isEmailCorrect) {
+                if(isLoginDataCorrect) {
 
                     if(NetworkUtils.isNetworkAvailable(getActivity())) {
                         //read url login from preference
@@ -137,6 +132,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
                     Toast.makeText(getActivity().getApplicationContext(),getString(R.string.login_toast_enter_login_password),
                             Toast.LENGTH_LONG).show();
                 }
+                */
                 break;
             }
             case R.id.login_button_register:{
