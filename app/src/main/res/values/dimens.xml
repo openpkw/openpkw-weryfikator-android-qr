@@ -40,6 +40,7 @@
     <dimen name="fontsize.thank.you">20sp</dimen>
     <dimen name="fontsize.query">20sp</dimen>
     <dimen name="fontsize.login.textlink.fpassword">16sp</dimen>
+    <dimen name="fontsize.simply.instruction.scan.qr">14sp</dimen>
     <dimen name="padding.committee.label">2dp</dimen>
     <dimen name="padding.result.committee.label">10dp</dimen>
     <dimen name="padding.fvoting.general.data">10dp</dimen>

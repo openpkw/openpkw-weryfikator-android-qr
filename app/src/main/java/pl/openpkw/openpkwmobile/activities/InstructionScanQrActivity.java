@@ -12,13 +12,12 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import pl.openpkw.openpkwmobile.R;
 import pl.openpkw.openpkwmobile.fragments.InstructionScanQrFragment;
 
+import static pl.openpkw.openpkwmobile.activities.ScanQrCodeActivity.showToast;
 import static pl.openpkw.openpkwmobile.fragments.LoginFragment.timer;
-import static pl.openpkw.openpkwmobile.utils.Utils.CLASS_NAME;
 import static pl.openpkw.openpkwmobile.utils.Utils.INSTRUCTION_SCAN_QR_FRAGMENT_TAG;
 
 public class InstructionScanQrActivity extends AppCompatActivity implements InstructionScanQrFragment.OnFragmentInteractionListener{
@@ -75,7 +74,7 @@ public class InstructionScanQrActivity extends AppCompatActivity implements Inst
         }
 
         this.doubleBackToExitPressedOnce = true;
-        Toast.makeText(this, getString(R.string.fragment_login_twotaptoexit), Toast.LENGTH_SHORT).show();
+        showToast(R.string.fragment_login_twotaptoexit,this);
         new Handler().postDelayed(new Runnable() {
 
             @Override

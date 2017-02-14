@@ -169,7 +169,6 @@ public class SendDataFragment extends Fragment {
     View.OnClickListener sendButtonClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-
             oAuthParam = getOAuthParam();
             final AlertDialog.Builder builder = new AlertDialog.Builder(contextThemeWrapper);
 

@@ -12,21 +12,18 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.v13.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,8 +35,8 @@ import pl.openpkw.openpkwmobile.camera.CameraActivity;
 import pl.openpkw.openpkwmobile.fragments.AboutFragment;
 import pl.openpkw.openpkwmobile.fragments.QueryAddPhotosFragment;
 import pl.openpkw.openpkwmobile.fragments.SettingsFragment;
-import pl.openpkw.openpkwmobile.utils.Utils;
 
+import static pl.openpkw.openpkwmobile.activities.ScanQrCodeActivity.showToast;
 import static pl.openpkw.openpkwmobile.fragments.LoginFragment.timer;
 import static pl.openpkw.openpkwmobile.utils.Utils.QUERY_ADD_PHOTOS_FRAGMENT_TAG;
 import static pl.openpkw.openpkwmobile.utils.Utils.REQUEST_ID_MULTIPLE_PERMISSIONS;
@@ -137,7 +134,7 @@ public class QueryAddPhotosActivity extends AppCompatActivity implements QueryAd
             }
 
             this.doubleBackToExitPressedOnce = true;
-            Toast.makeText(this, getString(R.string.fragment_login_twotaptoexit), Toast.LENGTH_SHORT).show();
+            showToast(R.string.fragment_login_twotaptoexit,this);
             new Handler().postDelayed(new Runnable() {
 
                 @Override

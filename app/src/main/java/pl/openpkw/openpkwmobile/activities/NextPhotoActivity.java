@@ -19,7 +19,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import pl.openpkw.openpkwmobile.R;
 import pl.openpkw.openpkwmobile.fragments.AboutFragment;
@@ -27,6 +26,7 @@ import pl.openpkw.openpkwmobile.fragments.NextPhotoFragment;
 import pl.openpkw.openpkwmobile.fragments.SettingsFragment;
 import pl.openpkw.openpkwmobile.utils.Utils;
 
+import static pl.openpkw.openpkwmobile.activities.ScanQrCodeActivity.showToast;
 import static pl.openpkw.openpkwmobile.fragments.LoginFragment.timer;
 
 public class NextPhotoActivity extends AppCompatActivity implements NextPhotoFragment.OnFragmentInteractionListener{
@@ -135,7 +135,7 @@ public class NextPhotoActivity extends AppCompatActivity implements NextPhotoFra
             }
 
             this.doubleBackToExitPressedOnce = true;
-            Toast.makeText(this, getString(R.string.fragment_login_twotaptoexit), Toast.LENGTH_SHORT).show();
+            showToast(R.string.fragment_login_twotaptoexit,this);
             new Handler().postDelayed(new Runnable() {
 
                 @Override

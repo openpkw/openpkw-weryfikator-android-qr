@@ -116,19 +116,25 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="instruction.scan.qr.description">Aby przystąpić do skanowania należy nacisnąć przycisk SKANUJ.
+    <string name="instruction.scan.qr.description">Aby przystąpić do skanowania należy nacisnąć przycisk SKANUJ lub kod QR.
         Obiektyw kamery naszego urządzenia kierujemy na kod QR tak, by znalazł się on w całości w zaznaczonym
         na ekranie prostokątnym obszarze. Następnie należy przez chwilę utrzymać urządzenie mobilne nieruchomo (kod cały
         czas ma być widoczny na ekranie), tak aby kamera mogła złapać ostrość. Po poprawnym zeskanowaniu
-        kodu ujrzymy na ekranie komunikat  - Kod QR został zeskanowany. Przejdź dalej.
+        kodu ujrzymy na ekranie komunikat  - Kod QR został zeskanowany poprawnie. Przejdź dalej.
         </string>
+
+    <string name="simply.instruction.scan.qr.description">
+        Obiektyw kamery ustawiamy tak, aby kod QR znalazł się w całości w zaznaczonym prostokącie.
+        Następnie trzymamj urządzenie nieruchomo do momentu zeskanowania.
+    </string>
     <string name="instruction.label.note">Uwaga!</string>
     <string name="instruction.label.note.description">W zależności od typu aparatu odległość pomiędzy obiektywem kamery
         a kodem QR umożliwiająca prawidłowe zeskanowanie może wynosić od 0,3 do 1 metra.
         Jeżeli skanowanie kodu QR nie powiodło się należy powtórzyć proces przy róznych odległościach obiektywu
         kamery od kodu QR.</string>
-    <string name="toast.scanned.qr.ok">Kod QR został zeskanowany. Przejdź dalej.</string>
+    <string name="toast.scanned.qr.ok">Kod QR został zeskanowany poprawnie. \nPrzejdź dalej.</string>
     <string name="toast.send.picture.by.wifi">Zdjęcia zostaną przesłane na serwer jak tylko będzie dostępne połączenia z siecią Wifi</string>
-    <string name="dialog_scan_qr_failed">"Skanowanie kodu QR zakończyło się niepowodzeniem. "</string>
+    <string name="dialog_scan_qr_failed">"Skanowanie kodu QR zakończyło się niepowodzeniem. \nSpróbuj ponownie."</string>
     <string name="toast_send_data_incorrect">Przesłane na serwer dane są niepoprawne</string>
+    <string name="qr_openpkw">qr_openpkw</string>
 </resources>

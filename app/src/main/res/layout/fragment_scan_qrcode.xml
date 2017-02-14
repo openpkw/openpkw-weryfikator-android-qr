@@ -8,7 +8,7 @@
         android:id="@+id/scan.qr.scrollview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/scan.qr.next.button">
+        android:layout_above="@+id/scan.qr.scan.button">
 
         <TableLayout
             android:id="@+id/scan.qr.protocol.data.tablelayout"
@@ -234,27 +234,29 @@
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:gravity="center_horizontal"
-                        android:layout_marginTop="30dp"
+                        android:layout_marginTop="2dp"
                         android:layout_weight="1"
                         android:textColor="@android:color/black"
                         android:text="@string/scan.qr.label.scan"
                         android:textSize="@dimen/fontsize.committee.label"/>
 
-                    <Button
+                    <ImageButton
                         android:layout_gravity="center_horizontal"
-                        android:id="@+id/scan.qr.button.scan"
-                        android:layout_width="@dimen/width.login.button.login"
+                        android:id="@+id/scan.qr.image.button.scan"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin.login.button.login.top"
-                        android:text="@string/scan.qr.buttonlabel.scan"
-                        style="@style/green_button"/>
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="0dp"
+                        android:src="@drawable/qr_openpkw"
+                        android:contentDescription="@string/qr_openpkw"
+                        />
 
                     <Button
                         android:id="@+id/scan.qr.textlink.scan"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:layout_marginTop="@dimen/margin.login.textlink.fpassword.top"
+                        android:layout_marginBottom="2dp"
+                        android:layout_marginTop="0dp"
                         android:layout_marginStart="@dimen/margin.login.left"
                         android:paddingStart="2dp"
                         android:paddingEnd="2dp"
@@ -275,13 +277,13 @@
     </ScrollView>
 
     <Button
-        android:id="@+id/scan.qr.next.button"
+        android:id="@+id/scan.qr.scan.button"
         android:layout_width="@dimen/width.login.button.register"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="@dimen/margin.bottom.buttons"
         android:layout_centerHorizontal="true"
-        android:text="@string/next.label.button"
+        android:text="@string/scan.qr.buttonlabel.scan"
         style="@style/orange_button"/>
 
 </RelativeLayout>

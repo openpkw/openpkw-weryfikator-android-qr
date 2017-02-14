@@ -75,7 +75,7 @@ public class ScanQrActivityInstrumentationTest {
         intending(hasAction("com.google.zxing.client.android.SCAN")).respondWith(result);
 
         // Now that we have the stub in place, click on the button in our app that launches into the ZXING app
-        onView(withId(R.id.scan_qr_button_scan)).perform(click());
+        onView(withId(R.id.scan_qr_image_button_scan)).perform(click());
 
         //check toast is displayed
         onView(withText(R.string.toast_scanned_qr_ok)).
@@ -88,7 +88,7 @@ public class ScanQrActivityInstrumentationTest {
         resultData.putExtra("SCAN_RESULT", invalidQrCode);
         Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, resultData);
         intending(hasAction("com.google.zxing.client.android.SCAN")).respondWith(result);
-        onView(withId(R.id.scan_qr_button_scan)).perform(click());
+        onView(withId(R.id.scan_qr_image_button_scan)).perform(click());
         //check is dialog incorrect qr code is displayed
         onView(withText(R.string.dialog_incorrect_qr_message))
                 .inRoot(isDialog()) // <---
@@ -100,7 +100,7 @@ public class ScanQrActivityInstrumentationTest {
         Intent resultData = new Intent();
         Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_CANCELED, resultData);
         intending(hasAction("com.google.zxing.client.android.SCAN")).respondWith(result);
-        onView(withId(R.id.scan_qr_button_scan)).perform(click());
+        onView(withId(R.id.scan_qr_image_button_scan)).perform(click());
         //check is dialog failed scan qr code is displayed
         onView(withText(R.string.dialog_scan_qr_failed))
                 .inRoot(isDialog()) // <---

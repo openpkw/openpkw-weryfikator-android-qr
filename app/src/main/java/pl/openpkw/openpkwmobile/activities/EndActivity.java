@@ -10,6 +10,7 @@ import android.widget.Toast;
 import pl.openpkw.openpkwmobile.R;
 import pl.openpkw.openpkwmobile.fragments.EndFragment;
 
+import static pl.openpkw.openpkwmobile.activities.ScanQrCodeActivity.showToast;
 import static pl.openpkw.openpkwmobile.utils.Utils.END_FRAGMENT_TAG;
 import static pl.openpkw.openpkwmobile.utils.Utils.SERVER_RESPONSE;
 
@@ -45,7 +46,7 @@ public class EndActivity extends AppCompatActivity implements EndFragment.OnFrag
         }
 
         this.doubleBackToExitPressedOnce = true;
-        Toast.makeText(this, getString(R.string.fragment_login_twotaptoexit), Toast.LENGTH_SHORT).show();
+        showToast(R.string.fragment_login_twotaptoexit,this);
         new Handler().postDelayed(new Runnable() {
 
             @Override

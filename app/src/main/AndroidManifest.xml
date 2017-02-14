@@ -99,12 +99,9 @@
             android:label="Krok 8 z 9"
             android:screenOrientation="portrait"
             android:theme="@style/SemiTransparentActionBarTheme" />
-        <activity android:name=".activities.QrCodeCaptureActivity" />
         <activity
-            android:label="SKANOWANIE"
             android:name="com.google.zxing.client.android.CaptureActivity"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="sensorLandscape"
             android:windowSoftInputMode="stateAlwaysHidden" />
 
         <activity android:name=".activities.RetryPhotoActivity"/>

@@ -1,11 +1,13 @@
 package pl.openpkw.openpkwmobile.fragments;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Point;
@@ -26,6 +28,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -34,7 +37,6 @@ import java.security.Security;
 
 import pl.openpkw.openpkwmobile.R;
 import pl.openpkw.openpkwmobile.activities.InstructionScanQrActivity;
-import pl.openpkw.openpkwmobile.activities.VotingFormActivity;
 
 import static pl.openpkw.openpkwmobile.utils.Utils.CAMERA_ID;
 import static pl.openpkw.openpkwmobile.utils.Utils.DATA;
@@ -43,12 +45,11 @@ import static pl.openpkw.openpkwmobile.utils.Utils.PERIPHERY_ADDRESS;
 import static pl.openpkw.openpkwmobile.utils.Utils.PERIPHERY_NAME;
 import static pl.openpkw.openpkwmobile.utils.Utils.PERIPHERY_NUMBER;
 import static pl.openpkw.openpkwmobile.utils.Utils.PERMISSION_REQUEST_CAMERA;
-import static pl.openpkw.openpkwmobile.utils.Utils.QR;
 import static pl.openpkw.openpkwmobile.utils.Utils.TERRITORIAL_CODE;
 
 public class ScanQrCodeFragment extends Fragment implements View.OnClickListener{
 
-    private ContextThemeWrapper contextThemeWrapper;
+    private static ContextThemeWrapper contextThemeWrapper;
 
     private TextView territorialCodeTextView;
     private TextView peripheryNumberTextView;
@@ -57,7 +58,7 @@ public class ScanQrCodeFragment extends Fragment implements View.OnClickListener
 
     public static Camera mCamera;
 
-    private Button nextButton;
+    private Button scanButton;
 
     private OnFragmentInteractionListener mListener;
 
@@ -71,12 +72,12 @@ public class ScanQrCodeFragment extends Fragment implements View.OnClickListener
                              Bundle savedInstanceState) {
         View viewScanQR  = inflater.inflate(R.layout.fragment_scan_qrcode, container, false);
 
-        Button scanQrButton = (Button) viewScanQR.findViewById(R.id.scan_qr_button_scan);
-        scanQrButton.setOnClickListener(this);
+        ImageButton scanQrImageButton = (ImageButton) viewScanQR.findViewById(R.id.scan_qr_image_button_scan);
+        scanQrImageButton.setOnClickListener(this);
 
-        nextButton = (Button)viewScanQR.findViewById(R.id.scan_qr_next_button);
-        nextButton.setOnClickListener(this);
-        nextButton.setEnabled(true);
+        scanButton = (Button)viewScanQR.findViewById(R.id.scan_qr_scan_button);
+        scanButton.setOnClickListener(this);
+        scanButton.setEnabled(true);
 
         Button helpScanQrButton = (Button) viewScanQR.findViewById(R.id.scan_qr_textlink_scan);
         helpScanQrButton.setOnClickListener(this);
@@ -97,11 +98,6 @@ public class ScanQrCodeFragment extends Fragment implements View.OnClickListener
         loadData();
 
         return viewScanQR;
-    }
-
-    private boolean isQrScanned(){
-        SharedPreferences sharedPref = getActivity().getSharedPreferences(DATA, Context.MODE_PRIVATE);
-        return sharedPref.getString(QR, null) != null;
     }
 
     public void loadData() {
@@ -138,7 +134,7 @@ public class ScanQrCodeFragment extends Fragment implements View.OnClickListener
         peripheryNumberTextView.setText(periphery_number);
         peripheryNameTextView.setText(createIndentedText(periphery_name,0,peripheryNameLabelTextWidth ));
         peripheryAddressTextView.setText(createIndentedText(periphery_address,0,addressLabelTextWidth));
-        nextButton.setEnabled(true);
+        scanButton.setEnabled(true);
     }
 
     public static SpannableString createIndentedText(String text, int marginFirstLine, int marginNextLines) {
@@ -175,20 +171,8 @@ public class ScanQrCodeFragment extends Fragment implements View.OnClickListener
     public void onClick(View view) {
         switch(view.getId()){
 
-            case R.id.scan_qr_next_button:{
-                if(isQrScanned()) {
-                    Intent vfIntent = new Intent(getActivity(), VotingFormActivity.class);
-                    startActivity(vfIntent);
-                    getActivity().finish();
-                }else{
-                    final AlertDialog.Builder builder = new AlertDialog.Builder(contextThemeWrapper);
-                    builder.setMessage("Aby przejść dalej proszę zeskanować kod QR z ostaniej strony protokołu wyborczego")
-                            .setTitle(R.string.dialog_warning_title)
-                            .setCancelable(false)
-                            .setPositiveButton(R.string.zxing_button_ok, null);
-                    final AlertDialog dialog = builder.create();
-                    dialog.show();
-                }
+            case R.id.scan_qr_scan_button:{
+                startQrScan(getActivity());
                 break;
             }
 
@@ -199,51 +183,57 @@ public class ScanQrCodeFragment extends Fragment implements View.OnClickListener
                 break;
             }
 
-            case R.id.scan_qr_button_scan:{
-                int permissionCamera = ContextCompat.checkSelfPermission(getActivity(),
-                        Manifest.permission.CAMERA);
-
-                if(permissionCamera == PackageManager.PERMISSION_GRANTED ) {
-                    //get screen dimensions
-                    int [] screenDimen = getScreenDimen();
-                    //create xzing scanning integrator
-                    IntentIntegrator integrator = new IntentIntegrator(getActivity());
-                    integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
-                    integrator.setPrompt("");
-                    integrator.setCameraId(CAMERA_ID);  // Use a specific camera of the device
-                    //integrator.setCaptureLayout(R.layout.activity_capture_qrcode);
-                    integrator.setScanningRectangle(screenDimen[1]-200,screenDimen[0]-200);
-                    //integrator.setScanningRectangle()
-                    //integrator.setBeepEnabled(true);
-                    //integrator.setBarcodeImageEnabled(true);
-                    //integrator.setOrientationLocked(true);
-                    //integrator.setTimeout(TIMEOUT_SCAN_QR);
-                    integrator.initiateScan();
-
-                }else{
-                    final AlertDialog.Builder builder = new AlertDialog.Builder(contextThemeWrapper);
-                    builder.setMessage("Aplikacja nie ma uprawnień do obsługi aparatu telefonu. Proszę zezwolić aplikacji na korzystanie z apratu.")
-                            .setTitle(R.string.dialog_warning_title)
-                            .setCancelable(false)
-                            .setPositiveButton(R.string.zxing_button_ok, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    // Request the camera permission
-                                    ActivityCompat.requestPermissions(getActivity(),
-                                            new String[]{Manifest.permission.CAMERA},
-                                            PERMISSION_REQUEST_CAMERA);
-                                }
-                            });
-                    final AlertDialog dialog = builder.create();
-                    dialog.show();
-                }
+            case R.id.scan_qr_image_button_scan:{
+                startQrScan(getActivity());
+                break;
             }
         }
     }
 
-    private int[] getScreenDimen() {
+    public static void startQrScan(final Activity activity){
+        int permissionCamera = ContextCompat.checkSelfPermission(activity,
+                Manifest.permission.CAMERA);
+
+        if(permissionCamera == PackageManager.PERMISSION_GRANTED ) {
+            //get screen dimensions
+            int [] screenDimen = getScreenDimen(activity);
+            //create xzing scanning integrator
+            IntentIntegrator integrator = new IntentIntegrator(activity);
+            integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
+            integrator.setCameraId(CAMERA_ID);  // Use a specific camera of the device
+            integrator.setCaptureLayout(R.layout.activity_capture_qrcode);
+            integrator.setScanningRectangle(screenDimen[0]-200,screenDimen[1]-200);
+            integrator.setPrompt("Kod QR musi się zmieścić w ramce powyżej");
+            integrator.setOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            //integrator.setScanningRectangle()
+            //integrator.setBeepEnabled(true);
+            //integrator.setBarcodeImageEnabled(true);
+            //integrator.setOrientationLocked(true);
+            //integrator.setTimeout(TIMEOUT_SCAN_QR);
+            integrator.initiateScan();
+
+        }else{
+            final AlertDialog.Builder builder = new AlertDialog.Builder(contextThemeWrapper);
+            builder.setMessage("Aplikacja nie ma uprawnień do obsługi aparatu telefonu. Proszę zezwolić aplikacji na korzystanie z apratu.")
+                    .setTitle(R.string.dialog_warning_title)
+                    .setCancelable(false)
+                    .setPositiveButton(R.string.zxing_button_ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            // Request the camera permission
+                            ActivityCompat.requestPermissions( activity,
+                                    new String[]{Manifest.permission.CAMERA},
+                                    PERMISSION_REQUEST_CAMERA);
+                        }
+                    });
+            final AlertDialog dialog = builder.create();
+            dialog.show();
+        }
+    }
+
+    public static int[] getScreenDimen(Activity activity) {
         int [] screenDimen = new int[2];
-        Display display = getActivity().getWindowManager().getDefaultDisplay();
+        Display display = activity.getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
         screenDimen[0] = size.x;

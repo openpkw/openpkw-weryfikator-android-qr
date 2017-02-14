@@ -111,14 +111,14 @@ public class SendScannedQrCodeToServerTest {
         intending(hasAction("com.google.zxing.client.android.SCAN")).respondWith(result);
 
         // Now that we have the stub in place, click on the button in our app that launches into the ZXING app
-        onView(withId(R.id.scan_qr_button_scan)).perform(click());
+        onView(withId(R.id.scan_qr_image_button_scan)).perform(click());
 
         //check toast is displayed
         onView(withText(R.string.toast_scanned_qr_ok)).
                 inRoot(withDecorView(not(is(getCurrentActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
 
         //start VotingFormActivity
-        onView(withId(R.id.scan_qr_next_button)).perform(click());
+        onView(withId(R.id.scan_qr_scan_button)).perform(click());
         //start CommitteesResultActivity
         onView(withId(R.id.fvoting_next_button)).perform(click());
         //start QueryAddPhotosActivity
@@ -153,14 +153,14 @@ public class SendScannedQrCodeToServerTest {
         intending(hasAction("com.google.zxing.client.android.SCAN")).respondWith(result);
 
         // Now that we have the stub in place, click on the button in our app that launches into the ZXING app
-        onView(withId(R.id.scan_qr_button_scan)).perform(click());
+        onView(withId(R.id.scan_qr_image_button_scan)).perform(click());
 
         //check toast is displayed
         onView(withText(R.string.toast_scanned_qr_ok)).
                 inRoot(withDecorView(not(is(getCurrentActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
 
         //start VotingFormActivity
-        onView(withId(R.id.scan_qr_next_button)).perform(click());
+        onView(withId(R.id.scan_qr_scan_button)).perform(click());
         //start CommitteesResultActivity
         onView(withId(R.id.fvoting_next_button)).perform(click());
         //start QueryAddPhotosActivity

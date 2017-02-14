@@ -1,6 +1,7 @@
 package pl.openpkw.openpkwmobile.activities;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
@@ -48,6 +49,7 @@ import java.util.Objects;
 
 import pl.openpkw.openpkwmobile.R;
 import pl.openpkw.openpkwmobile.fragments.AboutFragment;
+import pl.openpkw.openpkwmobile.fragments.AfterScanQrFragment;
 import pl.openpkw.openpkwmobile.fragments.ScanQrCodeFragment;
 import pl.openpkw.openpkwmobile.fragments.SettingsFragment;
 import pl.openpkw.openpkwmobile.loaders.CandidatesDataLoader;
@@ -58,9 +60,11 @@ import pl.openpkw.openpkwmobile.models.ElectionCommitteeDTO;
 import pl.openpkw.openpkwmobile.models.PeripheryDTO;
 import pl.openpkw.openpkwmobile.qr.QrValidator;
 import pl.openpkw.openpkwmobile.qr.QrWrapper;
+import pl.openpkw.openpkwmobile.utils.Utils;
 
 import static pl.openpkw.openpkwmobile.fragments.LoginFragment.timer;
 import static pl.openpkw.openpkwmobile.fragments.ScanQrCodeFragment.mCamera;
+import static pl.openpkw.openpkwmobile.utils.Utils.AFTER_SCAN_QR_FRAGMENT_TAG;
 import static pl.openpkw.openpkwmobile.utils.Utils.CAMERA_ID;
 import static pl.openpkw.openpkwmobile.utils.Utils.CLASS_NAME;
 import static pl.openpkw.openpkwmobile.utils.Utils.DATA;
@@ -75,7 +79,8 @@ import static pl.openpkw.openpkwmobile.utils.Utils.SCAN_QR_FRAGMENT_TAG;
 import static pl.openpkw.openpkwmobile.utils.Utils.TAG;
 import static pl.openpkw.openpkwmobile.utils.Utils.TERRITORIAL_CODE;
 
-public class ScanQrCodeActivity extends AppCompatActivity implements ScanQrCodeFragment.OnFragmentInteractionListener{
+public class ScanQrCodeActivity extends AppCompatActivity implements ScanQrCodeFragment.OnFragmentInteractionListener,
+        AfterScanQrFragment.OnFragmentInteractionListener{
 
     private boolean doubleBackToExitPressedOnce = false;
     public static HashMap<String,CandidateVoteDTO> candidatesHashMap;
@@ -87,10 +92,24 @@ public class ScanQrCodeActivity extends AppCompatActivity implements ScanQrCodeF
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan_qrcode);
 
-        if(savedInstanceState == null)
+        SharedPreferences sharedPref = getSharedPreferences(Utils.DATA, Context.MODE_PRIVATE);
+        String qrString = sharedPref.getString(Utils.QR, null);
+
+        if(qrString==null)
+            if(savedInstanceState == null)
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.scan_qr_fragment_container,new ScanQrCodeFragment(),SCAN_QR_FRAGMENT_TAG )
+                    .commit();
+            else
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.scan_qr_fragment_container,new AfterScanQrFragment(),AFTER_SCAN_QR_FRAGMENT_TAG )
+                        .commit();
+        else
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.scan_qr_fragment_container,new AfterScanQrFragment(),AFTER_SCAN_QR_FRAGMENT_TAG )
                     .commit();
 
         //set title and subtitle to action bar
@@ -204,7 +223,8 @@ public class ScanQrCodeActivity extends AppCompatActivity implements ScanQrCodeF
 
                 if (resultCode == RESULT_CANCELED){
                     Log.e(TAG, "SCAN CANCELED");
-                    showDialogRetryScan();
+                    //showDialogRetryScan();
+                    showToast(R.string.dialog_scan_qr_failed,this);
                 }
                 else
                 {
@@ -230,25 +250,22 @@ public class ScanQrCodeActivity extends AppCompatActivity implements ScanQrCodeF
                         writeDataToSharedPreferences(scannedQR, periphery.getTerritorialCode(), periphery.getPeripheryNumber(),
                                 periphery.getPeripheryName(), periphery.getPeripheryAddress(),district_number);
 
-                        android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
-                        ScanQrCodeFragment scanQRFragment = (ScanQrCodeFragment)fm.findFragmentByTag(SCAN_QR_FRAGMENT_TAG);
-
-                        if (scanQRFragment != null) {
-                            scanQRFragment.loadData();
-                        }
-
-                        //show info QR scanned OK
-                        Toast toast = Toast.makeText(this, R.string.toast_scanned_qr_ok, Toast.LENGTH_LONG);
-                        View view = toast.getView();
-                        view.setBackgroundResource(R.drawable.toast_green);
-                        TextView text = (TextView) view.findViewById(android.R.id.message);
-                        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-                            text.setTextColor(getResources().getColor(android.R.color.white,getTheme()));
+                        //show after scan fragment
+                        android.support.v4.app.Fragment scanQrFragment = getSupportFragmentManager().findFragmentByTag(SCAN_QR_FRAGMENT_TAG);
+                        if(scanQrFragment!=null)
+                            getSupportFragmentManager()
+                                    .beginTransaction()
+                                    .replace(android.R.id.content,new AfterScanQrFragment(),AFTER_SCAN_QR_FRAGMENT_TAG)
+                                    .remove(scanQrFragment)
+                                    .commitAllowingStateLoss();
                         else
-                            text.setTextColor(getResources().getColor(android.R.color.white));
-                        text.setTypeface(Typeface.DEFAULT_BOLD);
-                        text.setGravity(Gravity.CENTER);
-                        toast.show();
+                            getSupportFragmentManager()
+                                    .beginTransaction()
+                                    .replace(android.R.id.content,new AfterScanQrFragment(),AFTER_SCAN_QR_FRAGMENT_TAG)
+                                    .commitAllowingStateLoss();
+
+                        //show info QR scanned correct
+                        showToast(R.string.toast_scanned_qr_ok,this);
 
                     }else{
                         showDialogIncorrectQr();
@@ -257,6 +274,20 @@ public class ScanQrCodeActivity extends AppCompatActivity implements ScanQrCodeF
                 break;
             }
         }
+    }
+
+    public static void showToast(int resId, Activity activity){
+        Toast toast = Toast.makeText(activity,resId, Toast.LENGTH_LONG);
+        View view = toast.getView();
+        view.setBackgroundResource(R.drawable.toast_green);
+        TextView text = (TextView) view.findViewById(android.R.id.message);
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+            text.setTextColor(activity.getResources().getColor(android.R.color.white,activity.getTheme()));
+        else
+            text.setTextColor(activity.getResources().getColor(android.R.color.white));
+        text.setTypeface(Typeface.DEFAULT_BOLD);
+        text.setGravity(Gravity.CENTER);
+        toast.show();
     }
 
     private void showDialogRetryScan() {
@@ -409,7 +440,7 @@ public class ScanQrCodeActivity extends AppCompatActivity implements ScanQrCodeF
             }
 
             this.doubleBackToExitPressedOnce = true;
-            Toast.makeText(this, getString(R.string.fragment_login_twotaptoexit), Toast.LENGTH_SHORT).show();
+            showToast(R.string.fragment_login_twotaptoexit,this);
             new Handler().postDelayed(new Runnable() {
 
                 @Override

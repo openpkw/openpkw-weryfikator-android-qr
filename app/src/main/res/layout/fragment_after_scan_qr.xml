@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/after.scan.qr.relative.layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:id="@+id/after.scan.qr.scrollview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/after.scan.layout.buttons">
+
+        <TableLayout
+            android:id="@+id/after.scan.qr.protocol.data.tablelayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin.protocol.data"
+            android:layout_marginRight="@dimen/margin.protocol.data"
+            android:layout_marginBottom="@dimen/margin.protocol.data"
+            android:layout_marginTop="@dimen/margin.top.protocol.data"
+            android:background="@drawable/protocol_border"
+            android:stretchColumns="1">
+
+            <TableRow
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/rules.fragment.background">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/padding.committee.label"
+                    android:paddingRight="@dimen/padding.committee.label"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginEnd="0dp"
+                    android:paddingTop="@dimen/padding.committee.label"
+                    android:paddingBottom="@dimen/padding.committee.label"
+                    android:text="@string/scan_qr_label_enter_data"
+                    android:gravity="center"
+                    android:textColor="@android:color/black"
+                    android:textSize="@dimen/fontsize.committee.label" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/height.login.separator.bottom"
+                    android:layout_weight="1"
+                    android:layout_marginBottom="0dp"
+                    android:layout_marginTop="0dp"
+                    android:background="@android:color/black" />
+            </TableRow>
+
+            <TableRow
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/padding.committee.label"
+                    android:paddingRight="@dimen/padding.committee.label"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginEnd="0dp"
+                    android:paddingTop="@dimen/padding.committee.label"
+                    android:paddingBottom="@dimen/padding.committee.label"
+                    android:text="@string/committee_label"
+                    android:gravity="center"
+                    android:textColor="@android:color/black"
+                    android:textSize="@dimen/fontsize.committee.label" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/height.login.separator.bottom"
+                    android:layout_weight="1"
+                    android:layout_marginBottom="0dp"
+                    android:layout_marginTop="0dp"
+                    android:background="@android:color/black" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/after.scan.qr.periphery.number"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="@dimen/padding.committee.label"
+                        android:paddingTop="@dimen/padding.committee.label"
+                        android:paddingStart="2dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_toLeftOf="@+id/scan.qr.territorial.code"
+                        android:textColor="@android:color/black"
+                        android:text="Nr obwodu"
+                        android:maxLines="1"
+                        android:textSize="@dimen/fontsize.committee.label"/>
+
+                    <TextView
+                        android:id="@+id/after.scan.qr.territorial.code"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:paddingEnd="2dp"
+                        android:paddingBottom="@dimen/padding.committee.label"
+                        android:paddingTop="@dimen/padding.committee.label"
+                        android:textColor="@android:color/black"
+                        android:text="Kod terytorialny"
+                        android:maxLines="1"
+                        android:textSize="@dimen/fontsize.committee.label"/>
+                </RelativeLayout>
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/height.login.separator.bottom"
+                    android:layout_weight="1"
+                    android:layout_marginBottom="0dp"
+                    android:layout_marginTop="0dp"
+                    android:background="@android:color/black" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/after.scan.qr.periphery.name"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:paddingBottom="@dimen/padding.committee.label"
+                    android:paddingTop="@dimen/padding.committee.label"
+                    android:paddingLeft="@dimen/padding.committee.label"
+                    android:paddingRight="@dimen/padding.committee.label"
+                    android:layout_weight="1"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginEnd="0dp"
+                    android:layout_marginTop="0dp"
+                    android:textColor="@android:color/black"
+                    android:text="Nazwa"
+                    android:textSize="@dimen/fontsize.committee.label"/>
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/height.login.separator.bottom"
+                    android:layout_weight="1"
+                    android:layout_marginBottom="0dp"
+                    android:layout_marginTop="0dp"
+                    android:background="@android:color/black" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/after.scan.qr.periphery.address"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:paddingBottom="@dimen/padding.committee.label"
+                    android:paddingTop="@dimen/padding.committee.label"
+                    android:paddingLeft="@dimen/padding.committee.label"
+                    android:paddingRight="@dimen/padding.committee.label"
+                    android:layout_weight="1"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginEnd="0dp"
+                    android:layout_marginTop="0dp"
+                    android:textColor="@android:color/black"
+                    android:text="Adres"
+                    android:textSize="@dimen/fontsize.committee.address"/>
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/height.login.separator.bottom"
+                    android:layout_weight="1"
+                    android:layout_marginBottom="0dp"
+                    android:layout_marginTop="0dp"
+                    android:background="@android:color/black" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/light_gray_protocol"
+                >
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="@dimen/margin.protocol.data"
+                    android:layout_marginRight="@dimen/margin.protocol.data"
+                    android:layout_marginBottom="@dimen/margin.protocol.data"
+                    android:layout_marginTop="@dimen/margin.protocol.data"
+                    android:background="@drawable/row_button_border"
+                    >
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:gravity="center_horizontal"
+                        android:layout_marginTop="2dp"
+                        android:layout_weight="1"
+                        android:textColor="@android:color/black"
+                        android:text="@string/scan.qr.label.scan"
+                        android:textSize="@dimen/fontsize.committee.label"/>
+
+                    <ImageButton
+                        android:layout_gravity="center_horizontal"
+                        android:id="@+id/after.scan.qr.image.button.scan"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="0dp"
+                        android:src="@drawable/qr_openpkw"
+                        android:contentDescription="@string/qr_openpkw" />
+
+                    <Button
+                        android:id="@+id/after.scan.qr.textlink.scan"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="2dp"
+                        android:layout_marginTop="0dp"
+                        android:layout_marginStart="@dimen/margin.login.left"
+                        android:paddingStart="2dp"
+                        android:paddingEnd="2dp"
+                        android:textAllCaps="false"
+                        android:textStyle="normal"
+                        android:background="@android:color/transparent"
+                        android:text="@string/scan.qr.buttonlabel.help"
+                        android:textColor="@color/green"
+                        style="?android:attr/borderlessButtonStyle"
+                        android:textSize="@dimen/fontsize.login.textlink.fpassword" />
+
+                </LinearLayout>
+
+            </TableRow>
+
+        </TableLayout>
+
+    </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/after.scan.layout.buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/margin.bottom.buttons"
+        android:orientation="horizontal">
+
+    <Button
+        android:id="@+id/after.scan.qr.scan.button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.5"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginTop="@dimen/margin.login.button.login.top"
+        android:text="@string/scan.qr.buttonlabel.scan"
+        style="@style/green_button"/>
+
+    <Button
+        android:id="@+id/after.scan.qr.scan.next.button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.5"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginTop="@dimen/margin.login.button.login.top"
+        android:text="@string/next.label.button"
+        style="@style/orange_button"/>
+    </LinearLayout>
+
+</RelativeLayout>

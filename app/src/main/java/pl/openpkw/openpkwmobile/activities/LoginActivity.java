@@ -24,7 +24,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Toast;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -42,6 +41,7 @@ import pl.openpkw.openpkwmobile.fragments.SettingsFragment;
 import pl.openpkw.openpkwmobile.security.KeyWrapper;
 import pl.openpkw.openpkwmobile.security.SecurityECC;
 
+import static pl.openpkw.openpkwmobile.activities.ScanQrCodeActivity.showToast;
 import static pl.openpkw.openpkwmobile.fragments.LoginFragment.timer;
 import static pl.openpkw.openpkwmobile.utils.Utils.DATA;
 import static pl.openpkw.openpkwmobile.utils.Utils.DISTRICT_NUMBER;
@@ -240,7 +240,7 @@ public class LoginActivity extends AppCompatActivity implements OnRequestPermiss
             }
 
             this.doubleBackToExitPressedOnce = true;
-            Toast.makeText(this, getString(R.string.fragment_login_twotaptoexit), Toast.LENGTH_SHORT).show();
+            showToast(R.string.fragment_login_twotaptoexit,this);
             new Handler().postDelayed(new Runnable() {
 
                 @Override
