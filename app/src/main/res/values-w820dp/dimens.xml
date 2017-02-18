@@ -5,4 +5,16 @@
     <dimen name="activity_horizontal_margin">64dp</dimen>
     <dimen name="margin.top.enter.manually.button">40dp</dimen>
     <dimen name="fontsize.scan.qr.label">24sp</dimen>
+    <dimen name="margin.start.label.top.qr.capture.activity">-180dp</dimen>
+    <dimen name="margin.start.label.bottom.qr.capture.activity">520dp</dimen>
+    <dimen name="fontsize.qr.capture.activity">16sp</dimen>
+    <dimen name="fontsize.committee.label">18sp</dimen>
+    <dimen name="fontsize.committee.name">18sp</dimen>
+    <dimen name="fontsize.committee.address">18sp</dimen>
+    <dimen name="fontsize.fvoting.general.data">18sp</dimen>
+    <dimen name="margin.bottom.buttons">5dp</dimen>
+    <dimen name="margin.top.buttons">5dp</dimen>
+    <dimen name="margin.border.layout.scan.qr">10dp</dimen>
+    <dimen name="fontsize.login.textlink.fpassword">16sp</dimen>
+    <dimen name="label.width.qr.capture.activity">295dp</dimen>
 </resources>

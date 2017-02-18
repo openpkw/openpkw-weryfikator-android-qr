@@ -123,8 +123,8 @@ public class ScanQrCodeFragment extends Fragment implements View.OnClickListener
             periphery_name = "Nazwa: " + periphery_name;
             peripheryNameTextView.setMaxLines(2);
         }
-        String periphery_address = sharedPref.getString(PERIPHERY_ADDRESS, "Adres:   _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _");
-        if(!periphery_address.equalsIgnoreCase("Adres:   _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _")) {
+        String periphery_address = sharedPref.getString(PERIPHERY_ADDRESS, "Adres:   _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _");
+        if(!periphery_address.equalsIgnoreCase("Adres:   _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _")) {
             periphery_address = "Adres: " + periphery_address;
             peripheryAddressTextView.setMaxLines(2);
         }
@@ -202,9 +202,9 @@ public class ScanQrCodeFragment extends Fragment implements View.OnClickListener
             integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
             integrator.setCameraId(CAMERA_ID);  // Use a specific camera of the device
             integrator.setCaptureLayout(R.layout.activity_capture_qrcode);
-            integrator.setScanningRectangle(screenDimen[0]-200,screenDimen[1]-200);
-            integrator.setPrompt("Kod QR musi się zmieścić w ramce powyżej");
-            integrator.setOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            integrator.setScanningRectangle(screenDimen[1]-200,screenDimen[0]-200);
+            integrator.setPrompt("Skanuj kod QR z ostatniej strony protokołu wyborczego");
+            integrator.setOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
             //integrator.setScanningRectangle()
             //integrator.setBeepEnabled(true);
             //integrator.setBarcodeImageEnabled(true);

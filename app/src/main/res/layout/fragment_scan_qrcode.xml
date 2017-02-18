@@ -39,7 +39,8 @@
                     android:text="@string/scan_qr_label_enter_data"
                     android:gravity="center"
                     android:textColor="@android:color/black"
-                    android:textSize="@dimen/fontsize.committee.label" />
+                    android:textSize="@dimen/fontsize.committee.label"/>
+
             </TableRow>
 
             <TableRow
@@ -223,10 +224,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:layout_marginLeft="@dimen/margin.protocol.data"
-                    android:layout_marginRight="@dimen/margin.protocol.data"
-                    android:layout_marginBottom="@dimen/margin.protocol.data"
-                    android:layout_marginTop="@dimen/margin.protocol.data"
+                    android:layout_marginLeft="@dimen/margin.border.layout.scan.qr"
+                    android:layout_marginRight="@dimen/margin.border.layout.scan.qr"
+                    android:layout_marginBottom="@dimen/margin.border.layout.scan.qr"
+                    android:layout_marginTop="@dimen/margin.border.layout.scan.qr"
                     android:background="@drawable/row_button_border"
                     >
 
@@ -282,6 +283,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="@dimen/margin.bottom.buttons"
+        android:layout_marginTop="@dimen/margin.top.buttons"
         android:layout_centerHorizontal="true"
         android:text="@string/scan.qr.buttonlabel.scan"
         style="@style/orange_button"/>

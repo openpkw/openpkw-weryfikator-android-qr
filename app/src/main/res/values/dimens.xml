@@ -22,7 +22,8 @@
     <dimen name="margin.login.edittext.password.right">20dp</dimen>
     <dimen name="margin.login.edittext.password.top">10dp</dimen>
     <dimen name="margin.login.textlink.fpassword.bottom">10dp</dimen>
-    <dimen name="margin.bottom.buttons">5dp</dimen>
+    <dimen name="margin.bottom.buttons">2dp</dimen>
+    <dimen name="margin.top.buttons">2dp</dimen>
     <dimen name="fontsize.login.label">24sp</dimen>
     <dimen name="fontsize.settings.group">22sp</dimen>
     <dimen name="fontsize.settings.dialog.label">20sp</dimen>
@@ -31,15 +32,15 @@
     <dimen name="fontsize.about.description">16sp</dimen>
     <dimen name="fontsize.scan.qr.instruction">16sp</dimen>
     <dimen name="fontsize.login.label.register">24sp</dimen>
-    <dimen name="fontsize.committee.label">16sp</dimen>
-    <dimen name="fontsize.committee.name">16sp</dimen>
-    <dimen name="fontsize.committee.address">16sp</dimen>
-    <dimen name="fontsize.fvoting.general.data">16sp</dimen>
+    <dimen name="fontsize.committee.label">14sp</dimen>
+    <dimen name="fontsize.committee.name">14sp</dimen>
+    <dimen name="fontsize.committee.address">14sp</dimen>
+    <dimen name="fontsize.fvoting.general.data">14sp</dimen>
     <dimen name="fontsize.scan.qr.label">20sp</dimen>
     <dimen name="fontsize.list.number">20sp</dimen>
     <dimen name="fontsize.thank.you">20sp</dimen>
     <dimen name="fontsize.query">20sp</dimen>
-    <dimen name="fontsize.login.textlink.fpassword">16sp</dimen>
+    <dimen name="fontsize.login.textlink.fpassword">14sp</dimen>
     <dimen name="fontsize.simply.instruction.scan.qr">14sp</dimen>
     <dimen name="padding.committee.label">2dp</dimen>
     <dimen name="padding.result.committee.label">10dp</dimen>
@@ -54,4 +55,11 @@
     <dimen name="margin.top.enter.manually.button">20dp</dimen>
     <dimen name="margin.protocol.data">5dp</dimen>
     <dimen name="margin.top.protocol.data">10dp</dimen>
+    <dimen name="margin.start.label.top.qr.capture.activity">-120dp</dimen>
+    <dimen name="margin.start.label.bottom.qr.capture.activity">360dp</dimen>
+    <dimen name="fontsize.qr.capture.activity">12sp</dimen>
+    <dimen name="label.width.qr.capture.activity">250dp</dimen>
+    <dimen name="margin.border.layout.scan.qr">2dp</dimen>
+    <dimen name="test">10dp</dimen>
+
 </resources>

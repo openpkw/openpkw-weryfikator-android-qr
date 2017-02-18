@@ -180,37 +180,40 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_gravity="bottom|center_horizontal"
+        android:layout_gravity="start|center_vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginBottom="10dp">
-
+        android:rotation="-90"
+        android:layout_marginStart="@dimen/margin.start.label.top.qr.capture.activity"
+        >
+        <!-- 120 -->
         <TextView android:id="@+id/zxing_status_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center_horizontal"
+            android:layout_gravity="start|center_vertical"
             android:background="@color/zxing_transparent"
             android:text="@string/zxing_msg_default_status"
-            android:textColor="@color/light_green"/>
-
+            android:textColor="@color/light_green"
+            android:textSize="@dimen/fontsize.qr.capture.activity"/>
     </LinearLayout>
 
-
     <LinearLayout
-        android:layout_gravity="top|center_horizontal"
-        android:layout_width="wrap_content"
+        android:layout_gravity="start|center_vertical"
+        android:rotation="-90"
+        android:layout_width="@dimen/label.width.qr.capture.activity"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginTop="10dp">
+        android:layout_marginStart="@dimen/margin.start.label.bottom.qr.capture.activity">
 
         <TextView android:id="@+id/zxing_scan_instruction"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center_horizontal"
+            android:layout_gravity="start|center_vertical"
             android:background="@color/zxing_transparent"
-            android:text="Skanuj kod QR z ostatniej strony protokołu wyborczego"
-            android:textColor="@color/light_green"/>
+            android:text="Kod QR musi się zmieścić w ramce powyżej"
+            android:textColor="@color/light_green"
+            android:textSize="@dimen/fontsize.qr.capture.activity"/>
 
     </LinearLayout>
 
