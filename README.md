@@ -1,3 +1,5 @@
+#openpkw-weryfikator-android-qr [![Build Status](https://travis-ci.org/openpkw/openpkw-weryfikator-android-qr.svg?branch=master)](https://travis-ci.org/openpkw/openpkw-weryfikator-android-qr)
+
 Działanie aplikacji OpenPKW po zmianie algorytmu na ECDSA:
 
 Pierwsze uruchomienie generacja kluczy dla algorytmu ECDSA, krzywa - secp256k1
