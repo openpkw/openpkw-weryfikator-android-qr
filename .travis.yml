@@ -14,7 +14,7 @@ android:
     - extra-android-m2repository
     - extra-google-m2repository    
 script:
-  - ./gradlew build connectedCheck -x test
+  - ./gradlew build
 
 #before_script:
 #  - echo no | android create avd --force -n test -t android-24 --abi armeabi-v7a
