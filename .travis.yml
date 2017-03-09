@@ -10,7 +10,8 @@ android:
     - tools
     - build-tools-24.0.0
     - android-24
-  
+    - extra-android-m2repository
+    - extra-google-m2repository    
   #licenses:
   #  - 'android-sdk-preview-license-.+'
   #  - 'android-sdk-license-.+'
