@@ -11,10 +11,10 @@ android:
     - build-tools-24.0.0
     - android-24
   
-  licenses:
-    - 'android-sdk-preview-license-.+'
-    - 'android-sdk-license-.+'
-    - 'intel-android-extra-license.+'
+  #licenses:
+  #  - 'android-sdk-preview-license-.+'
+  #  - 'android-sdk-license-.+'
+  #  - 'intel-android-extra-license.+'
 
 
 # cache between builds
