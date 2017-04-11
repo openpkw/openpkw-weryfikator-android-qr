@@ -1,8 +1,9 @@
 #openpkw-weryfikator-android-qr [![Build Status](https://travis-ci.org/openpkw/openpkw-weryfikator-android-qr.svg?branch=master)](https://travis-ci.org/openpkw/openpkw-weryfikator-android-qr)
 
-Instrukcja dodaania pliku konfigurujacego url do backendu:
+Instrukcja dodania pliku konfigurujacego url do backendu:
 - lokalizacja pliku config.txt folfer OpenPKW
 - struktura pliku:
+```xml
 <openpkw-mobile>
   <backends>
     <backend>
@@ -18,13 +19,17 @@ Instrukcja dodaania pliku konfigurujacego url do backendu:
       <url>http://serwer2.com</url>
      </backend>
      <defaults>
-       <id>1</id>
+       <id>2</id>
      </defaults>
   </backends>
 </openpkw-mobile>
+```
 - przykładowe url backendu zgodnie z powyzsza konfiguracja:
+
 logowanie: http://serwer1.com/login
+
 weryfikator qr: http://serwer1.com/qr
+
 rejestracja uzytkownika: http://serwer1.com/users
 
 Działanie aplikacji OpenPKW po zmianie algorytmu na ECDSA:
@@ -85,7 +90,5 @@ Pierwsze uruchomienie generacja kluczy dla algorytmu ECDSA, krzywa - secp256k1
   "protocol": "app_protocol",
   "candidates": "app_candidates []"
   }
-
-  Rekonfiguracja URL: Ustawienia -> Adres URL weryfikatora QR
   
   Konfiguracj ID i Secret OAuth2.0: Ustawienia -> Skonfiguruj ID uzytkownika i haslo
