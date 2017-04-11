@@ -19,7 +19,7 @@ Instrukcja dodania pliku konfigurujacego url do backendu:
       <url>http://serwer2.com</url>
      </backend>
      <defaults>
-       <id>2</id>
+       <id>1</id>
      </defaults>
   </backends>
 </openpkw-mobile>
