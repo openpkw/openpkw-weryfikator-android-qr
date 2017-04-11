@@ -1,5 +1,32 @@
 #openpkw-weryfikator-android-qr [![Build Status](https://travis-ci.org/openpkw/openpkw-weryfikator-android-qr.svg?branch=master)](https://travis-ci.org/openpkw/openpkw-weryfikator-android-qr)
 
+Instrukcja dodaania pliku konfigurujacego url do backendu:
+- lokalizacja pliku config.txt folfer OpenPKW
+- struktura pliku:
+<openpkw-mobile>
+  <backends>
+    <backend>
+       <id>1</id>
+       <name></name>
+       <description></description>
+       <url>http://serwer1.com</url>
+     </backend>
+     <backend>
+      <id>2</id>
+      <name>Serwer 2</name>
+      <description>Serwer 2 - weryfikatora</description>
+      <url>http://serwer2.com</url>
+     </backend>
+     <defaults>
+       <id>1</id>
+     </defaults>
+  </backends>
+</openpkw-mobile>
+- przykładowe url backendu zgodnie z powyzsza konfiguracja:
+logowanie: http://serwer1.com/login
+weryfikator qr: http://serwer1.com/qr
+rejestracja uzytkownika: http://serwer1.com/users
+
 Działanie aplikacji OpenPKW po zmianie algorytmu na ECDSA:
 
 Pierwsze uruchomienie generacja kluczy dla algorytmu ECDSA, krzywa - secp256k1
@@ -8,7 +35,7 @@ Pierwsze uruchomienie generacja kluczy dla algorytmu ECDSA, krzywa - secp256k1
 
   Aplikacja generuje następujący request 
 
-  [host]/openpkw/api/login?password=client_password&scope=read+write&client_secret=secret&client_id=openpkw&username=client_email&grant_type=password
+  [host]/login?password=client_password&scope=read+write&client_secret=secret&client_id=openpkw&username=client_email&grant_type=password
 
   Authorization: Basic [Base64("client_id:client_secret")]
   
@@ -29,7 +56,7 @@ Pierwsze uruchomienie generacja kluczy dla algorytmu ECDSA, krzywa - secp256k1
 
   Aplikacja wysyła imie, nazwisko, email i hasło oraz wygenerowany klucz publiczny ECDSA na serwer:
 
-  URL: POST [host]/openpkw/users/
+  URL: POST [host]/users/
 
   JSON:{"first_name":"user_first_name","last_name":"user_last_name","email":"user_email","password":"user_password","public_key":"ecdsa_public_key}
   
@@ -46,7 +73,7 @@ Pierwsze uruchomienie generacja kluczy dla algorytmu ECDSA, krzywa - secp256k1
 
   Aplikacja podpisuje zeskanowany kod QR kluczem prywatnym ECDSA i wysyla następujący request:
 
-  POST [host]/openpkw/api/qr
+  POST [host]/qr
   
   Authorization: Bearer app_access_token
 
