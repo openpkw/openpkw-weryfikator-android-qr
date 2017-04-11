@@ -39,7 +39,7 @@
         <activity android:name=".activities.PasswordRestoreActivity" />
         <activity
             android:name=".activities.ScanQrCodeActivity"
-            android:label="Krok 3 z 9"
+            android:label="Krok 2 z 9"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity

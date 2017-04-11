@@ -2,7 +2,6 @@ package pl.openpkw.openpkwmobile.activities;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Context;
@@ -25,7 +24,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.util.Pair;
-import android.view.ContextThemeWrapper;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.Menu;
@@ -65,10 +63,7 @@ import pl.openpkw.openpkwmobile.utils.Utils;
 import static pl.openpkw.openpkwmobile.fragments.LoginFragment.timer;
 import static pl.openpkw.openpkwmobile.fragments.ScanQrCodeFragment.mCamera;
 import static pl.openpkw.openpkwmobile.utils.Utils.AFTER_SCAN_QR_FRAGMENT_TAG;
-import static pl.openpkw.openpkwmobile.utils.Utils.CAMERA_ID;
-import static pl.openpkw.openpkwmobile.utils.Utils.CLASS_NAME;
 import static pl.openpkw.openpkwmobile.utils.Utils.DATA;
-import static pl.openpkw.openpkwmobile.utils.Utils.DIALOG_STYLE;
 import static pl.openpkw.openpkwmobile.utils.Utils.DISTRICT_NUMBER;
 import static pl.openpkw.openpkwmobile.utils.Utils.PERIPHERY_ADDRESS;
 import static pl.openpkw.openpkwmobile.utils.Utils.PERIPHERY_NAME;
@@ -115,7 +110,7 @@ public class ScanQrCodeActivity extends AppCompatActivity implements ScanQrCodeF
         //set title and subtitle to action bar
         ActionBar actionBar = getSupportActionBar();
         if(actionBar!=null) {
-            actionBar.setTitle("Krok 3 z 9");
+            actionBar.setTitle("Krok 2 z 7");
             actionBar.setSubtitle("Skanowanie kodu QR");
         }
 
@@ -223,8 +218,7 @@ public class ScanQrCodeActivity extends AppCompatActivity implements ScanQrCodeF
 
                 if (resultCode == RESULT_CANCELED){
                     Log.e(TAG, "SCAN CANCELED");
-                    //showDialogRetryScan();
-                    showToast(R.string.dialog_scan_qr_failed,this);
+                    showToast(R.string.dialog_scan_qr_failed,this,false);
                 }
                 else
                 {
@@ -265,10 +259,10 @@ public class ScanQrCodeActivity extends AppCompatActivity implements ScanQrCodeF
                                     .commitAllowingStateLoss();
 
                         //show info QR scanned correct
-                        showToast(R.string.toast_scanned_qr_ok,this);
+                        showToast(R.string.toast_scanned_qr_ok,this,false);
 
                     }else{
-                        showDialogIncorrectQr();
+                        showToast(R.string.dialog_incorrect_qr_message,this,false);
                     }
                 }
                 break;
@@ -276,7 +270,7 @@ public class ScanQrCodeActivity extends AppCompatActivity implements ScanQrCodeF
         }
     }
 
-    public static void showToast(int resId, Activity activity){
+    public static void showToast(int resId, Activity activity, boolean isGravityBottom){
         Toast toast = Toast.makeText(activity,resId, Toast.LENGTH_LONG);
         View view = toast.getView();
         view.setBackgroundResource(R.drawable.toast_green);
@@ -287,64 +281,9 @@ public class ScanQrCodeActivity extends AppCompatActivity implements ScanQrCodeF
             text.setTextColor(activity.getResources().getColor(android.R.color.white));
         text.setTypeface(Typeface.DEFAULT_BOLD);
         text.setGravity(Gravity.CENTER);
+        if(isGravityBottom)
+            toast.setGravity(Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL, 0, 10);
         toast.show();
-    }
-
-    private void showDialogRetryScan() {
-        ContextThemeWrapper contextThemeWrapper = new ContextThemeWrapper(ScanQrCodeActivity.this, DIALOG_STYLE);
-        final AlertDialog.Builder builder = new AlertDialog.Builder(contextThemeWrapper);
-        builder.setMessage(R.string.dialog_scan_qr_failed)
-                .setTitle(R.string.dialog_warning_title)
-                .setCancelable(false)
-                .setNeutralButton("Instrukcja", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        Intent instructionScanQrIntent = new Intent(ScanQrCodeActivity.this, InstructionScanQrActivity.class);
-                        instructionScanQrIntent.putExtra(CLASS_NAME,"INTEGRATOR");
-                        startActivity(instructionScanQrIntent);
-                        finish();
-                    }
-                })
-                .setNegativeButton("Zakończ", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        finish();
-                    }
-                })
-                .setPositiveButton("Ponów", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        //get screen dimensions
-                        int [] screenDimen = getScreenDimen();
-                        IntentIntegrator integrator = new IntentIntegrator(ScanQrCodeActivity.this);
-                        integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
-                        integrator.setCameraId(CAMERA_ID);  // Use a specific camera of the device
-                       // integrator.setBeepEnabled(true);
-                        integrator.setScanningRectangle(screenDimen[1]-200,screenDimen[0]-200);
-                        integrator.setPrompt("");
-                        //integrator.setBarcodeImageEnabled(true);
-                        //integrator.setOrientationLocked(true);
-                        //integrator.setTimeout(TIMEOUT_SCAN_QR);
-                        integrator.initiateScan();
-                    }
-                });
-        final AlertDialog dialog = builder.create();
-        dialog.show();
-    }
-
-    private void showDialogIncorrectQr(){
-        ContextThemeWrapper contextThemeWrapper = new ContextThemeWrapper(ScanQrCodeActivity.this, DIALOG_STYLE);
-        final AlertDialog.Builder builder = new AlertDialog.Builder(contextThemeWrapper);
-        builder.setMessage(R.string.dialog_incorrect_qr_message)
-                .setTitle(R.string.dialog_warning_title)
-                .setCancelable(false)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                    }
-                });
-        final AlertDialog dialog = builder.create();
-        dialog.show();
     }
 
     private void writeDataToSharedPreferences(String qr, String territorial_code,
@@ -440,7 +379,7 @@ public class ScanQrCodeActivity extends AppCompatActivity implements ScanQrCodeF
             }
 
             this.doubleBackToExitPressedOnce = true;
-            showToast(R.string.fragment_login_twotaptoexit,this);
+            showToast(R.string.fragment_login_twotaptoexit,this,false);
             new Handler().postDelayed(new Runnable() {
 
                 @Override

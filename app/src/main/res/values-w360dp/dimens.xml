@@ -14,5 +14,6 @@
     <dimen name="margin.border.layout.scan.qr">5dp</dimen>
     <dimen name="fontsize.login.textlink.fpassword">16sp</dimen>
     <dimen name="label.width.qr.capture.activity">250dp</dimen>
+    <dimen name="image.qr.dimen">100dp</dimen>
 
 </resources>

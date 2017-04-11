@@ -61,5 +61,6 @@
     <dimen name="label.width.qr.capture.activity">250dp</dimen>
     <dimen name="margin.border.layout.scan.qr">2dp</dimen>
     <dimen name="test">10dp</dimen>
+    <dimen name="image.qr.dimen">125dp</dimen>
 
 </resources>

@@ -60,8 +60,8 @@ public class NextPhotoActivity extends AppCompatActivity implements NextPhotoFra
         //set title and subtitle to action bar
         ActionBar actionBar = getSupportActionBar();
         if(actionBar!=null) {
-            final SpannableString spannableString = new SpannableString("Krok 8 z 9\nWykonaj zdjęcia każdej strony protokołu wyborczego");
-            spannableString.setSpan(new RelativeSizeSpan(1.2f),0,"Krok 8 z 9".length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            final SpannableString spannableString = new SpannableString("Krok 6 z 7\nWykonaj zdjęcia każdej strony protokołu wyborczego");
+            spannableString.setSpan(new RelativeSizeSpan(1.2f),0,"Krok 6 z 7".length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             actionBar.setDisplayShowCustomEnabled(true);
             actionBar.setCustomView(R.layout.action_bar_title_layout);
             ((TextView) findViewById(R.id.action_bar_title)).setText(spannableString);
@@ -135,7 +135,7 @@ public class NextPhotoActivity extends AppCompatActivity implements NextPhotoFra
             }
 
             this.doubleBackToExitPressedOnce = true;
-            showToast(R.string.fragment_login_twotaptoexit,this);
+            showToast(R.string.fragment_login_twotaptoexit,this,false);
             new Handler().postDelayed(new Runnable() {
 
                 @Override

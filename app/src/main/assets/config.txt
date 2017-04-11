@@ -1,0 +1,25 @@
+<openpkw-mobile>
+  <backends>
+    <backend>
+       <id>1</id>
+       <name>Serwer 1 OpenPKW</name>
+       <description>Serwer 1 - weryfikatora qr</description>
+       <url>http://serwer1.com</url>
+     </backend>
+     <backend>
+      <id>2</id>
+      <name>Serwer 2</name>
+      <description>Serwer 2 - weryfikatora qr</description>
+      <url>http://serwer2.com</url>
+     </backend>
+     <backend>
+        <id>3</id>
+        <name>Serwer 3 OpenPKW</name>
+        <description>Serwer 3 - weryfikatora qr</description>
+        <url>http://serwer3.com</url>
+     </backend>
+     <defaults>
+       <id>2</id>
+     </defaults>
+  </backends>
+</openpkw-mobile>

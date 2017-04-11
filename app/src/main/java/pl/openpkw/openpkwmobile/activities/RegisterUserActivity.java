@@ -40,7 +40,6 @@ public class RegisterUserActivity extends AppCompatActivity {
         //set title and subtitle to action bar
         ActionBar actionBar = getSupportActionBar();
         if(actionBar!=null) {
-            actionBar.setTitle("Krok 2 z 9");
             actionBar.setSubtitle("Rejestracja nowego użytkownika");
         }
     }

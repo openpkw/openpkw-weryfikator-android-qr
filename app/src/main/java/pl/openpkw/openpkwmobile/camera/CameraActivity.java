@@ -12,12 +12,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import pl.openpkw.openpkwmobile.R;
 import pl.openpkw.openpkwmobile.activities.RetryPhotoActivity;
 import pl.openpkw.openpkwmobile.utils.Utils;
 
+import static pl.openpkw.openpkwmobile.activities.ScanQrCodeActivity.showToast;
 import static pl.openpkw.openpkwmobile.fragments.LoginFragment.timer;
 
 public class CameraActivity extends AppCompatActivity implements Camera2Fragment.OnFragmentInteractionListener{
@@ -50,7 +50,7 @@ public class CameraActivity extends AppCompatActivity implements Camera2Fragment
         //set title and subtitle to action bar
         ActionBar actionBar = getSupportActionBar();
         if(actionBar!=null) {
-            actionBar.setTitle("Krok 8 z 9");
+            actionBar.setTitle("Krok 6 z 7");
             actionBar.setSubtitle("Wykonaj zdjęcia protokołu wyborczego");
         }
     }
@@ -90,7 +90,7 @@ public class CameraActivity extends AppCompatActivity implements Camera2Fragment
         }
 
         this.doubleBackToExitPressedOnce = true;
-        Toast.makeText(this, getString(R.string.fragment_login_twotaptoexit), Toast.LENGTH_SHORT).show();
+        showToast(R.string.fragment_login_twotaptoexit,this,false);
         new Handler().postDelayed(new Runnable() {
 
             @Override
@@ -98,7 +98,6 @@ public class CameraActivity extends AppCompatActivity implements Camera2Fragment
                 doubleBackToExitPressedOnce = false;
             }
         }, 3000);
-
     }
 
     @Override

@@ -50,8 +50,8 @@ public class CommitteesResultActivity extends AppCompatActivity implements Commi
         //set title and subtitle to action bar
         ActionBar actionBar = getSupportActionBar();
         if(actionBar!=null) {
-            final SpannableString spannableString = new SpannableString("Krok 5 z 9\nLiczba głosów oddanych na poszczególne komitety wyborcze");
-            spannableString.setSpan(new RelativeSizeSpan(1.2f),0,"Krok 5 z 9".length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            final SpannableString spannableString = new SpannableString("Krok 4 z 7\nLiczba głosów oddanych na poszczególne komitety wyborcze");
+            spannableString.setSpan(new RelativeSizeSpan(1.2f),0,"Krok 4 z 7".length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             actionBar.setDisplayShowCustomEnabled(true);
             actionBar.setCustomView(R.layout.action_bar_title_layout);
             ((TextView) findViewById(R.id.action_bar_title)).setText(spannableString);
@@ -123,7 +123,7 @@ public class CommitteesResultActivity extends AppCompatActivity implements Commi
             }
 
             this.doubleBackToExitPressedOnce = true;
-            showToast(R.string.fragment_login_twotaptoexit,this);
+            showToast(R.string.fragment_login_twotaptoexit,this,false);
             new Handler().postDelayed(new Runnable() {
 
                 @Override

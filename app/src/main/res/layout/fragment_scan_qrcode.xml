@@ -244,12 +244,14 @@
                     <ImageButton
                         android:layout_gravity="center_horizontal"
                         android:id="@+id/scan.qr.image.button.scan"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="@dimen/image.qr.dimen"
+                        android:layout_height="@dimen/image.qr.dimen"
                         android:layout_marginTop="2dp"
                         android:layout_marginBottom="0dp"
                         android:src="@drawable/qr_openpkw"
                         android:contentDescription="@string/qr_openpkw"
+                        android:adjustViewBounds="true"
+                        android:scaleType="centerInside"
                         />
 
                     <Button

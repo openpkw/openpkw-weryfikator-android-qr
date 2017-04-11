@@ -29,11 +29,13 @@ import android.hardware.camera2.TotalCaptureResult;
 import android.hardware.camera2.params.StreamConfigurationMap;
 import android.media.Image;
 import android.media.ImageReader;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.util.Size;
@@ -43,6 +45,7 @@ import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
@@ -73,6 +76,7 @@ import static pl.openpkw.openpkwmobile.utils.Utils.STORAGE_PROTOCOL_DIRECTORY;
 
  */
 
+@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class Camera2Fragment extends Fragment
         implements View.OnClickListener{
 
@@ -81,6 +85,7 @@ public class Camera2Fragment extends Fragment
      */
     private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
     private static final String FRAGMENT_DIALOG_CAMERA = "FRAGMENT_DIALOG_CAMERA ";
+    private static final String CAMERA_BACK = "0";
 
     static {
         ORIENTATIONS.append(Surface.ROTATION_0, 90);
@@ -91,6 +96,9 @@ public class Camera2Fragment extends Fragment
 
     private String mCurrentPhotoPath;
     private OnFragmentInteractionListener mListener;
+    private boolean isFlashOn;
+    private  CameraManager mCameraManager;
+    private ImageButton flashButton;
 
     /**
      * Tag for the {@link Log}.
@@ -385,7 +393,7 @@ public class Camera2Fragment extends Fragment
      * @return The optimal {@code Size}, or an arbitrary one if none were big enough
      */
     private static Size chooseOptimalSize(Size[] choices, int textureViewWidth,
-            int textureViewHeight, int maxWidth, int maxHeight, Size aspectRatio) {
+                                          int textureViewHeight, int maxWidth, int maxHeight, Size aspectRatio) {
 
         // Collect the supported resolutions that are at least as big as the preview Surface
         List<Size> bigEnough = new ArrayList<>();
@@ -397,7 +405,7 @@ public class Camera2Fragment extends Fragment
             if (option.getWidth() <= maxWidth && option.getHeight() <= maxHeight &&
                     option.getHeight() == option.getWidth() * h / w) {
                 if (option.getWidth() >= textureViewWidth &&
-                    option.getHeight() >= textureViewHeight) {
+                        option.getHeight() >= textureViewHeight) {
                     bigEnough.add(option);
                 } else {
                     notBigEnough.add(option);
@@ -430,8 +438,10 @@ public class Camera2Fragment extends Fragment
     @Override
     public void onViewCreated(final View view, Bundle savedInstanceState) {
         view.findViewById(R.id.take_picture_button).setOnClickListener(this);
-        view.findViewById(R.id.info_take_picture_button).setOnClickListener(this);
+        flashButton = (ImageButton) view.findViewById(R.id.info_take_picture_button);
+        flashButton.setOnClickListener(this);
         mTextureView = (AutoFitTextureView) view.findViewById(R.id.texture);
+        isFlashOn = false;
     }
 
     @Override
@@ -467,6 +477,11 @@ public class Camera2Fragment extends Fragment
         super.onPause();
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+    }
+
     /**
      * Sets up member variables related to camera.
      *
@@ -475,11 +490,11 @@ public class Camera2Fragment extends Fragment
      */
     private void setUpCameraOutputs(int width, int height) {
         Activity activity = getActivity();
-        CameraManager manager = (CameraManager) activity.getSystemService(Context.CAMERA_SERVICE);
+        mCameraManager = (CameraManager) activity.getSystemService(Context.CAMERA_SERVICE);
         try {
-            for (String cameraId : manager.getCameraIdList()) {
+            for (String cameraId : mCameraManager.getCameraIdList()) {
                 CameraCharacteristics characteristics
-                        = manager.getCameraCharacteristics(cameraId);
+                        = mCameraManager.getCameraCharacteristics(cameraId);
 
                 // We don't use a front facing camera in this sample.
                 Integer facing = characteristics.get(CameraCharacteristics.LENS_FACING);
@@ -568,7 +583,14 @@ public class Camera2Fragment extends Fragment
                 Boolean available = characteristics.get(CameraCharacteristics.FLASH_INFO_AVAILABLE);
                 mFlashSupported = available == null ? false : available;
 
+                if(!mFlashSupported)
+                    showToast("Aplikacja nie ma dostępu do flash");
+                else
+                    showToast("Aplikacja ma dostępu do flash");
+
                 mCameraId = cameraId;
+
+                setupFlashButton();
                 return;
             }
         } catch (CameraAccessException e) {
@@ -578,6 +600,19 @@ public class Camera2Fragment extends Fragment
             // device this code runs.
             ErrorDialog.newInstance("Nie można użyc aparatu")
                     .show(getChildFragmentManager(), FRAGMENT_DIALOG_CAMERA);
+        }
+    }
+
+    private void setupFlashButton() {
+        if (mCameraId.equals(CAMERA_BACK) && mFlashSupported) {
+            flashButton.setVisibility(View.VISIBLE);
+            if (isFlashOn) {
+                flashButton.setImageResource(R.mipmap.ic_flash_off);
+            } else {
+                flashButton.setImageResource(R.mipmap.ic_flash_on);
+            }
+        }else{
+            flashButton.setVisibility(View.GONE);
         }
     }
 
@@ -689,8 +724,6 @@ public class Camera2Fragment extends Fragment
                                 // Auto focus should be continuous for camera preview.
                                 mPreviewRequestBuilder.set(CaptureRequest.CONTROL_AF_MODE,
                                         CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE);
-                                // Flash is automatically enabled when necessary.
-                                setAutoFlash(mPreviewRequestBuilder);
 
                                 // Finally, we start displaying the camera preview.
                                 mPreviewRequest = mPreviewRequestBuilder.build();
@@ -806,8 +839,6 @@ public class Camera2Fragment extends Fragment
             // Use the same AE and AF modes as the preview.
             captureBuilder.set(CaptureRequest.CONTROL_AF_MODE,
                     CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE);
-            setAutoFlash(captureBuilder);
-
             // Orientation
             int rotation = activity.getWindowManager().getDefaultDisplay().getRotation();
             captureBuilder.set(CaptureRequest.JPEG_ORIENTATION, getOrientation(rotation));
@@ -819,7 +850,7 @@ public class Camera2Fragment extends Fragment
                 public void onCaptureCompleted(@NonNull CameraCaptureSession session,
                                                @NonNull CaptureRequest request,
                                                @NonNull TotalCaptureResult result) {
-                    showToast("Saved: " + mFile);
+                    //showToast("Saved: " + mFile);
                     Log.d(TAG, mFile.toString());
                     unlockFocus();
                 }
@@ -855,7 +886,6 @@ public class Camera2Fragment extends Fragment
             // Reset the auto-focus trigger
             mPreviewRequestBuilder.set(CaptureRequest.CONTROL_AF_TRIGGER,
                     CameraMetadata.CONTROL_AF_TRIGGER_CANCEL);
-            setAutoFlash(mPreviewRequestBuilder);
             mCaptureSession.capture(mPreviewRequestBuilder.build(), mCaptureCallback,
                     mBackgroundHandler);
             // After this, the camera will go back to the normal state of preview.
@@ -874,10 +904,12 @@ public class Camera2Fragment extends Fragment
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.take_picture_button: {
-                    takePicture();
+                takePicture();
                 break;
             }
             case R.id.info_take_picture_button: {
+                switchFlash();
+                /*
                 Activity activity = getActivity();
                 if (null != activity) {
                     // Hide the status bar.
@@ -897,24 +929,61 @@ public class Camera2Fragment extends Fragment
                             })
                             .show();
                 }
+                */
                 break;
             }
         }
     }
 
-    private void setAutoFlash(CaptureRequest.Builder requestBuilder) {
-        if (mFlashSupported) {
-            requestBuilder.set(CaptureRequest.CONTROL_AE_MODE,
-                    CaptureRequest.CONTROL_AE_MODE_ON_AUTO_FLASH);
+    private void switchFlash() {
+        if(mCameraId.equals("0")){
+            if(mFlashSupported){
+                if(isFlashOn){
+
+                    mPreviewRequestBuilder.set(CaptureRequest.FLASH_MODE, CaptureRequest.FLASH_MODE_OFF);
+                    try {
+                        mCaptureSession.capture(mPreviewRequestBuilder.build(), mCaptureCallback,
+                                mBackgroundHandler);
+                        // After this, the camera will go back to the normal state of preview.
+                        mState = STATE_PREVIEW;
+                        mCaptureSession.setRepeatingRequest(mPreviewRequest, mCaptureCallback,
+                                mBackgroundHandler);
+                    } catch (CameraAccessException e) {
+                        e.printStackTrace();
+                    }
+
+                    //
+                    isFlashOn = false;
+                    flashButton.setImageResource(R.mipmap.ic_flash_off);
+                    Log.e(TAG,"FLASH OFF");
+                }else {
+
+                    mPreviewRequestBuilder.set(CaptureRequest.FLASH_MODE, CaptureRequest.FLASH_MODE_TORCH);
+                    try {
+                        mCaptureSession.capture(mPreviewRequestBuilder.build(), mCaptureCallback,
+                                mBackgroundHandler);
+                        // After this, the camera will go back to the normal state of preview.
+                        mState = STATE_PREVIEW;
+                        mCaptureSession.setRepeatingRequest(mPreviewRequest, mCaptureCallback,
+                                mBackgroundHandler);
+                    } catch (CameraAccessException e) {
+                        e.printStackTrace();
+                    }
+
+                    isFlashOn = true;
+                    flashButton.setImageResource(R.mipmap.ic_flash_on);
+                    Log.e(TAG,"FLASH ON");
+                }
+            }
         }
+
+
     }
 
     private File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss").format(new Date());
         String imageFileName = "CP_" + timeStamp + "_";
-        //File storageDir = Environment.getExternalStoragePublicDirectory(
-        //        Environment.DIRECTORY_PICTURES);
         File storageDir = getPictureStorageDir(STORAGE_PROTOCOL_DIRECTORY);
         File image = File.createTempFile(
                 imageFileName,  /* prefix */

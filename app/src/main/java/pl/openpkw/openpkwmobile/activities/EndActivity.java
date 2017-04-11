@@ -46,7 +46,7 @@ public class EndActivity extends AppCompatActivity implements EndFragment.OnFrag
         }
 
         this.doubleBackToExitPressedOnce = true;
-        showToast(R.string.fragment_login_twotaptoexit,this);
+        showToast(R.string.fragment_login_twotaptoexit,this,false);
         new Handler().postDelayed(new Runnable() {
 
             @Override

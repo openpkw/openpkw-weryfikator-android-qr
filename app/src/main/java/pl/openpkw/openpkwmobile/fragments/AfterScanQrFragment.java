@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.hardware.Camera;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -23,10 +22,9 @@ import android.widget.TextView;
 import java.security.Security;
 
 import pl.openpkw.openpkwmobile.R;
-import pl.openpkw.openpkwmobile.activities.InstructionScanQrActivity;
 import pl.openpkw.openpkwmobile.activities.VotingFormActivity;
 
-import static pl.openpkw.openpkwmobile.fragments.ScanQrCodeFragment.startQrScan;
+import static pl.openpkw.openpkwmobile.activities.ScanQrCodeActivity.showToast;
 import static pl.openpkw.openpkwmobile.utils.Utils.DATA;
 import static pl.openpkw.openpkwmobile.utils.Utils.PERIPHERY_ADDRESS;
 import static pl.openpkw.openpkwmobile.utils.Utils.PERIPHERY_NAME;
@@ -39,10 +37,6 @@ public class AfterScanQrFragment extends Fragment implements View.OnClickListene
     private TextView peripheryNumberTextView;
     private TextView peripheryNameTextView;
     private TextView peripheryAddressTextView;
-
-    public static Camera mCamera;
-
-    private Button scanButton;
 
     private OnFragmentInteractionListener mListener;
 
@@ -58,10 +52,6 @@ public class AfterScanQrFragment extends Fragment implements View.OnClickListene
 
         ImageButton scanQrImageButton = (ImageButton) viewScanQR.findViewById(R.id.after_scan_qr_image_button_scan);
         scanQrImageButton.setOnClickListener(this);
-
-        scanButton = (Button)viewScanQR.findViewById(R.id.after_scan_qr_scan_button);
-        scanButton.setOnClickListener(this);
-        scanButton.setEnabled(true);
 
         Button nextButton = (Button) viewScanQR.findViewById(R.id.after_scan_qr_scan_next_button);
         nextButton.setOnClickListener(this);
@@ -119,7 +109,6 @@ public class AfterScanQrFragment extends Fragment implements View.OnClickListene
         peripheryNumberTextView.setText(periphery_number);
         peripheryNameTextView.setText(createIndentedText(periphery_name,0,peripheryNameLabelTextWidth ));
         peripheryAddressTextView.setText(createIndentedText(periphery_address,0,addressLabelTextWidth));
-        scanButton.setEnabled(true);
     }
 
     public static SpannableString createIndentedText(String text, int marginFirstLine, int marginNextLines) {
@@ -156,20 +145,13 @@ public class AfterScanQrFragment extends Fragment implements View.OnClickListene
     public void onClick(View view) {
         switch(view.getId()){
 
-            case R.id.after_scan_qr_scan_button:{
-                startQrScan(getActivity());
-                break;
-            }
-
             case R.id.after_scan_qr_textlink_scan:{
-                Intent instructionScanQrIntent = new Intent(getActivity(), InstructionScanQrActivity.class);
-                startActivity(instructionScanQrIntent);
-                getActivity().finish();
+                showToast(R.string.toast_scanned_qr_ok,getActivity(),false);
                 break;
             }
 
             case R.id.after_scan_qr_image_button_scan:{
-                startQrScan(getActivity());
+                showToast(R.string.toast_scanned_qr_ok,getActivity(),false);
                 break;
             }
 

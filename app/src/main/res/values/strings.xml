@@ -132,7 +132,7 @@
         a kodem QR umożliwiająca prawidłowe zeskanowanie może wynosić od 0,3 do 1 metra.
         Jeżeli skanowanie kodu QR nie powiodło się należy powtórzyć proces przy róznych odległościach obiektywu
         kamery od kodu QR.</string>
-    <string name="toast.scanned.qr.ok">Kod QR został zeskanowany poprawnie. \nPrzejdź dalej.</string>
+    <string name="toast.scanned.qr.ok">Kod QR został zeskanowany poprawnie. Przejdź dalej.</string>
     <string name="toast.send.picture.by.wifi">Zdjęcia zostaną przesłane na serwer jak tylko będzie dostępne połączenia z siecią Wifi</string>
     <string name="dialog_scan_qr_failed">"Skanowanie kodu QR zakończyło się niepowodzeniem. \nSpróbuj ponownie."</string>
     <string name="toast_send_data_incorrect">Przesłane na serwer dane są niepoprawne</string>

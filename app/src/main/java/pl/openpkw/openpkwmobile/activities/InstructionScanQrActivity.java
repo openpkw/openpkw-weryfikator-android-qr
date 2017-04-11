@@ -74,7 +74,7 @@ public class InstructionScanQrActivity extends AppCompatActivity implements Inst
         }
 
         this.doubleBackToExitPressedOnce = true;
-        showToast(R.string.fragment_login_twotaptoexit,this);
+        showToast(R.string.fragment_login_twotaptoexit,this,false);
         new Handler().postDelayed(new Runnable() {
 
             @Override

@@ -62,7 +62,7 @@ public class QueryAddPhotosActivity extends AppCompatActivity implements QueryAd
         //set title and subtitle to action bar
         ActionBar actionBar = getSupportActionBar();
         if(actionBar!=null) {
-            actionBar.setTitle("Krok 7 z 9");
+            actionBar.setTitle("Krok 5 z 7");
             actionBar.setSubtitle("Udziel odpowiedzi na pytanie");
         }
     }
@@ -134,7 +134,7 @@ public class QueryAddPhotosActivity extends AppCompatActivity implements QueryAd
             }
 
             this.doubleBackToExitPressedOnce = true;
-            showToast(R.string.fragment_login_twotaptoexit,this);
+            showToast(R.string.fragment_login_twotaptoexit,this,false);
             new Handler().postDelayed(new Runnable() {
 
                 @Override

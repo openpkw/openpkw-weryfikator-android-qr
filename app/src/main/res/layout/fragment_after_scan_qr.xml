@@ -8,7 +8,7 @@
         android:id="@+id/after.scan.qr.scrollview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/after.scan.layout.buttons">
+        android:layout_above="@+id/after.scan.qr.scan.next.button">
 
         <TableLayout
             android:id="@+id/after.scan.qr.protocol.data.tablelayout"
@@ -105,7 +105,7 @@
                         android:paddingTop="@dimen/padding.committee.label"
                         android:paddingStart="2dp"
                         android:layout_alignParentLeft="true"
-                        android:layout_toLeftOf="@+id/scan.qr.territorial.code"
+                        android:layout_toLeftOf="@+id/after.scan.qr.territorial.code"
                         android:textColor="@android:color/black"
                         android:text="Nr obwodu"
                         android:maxLines="1"
@@ -116,6 +116,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true"
                         android:paddingEnd="2dp"
                         android:paddingBottom="@dimen/padding.committee.label"
                         android:paddingTop="@dimen/padding.committee.label"
@@ -243,12 +244,14 @@
                     <ImageButton
                         android:layout_gravity="center_horizontal"
                         android:id="@+id/after.scan.qr.image.button.scan"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="@dimen/image.qr.dimen"
+                        android:layout_height="@dimen/image.qr.dimen"
                         android:layout_marginTop="2dp"
                         android:layout_marginBottom="0dp"
                         android:src="@drawable/qr_openpkw"
-                        android:contentDescription="@string/qr_openpkw" />
+                        android:contentDescription="@string/qr_openpkw"
+                        android:adjustViewBounds="true"
+                        android:scaleType="centerInside"/>
 
                     <Button
                         android:id="@+id/after.scan.qr.textlink.scan"
@@ -275,35 +278,15 @@
 
     </ScrollView>
 
-    <LinearLayout
-        android:id="@+id/after.scan.layout.buttons"
-        android:layout_width="match_parent"
+    <Button
+        android:id="@+id/after.scan.qr.scan.next.button"
+        android:layout_width="@dimen/width.login.button.register"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="@dimen/margin.bottom.buttons"
-        android:orientation="horizontal">
-
-    <Button
-        android:id="@+id/after.scan.qr.scan.button"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.5"
-        android:layout_marginStart="5dp"
-        android:layout_marginEnd="5dp"
-        android:layout_marginTop="@dimen/margin.login.button.login.top"
-        android:text="@string/scan.qr.buttonlabel.scan"
-        style="@style/green_button"/>
-
-    <Button
-        android:id="@+id/after.scan.qr.scan.next.button"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.5"
-        android:layout_marginStart="5dp"
-        android:layout_marginEnd="5dp"
-        android:layout_marginTop="@dimen/margin.login.button.login.top"
+        android:layout_marginTop="@dimen/margin.top.buttons"
+        android:layout_centerHorizontal="true"
         android:text="@string/next.label.button"
         style="@style/orange_button"/>
-    </LinearLayout>
 
 </RelativeLayout>

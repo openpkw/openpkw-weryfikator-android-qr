@@ -1,5 +1,6 @@
 package pl.openpkw.openpkwmobile.fragments;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -20,7 +21,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,9 +33,12 @@ import pl.openpkw.openpkwmobile.activities.RegisterUserActivity;
 import pl.openpkw.openpkwmobile.models.OAuthParam;
 import pl.openpkw.openpkwmobile.models.UserCredentialsDTO;
 import pl.openpkw.openpkwmobile.network.GetRefreshToken;
+import pl.openpkw.openpkwmobile.network.NetworkUtils;
 import pl.openpkw.openpkwmobile.security.SecurityRSA;
 import pl.openpkw.openpkwmobile.utils.TimerSingleton;
 import pl.openpkw.openpkwmobile.utils.Utils;
+
+import static pl.openpkw.openpkwmobile.activities.ScanQrCodeActivity.showToast;
 
 
 public class LoginFragment extends Fragment implements View.OnClickListener{
@@ -85,8 +88,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.login_button_login:{
-                onLoginSuccessfully();
-                /*
+
                 boolean isLoginDataCorrect = true;
                 if(emailEditText.getText().toString().isEmpty())
                 {
@@ -127,12 +129,9 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
                         dialog.show();
                     }
                 }
-                else
-                {
-                    Toast.makeText(getActivity().getApplicationContext(),getString(R.string.login_toast_enter_login_password),
-                            Toast.LENGTH_LONG).show();
+                else{
+                    showToast(R.string.login_toast_enter_login_password,getActivity(),true);
                 }
-                */
                 break;
             }
             case R.id.login_button_register:{
@@ -187,8 +186,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
                         if(progressBar!=null)
                             progressBar.dismiss();
 
-                        Toast.makeText(getActivity().getApplicationContext(),
-                                getString(R.string.login_toast_no_connection), Toast.LENGTH_LONG).show();
+                        showToast(R.string.login_toast_no_connection,getActivity(),true);
                     }
                 }
             }.start();
@@ -196,7 +194,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
 
         @Override
         protected JSONObject doInBackground(UserCredentialsDTO... credentials) {
-            Log.e(Utils.TAG, "OAUTH URL: "+oAuthParam.getLoginURL());
+            Log.e(Utils.TAG, "OAUTH URL LOGIN: "+oAuthParam.getLoginURL());
             Log.e(Utils.TAG, "OAUTH ID: "+oAuthParam.getId());
             Log.e(Utils.TAG, "OAUTH SECRET: " + oAuthParam.getSecret());
             GetRefreshToken jParser = new GetRefreshToken();
@@ -218,8 +216,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
 
                     if(!json.getString(Utils.ERROR).isEmpty())
                     {
-                        Toast.makeText(getActivity().getApplicationContext(),
-                                getString(R.string.login_toast_authorization_failed), Toast.LENGTH_LONG).show();
+                        showToast(R.string.login_toast_authorization_failed,getActivity(),true);
 
                         emailEditText.getText().clear();
                         emailEditText.setError(null);
@@ -251,8 +248,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
                 }
 
             }else{
-                Toast.makeText(getActivity().getApplicationContext(),
-                        getString(R.string.login_toast_no_connection), Toast.LENGTH_LONG).show();
+                showToast(R.string.login_toast_no_connection,getActivity(),true);
             }
         }
     }

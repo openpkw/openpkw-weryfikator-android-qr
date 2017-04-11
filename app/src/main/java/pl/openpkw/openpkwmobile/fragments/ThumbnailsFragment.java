@@ -471,6 +471,7 @@ public class ThumbnailsFragment extends Fragment implements View.OnClickListener
         protected Bitmap doInBackground(File... files) {
             final int THUMBNAIL_SIZE = 512;
             absoluteFilePath = files[0].getAbsolutePath();
+            Log.e(TAG,"LOAD THUMBNAIL PATH: "+absoluteFilePath);
             imageBitmap = BitmapFactory.decodeFile(absoluteFilePath);
             Float width = (float) imageBitmap.getWidth();
             Float height = (float) imageBitmap.getHeight();

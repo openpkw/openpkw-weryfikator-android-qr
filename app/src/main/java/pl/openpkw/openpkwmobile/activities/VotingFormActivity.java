@@ -52,8 +52,8 @@ public class VotingFormActivity extends AppCompatActivity {
         //set title and subtitle to action bar
         ActionBar actionBar = getSupportActionBar();
         if(actionBar!=null) {
-            final SpannableString spannableString = new SpannableString("Krok 4 z 9\nPorównaj dane z protokołu wyborczego z danymi z zeskanowanego QR");
-            spannableString.setSpan(new RelativeSizeSpan(1.2f),0,"Krok 4 z 9".length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            final SpannableString spannableString = new SpannableString("Krok 3 z 7\nPorównaj dane z protokołu wyborczego z danymi z zeskanowanego QR");
+            spannableString.setSpan(new RelativeSizeSpan(1.2f),0,"Krok 3 z 7".length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             actionBar.setDisplayShowCustomEnabled(true);
             actionBar.setCustomView(R.layout.action_bar_title_layout);
             ((TextView) findViewById(R.id.action_bar_title)).setText(spannableString);
@@ -126,7 +126,7 @@ public class VotingFormActivity extends AppCompatActivity {
             }
 
             this.doubleBackToExitPressedOnce = true;
-            showToast(R.string.fragment_login_twotaptoexit,this);
+            showToast(R.string.fragment_login_twotaptoexit,this,false);
             new Handler().postDelayed(new Runnable() {
 
                 @Override
