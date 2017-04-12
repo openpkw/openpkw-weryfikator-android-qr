@@ -1,7 +1,7 @@
 #openpkw-weryfikator-android-qr [![Build Status](https://travis-ci.org/openpkw/openpkw-weryfikator-android-qr.svg?branch=master)](https://travis-ci.org/openpkw/openpkw-weryfikator-android-qr)
 
 Instrukcja dodania pliku konfigurujacego url do backendu:
-- lokalizacja pliku config.txt folfer OpenPKW
+- lokalizacja pliku config.txt folder OpenPKW
 - struktura pliku:
 ```xml
 <openpkw-mobile>
